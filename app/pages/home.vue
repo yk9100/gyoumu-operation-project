@@ -1,6 +1,23 @@
 <template>
-  <div>
-    <h1>Home Page</h1>
-    <p>Welcome to the home page!</p>
+  <div class="home-container">
+    <Notification />
+    <Performance />
   </div>
 </template>
+
+<script lang="ts" setup>
+import Notification from "../components/home/Notification.vue";
+import Performance from "../components/home/Performance.vue";
+</script>
+
+<style scoped>
+.home-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.home-component {
+  width: 100%;
+}
+</style>
