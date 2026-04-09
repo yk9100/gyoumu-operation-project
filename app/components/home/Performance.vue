@@ -4,7 +4,7 @@
             <BarChartOutlined /><span>業績</span>
         </h3>
         <div class="performance-chart">
-            <a-chart :data="chartData" :config="chartConfig" :style="{ height: '300px' }" />
+            <v-chart :option="chartOption" />
         </div>
     </div>
 </template>
@@ -12,6 +12,28 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import { BarChartOutlined } from '@ant-design/icons-vue';
+import { use } from 'echarts/core';
+import { CanvasRenderer } from 'echarts/renderers';
+import { BarChart } from 'echarts/charts';
+import {
+    TitleComponent,
+    TooltipComponent,
+    GridComponent,
+    DatasetComponent,
+    TransformComponent
+} from 'echarts/components';
+import VChart from 'vue-echarts';
+
+// 注册必要的 ECharts 组件
+use([
+    CanvasRenderer,
+    BarChart,
+    TitleComponent,
+    TooltipComponent,
+    GridComponent,
+    DatasetComponent,
+    TransformComponent
+]);
 
 // 图表数据
 const chartData = ref([
@@ -24,32 +46,45 @@ const chartData = ref([
 ]);
 
 // 图表配置
-const chartConfig = ref({
-    xField: 'name',
-    yField: 'value',
-    type: 'column',
-    color: '#1890ff',
-    label: {
-        position: 'top',
-        style: {
-            fill: '#666'
+const chartOption = ref({
+    tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+            type: 'shadow'
         }
     },
+    grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true
+    },
     xAxis: {
-        label: {
-            autoHide: true
+        type: 'category',
+        data: chartData.value.map(item => item.name),
+        axisLabel: {
+            interval: 0
         }
     },
     yAxis: {
-        label: {
-            formatter: (value: any) => `${value}`
-        }
+        type: 'value',
+        name: ''
     },
-    meta: {
-        value: {
-            alias: '業績'
+    series: [
+        {
+            name: '業績',
+            type: 'bar',
+            data: chartData.value.map(item => item.value),
+            itemStyle: {
+                color: '#1890ff'
+            },
+            label: {
+                show: true,
+                position: 'top',
+                color: '#666'
+            }
         }
-    }
+    ]
 });
 </script>
 
@@ -76,5 +111,6 @@ const chartConfig = ref({
     border-radius: 6px;
     padding: 12px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    height: 300px;
 }
 </style>

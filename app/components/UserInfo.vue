@@ -3,21 +3,20 @@
         <a class="user-info" href="#" @click.stop>
             <a-avatar :size="32" :src="userInfo.avatar" :alt="userInfo.name" />
             <span class="user-name">{{ userInfo.name }}</span>
-            <a-icon type="down" class="user-icon" />
         </a>
         <template #overlay>
             <a-menu @click="handleMenuClick">
                 <a-menu-item key="profile">
-                    <a-icon type="user" />
+                    <UserOutlined />
                     <span>プロフィール</span>
                 </a-menu-item>
                 <a-menu-item key="settings">
-                    <a-icon type="setting" />
+                    <SettingOutlined />
                     <span>設定</span>
                 </a-menu-item>
                 <a-menu-divider />
                 <a-menu-item key="logout">
-                    <a-icon type="logout" />
+                    <LogoutOutlined />
                     <span>ログアウト</span>
                 </a-menu-item>
             </a-menu>
@@ -27,6 +26,11 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
+import {
+    UserOutlined,
+    SettingOutlined,
+    LogoutOutlined
+} from '@ant-design/icons-vue';
 
 // 模拟用户信息
 const userInfo = ref({
@@ -75,5 +79,17 @@ const handleMenuClick = (e: any) => {
 .user-icon {
     font-size: 12px;
     color: #666;
+}
+
+.user-menu-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+:deep(.ant-dropdown-menu-title-content) {
+    display: flex;
+    align-items: center;
+    gap: 4px;
 }
 </style>

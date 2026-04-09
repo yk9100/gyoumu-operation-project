@@ -40,7 +40,6 @@ const notifications = ref([
     background-color: #f5f5f5;
     border-radius: 8px;
     padding: 16px;
-    margin-bottom: 20px;
 }
 
 .notification-title {
@@ -54,6 +53,8 @@ const notifications = ref([
     display: flex;
     flex-direction: column;
     gap: 12px;
+    max-height: 300px;
+    overflow-y: auto;
 }
 
 .notification-item {

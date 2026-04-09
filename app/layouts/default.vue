@@ -6,12 +6,9 @@
         <a-layout style="min-height: 100vh">
             <a-layout-sider v-model:collapsed="collapsed" collapsible width="240px">
                 <div class="logo" />
-                <!-- 加载状态显示骨架图 -->
                 <a-skeleton v-if="loading" :active="true" :paragraph="{ rows: 10 }" />
-                <!-- 数据加载完成后显示菜单 -->
                 <a-menu v-else v-model:selectedKeys="selectedKeys" v-model:openKeys="openKeys" @select="handleSelect"
                     theme="dark" mode="inline">
-
                     <template v-for="item in menuData">
                         <!-- 处理子菜单 -->
                         <a-sub-menu v-if="item.children && item.children.length > 0" :key="item.key">
@@ -69,7 +66,6 @@ import { useRouter, useRoute } from "vue-router";
 import UserInfo from "../components/UserInfo.vue";
 import { ROUTE_TITLE_MAP, HIDE_BREADCRUMB_ROUTES } from "../layouts/common";
 
-// 定义菜单项类型
 interface MenuItem {
     key: string;
     title: string;
@@ -83,14 +79,12 @@ const route = useRoute();
 
 const currentPageTitle = computed(() => ROUTE_TITLE_MAP[`${route.path}${route.hash}`]);
 
-// 状态管理
 const collapsed = ref<boolean>(false);
 const selectedKeys = ref<string[]>([]);
 const loading = ref<boolean>(true);
 const menuData = ref<MenuItem[]>([]);
 const openKeys = ref<string[]>([]);
 
-// Mock 数据 - key 使用路由路径
 const mockMenuData: MenuItem[] = [
     {
         key: "/home",
@@ -186,7 +180,6 @@ const breadcrumbItems = computed(() => {
         items.push({ title: "プロジェクト管理" });
     } else if (path === "/user-info") {
         items.push({ title: "ユーザー情報" });
-        // 处理锚点
         const hash = route.hash;
         if (hash === "#basic-info") {
             items.push({ title: "基本情報" });
@@ -210,10 +203,8 @@ const breadcrumbItems = computed(() => {
 });
 
 
-// 模拟 API 请求
 const fetchMenuData = (): Promise<MenuItem[]> => {
     return new Promise<MenuItem[]>((resolve) => {
-        // 模拟网络延迟
         // setTimeout(() => {
         //     resolve(mockMenuData);
         // }, 1000);
@@ -235,6 +226,7 @@ const updateSelectedKeysByRoute = () => {
             for (const child of item.children) {
                 if (child.key === fullPath || child.path === fullPath) {
                     selectedKeys.value = [child.key];
+                    openKeys.value = [item.key];
                     scrollToAnchor(currentHash);
                     return;
                 }
@@ -251,22 +243,16 @@ const updateSelectedKeysByRoute = () => {
     scrollToAnchor(currentHash);
 };
 
-// 滚动到锚点
 const scrollToAnchor = (hash: string) => {
     if (!hash) {
         return;
     }
-
-    // 移除 # 前缀
     const anchor = hash.replace('#', '');
     if (!anchor) {
         return;
     }
-
-    // 查找对应的 DOM 元素
     const element = document.getElementById(anchor);
     if (element) {
-        // 滚动到元素位置
         element.scrollIntoView({ behavior: 'smooth' });
     }
 };
@@ -282,11 +268,9 @@ watch(
 );
 
 
-// 组件挂载时获取数据
 onMounted(async () => {
     loading.value = true;
     try {
-        // 模拟 API 请求
         const data = await fetchMenuData();
         menuData.value = data;
         updateSelectedKeysByRoute();
