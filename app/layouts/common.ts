@@ -1,5 +1,6 @@
 const ROUTE_TITLE_MAP: Record<string, string> = {
   "/home": "ホーム",
+  "/my-task": "マイタスク",
   "/project-management": "プロジェクト管理",
   "/user-info#basic-info": "ユーザー情報>基本情報",
   "/user-info#personnel-info": "ユーザー情報>人事情報",
@@ -9,4 +10,6 @@ const ROUTE_TITLE_MAP: Record<string, string> = {
   "/other/privacy": "その他>プライバシーポリシー",
 };
 
-export { ROUTE_TITLE_MAP };
+const HIDE_BREADCRUMB_ROUTES = ["/home", "/my-task", "/project-management"];
+
+export { ROUTE_TITLE_MAP, HIDE_BREADCRUMB_ROUTES };

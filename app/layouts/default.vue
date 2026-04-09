@@ -61,12 +61,22 @@ import {
     FundProjectionScreenOutlined,
     UserOutlined,
     TagsOutlined,
+    ContainerOutlined
 } from "@ant-design/icons-vue";
 import type { MenuProps } from "ant-design-vue";
 import { ref, onMounted, computed, watch } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import UserInfo from "../components/UserInfo.vue";
-import { ROUTE_TITLE_MAP } from "../layouts/common";
+import { ROUTE_TITLE_MAP, HIDE_BREADCRUMB_ROUTES } from "../layouts/common";
+
+// 定义菜单项类型
+interface MenuItem {
+    key: string;
+    title: string;
+    icon?: any;
+    path?: string;
+    children?: MenuItem[];
+}
 
 const router = useRouter();
 const route = useRoute();
@@ -87,6 +97,12 @@ const mockMenuData: MenuItem[] = [
         title: "ホーム",
         icon: HomeOutlined,
         path: "/home"
+    },
+    {
+        key: '/my-task',
+        title: "マイタスク",
+        icon: ContainerOutlined,
+        path: "/my-task"
     },
     {
         key: "/project-management",
@@ -141,15 +157,6 @@ const mockMenuData: MenuItem[] = [
     },
 ];
 
-// 定义菜单项类型
-interface MenuItem {
-    key: string;
-    title: string;
-    icon?: any;
-    path?: string;
-    children?: MenuItem[];
-}
-
 const handleSelect: MenuProps["onSelect"] = (e) => {
     const key = e.key?.toString();
     if (!key) {
@@ -159,18 +166,16 @@ const handleSelect: MenuProps["onSelect"] = (e) => {
     router.push(key);
 };
 
-// 处理面包屑点击
 const handleBreadcrumbClick = (href?: string) => {
     if (href) {
         router.push(href);
     }
 };
 
-// 生成面包屑数据
 const breadcrumbItems = computed(() => {
     const path = route.path;
 
-    if (path === "/home") {
+    if (HIDE_BREADCRUMB_ROUTES.includes(path)) {
         return []
     }
     const items: { title: string; href?: string }[] = [
