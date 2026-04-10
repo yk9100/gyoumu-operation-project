@@ -1,0 +1,9 @@
+* {
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 0;
+    font-family: "LINE Seed JP App_OTF";
+    overscroll-behavior: none;
+}
