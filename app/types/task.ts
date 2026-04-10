@@ -71,6 +71,7 @@ export interface Ext {
 }
 
 export interface Task {
+  fav?: boolean;
   id: number;
   projectId: number;
   issueKey: string;

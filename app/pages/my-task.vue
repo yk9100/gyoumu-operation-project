@@ -8,6 +8,7 @@
       :page-size="pageSize"
       @page-change="handlePageChange"
       @size-change="handleSizeChange"
+      @toggle-fav="toggleFav"
     />
   </div>
 </template>
@@ -25,7 +26,8 @@ const {
   pageSize,
   setSearchKeyword,
   setCurrentPage,
-  setPageSize
+  setPageSize,
+  toggleFav,
 } = useTasks();
 
 // 处理搜索

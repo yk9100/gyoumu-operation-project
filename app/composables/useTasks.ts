@@ -48,6 +48,15 @@ export function useTasks() {
     currentPage.value = 1;
   };
 
+  const toggleFav = (task: Task) => {
+    tasks.value.map((i) => {
+      if (i.id === task.id) {
+        i.fav = !i.fav;
+      }
+      return i;
+    });
+  };
+
   return {
     tasks: paginatedTasks,
     total,
@@ -57,5 +66,6 @@ export function useTasks() {
     setSearchKeyword,
     setCurrentPage,
     setPageSize,
+    toggleFav,
   };
 }

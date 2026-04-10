@@ -82,8 +82,14 @@
                 </a-menu>
               </template>
             </a-dropdown>
-            <a-button class="ant-dropdown-link" type="danger" size="small">
-              <StarOutlined />
+            <a-button
+              class="ant-dropdown-link"
+              type="danger"
+              size="small"
+              @click="emit('toggle-fav', record)"
+            >
+              <StarFilled v-if="record.fav" style="color: #1677FF" />
+              <StarOutlined v-else />
             </a-button>
           </div>
         </template>
@@ -112,6 +118,7 @@ const props = defineProps<{
 const emit = defineEmits<{
   (e: "page-change", page: number): void;
   (e: "size-change", size: number): void;
+  (e: "toggle-fav", task: Task): void;
 }>();
 
 const scrollX = computed(() => window.innerWidth - 300);
