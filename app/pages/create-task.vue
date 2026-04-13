@@ -23,9 +23,17 @@
           <CloseOutlined />
         </a-button>
       </div>
+
+      <div class="parent-issue-box-right">
+        <a-button>Preview</a-button>
+        <a-button type="primary" style="width: 80px">Add</a-button>
+      </div>
     </div>
     <div class="create-task-form">
-      <IssueTypeSelect v-model="createTaskState.issueType" />
+      <IssueTypeSelect
+        v-model="createTaskState.issueType"
+        :allowClear="false"
+      />
       <a-input v-model:value="createTaskState.title" placeholder="Add title" />
       <div class="summary-box">
         <a-textarea
@@ -56,7 +64,6 @@
             <span class="form-item-label">Priority</span>
             <div class="form-item-content">
               <a-select
-                allowClear
                 v-model:value="createTaskState.priority"
                 style="width: 210px"
                 :options="[
@@ -100,6 +107,15 @@
           </div>
         </div>
       </div>
+    </div>
+
+    <div style="margin-top: 24px">
+      <FileUploadArea />
+    </div>
+
+    <div class="page-footer">
+      <a-button>Preview</a-button>
+      <a-button type="primary" style="width: 80px">Add</a-button>
     </div>
     <AssociationTasksDialog
       v-model:visible="showParentIssueDialog"
@@ -147,6 +163,8 @@ const handleCancel = () => {
 }
 
 .parent-issue-box {
+  display: flex;
+  justify-content: space-between;
   margin-bottom: 12px;
 }
 
@@ -226,5 +244,20 @@ const handleCancel = () => {
 
 .form-item-content {
   flex: 1 1 70%;
+}
+
+.page-footer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+}
+
+.parent-issue-box-right {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
 }
 </style>

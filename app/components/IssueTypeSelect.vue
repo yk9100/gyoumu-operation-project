@@ -1,6 +1,6 @@
 <template>
   <a-select
-    allowClear
+    :allowClear="allowClear"
     v-model:value="model"
     show-search
     :placeholder="placeholder"
@@ -22,6 +22,10 @@ const props = defineProps({
   placeholder: {
     type: String,
     default: "Select issue type",
+  },
+  allowClear: {
+    type: Boolean,
+    default: true,
   },
 });
 const model = defineModel<string | undefined>();

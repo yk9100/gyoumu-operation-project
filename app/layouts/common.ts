@@ -19,7 +19,6 @@ export const BREADCRUMB_CONFIG: Record<
   "/user-info#basic-info": [
     {
       title: "ユーザー情報",
-      href: "/user-info",
     },
     {
       title: "基本情報",
@@ -28,7 +27,6 @@ export const BREADCRUMB_CONFIG: Record<
   "/user-info#personnel-info": [
     {
       title: "ユーザー情報",
-      href: "/user-info",
     },
     {
       title: "人事情報",
@@ -37,7 +35,6 @@ export const BREADCRUMB_CONFIG: Record<
   "/user-info#salary-info": [
     {
       title: "ユーザー情報",
-      href: "/user-info",
     },
     {
       title: "給与情報",

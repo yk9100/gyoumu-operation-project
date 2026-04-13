@@ -34,8 +34,6 @@
 
 <script lang="ts" setup>
 import { ref, computed } from "vue";
-
-// 定义 props
 const props = defineProps({
   style: {
     type: Object,
@@ -79,7 +77,6 @@ const assignees = ref([
   },
 ]);
 
-// 转换为 select 选项格式
 const assigneeOptions = computed(() => {
   return assignees.value.map((assignee) => ({
     value: assignee.id,

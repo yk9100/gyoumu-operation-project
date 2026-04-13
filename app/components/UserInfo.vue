@@ -32,25 +32,19 @@ import {
     LogoutOutlined
 } from '@ant-design/icons-vue';
 
-// 模拟用户信息
 const userInfo = ref({
     name: '山田太郎',
     avatar: 'https://api.dicebear.com/7.x/lorelei/svg?seed=John',
     email: 'yamada@example.com'
 });
 
-// 处理下拉菜单可见性变化
 const handleVisibleChange = (visible: boolean) => {
     console.log('下拉菜单可见性变化:', visible);
 };
 
-// 处理菜单点击
 const handleMenuClick = (e: any) => {
-    console.log('菜单点击:', e.key);
     if (e.key === 'logout') {
-        // 登出逻辑
         console.log('执行登出操作');
-        // 这里可以添加实际的登出逻辑，比如清除token，跳转到登录页面等
     }
 };
 </script>
