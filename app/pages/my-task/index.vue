@@ -14,11 +14,10 @@
 </template>
 
 <script lang="ts" setup>
-import TaskFilter from '../components/myTask/TaskFilter.vue';
-import TaskTable from '../components/myTask/TaskTable.vue';
-import { useTasks } from '../composables/useTasks';
+import TaskFilter from "../../components/myTask/TaskFilter.vue";
+import TaskTable from "../../components/myTask/TaskTable.vue";
+import { useTasks } from "../../composables/useTasks";
 
-// 使用 composable
 const {
   tasks,
   total,
@@ -30,12 +29,10 @@ const {
   toggleFav,
 } = useTasks();
 
-// 处理搜索
 const handleSearch = (keyword: string) => {
   setSearchKeyword(keyword);
 };
 
-// 处理分页
 const handlePageChange = (page: number) => {
   setCurrentPage(page);
 };

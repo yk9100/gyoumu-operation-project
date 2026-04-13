@@ -3,14 +3,14 @@ import Antd from "ant-design-vue";
 import "ant-design-vue/dist/reset.css";
 
 // 提前导入 dayjs 及其插件，确保它们被正确加载
-import dayjs from 'dayjs';
-import advancedFormat from 'dayjs/plugin/advancedFormat';
-import customParseFormat from 'dayjs/plugin/customParseFormat';
-import localeData from 'dayjs/plugin/localeData';
-import quarterOfYear from 'dayjs/plugin/quarterOfYear';
-import weekOfYear from 'dayjs/plugin/weekOfYear';
-import weekYear from 'dayjs/plugin/weekYear';
-import weekday from 'dayjs/plugin/weekday';
+import dayjs from "dayjs";
+import advancedFormat from "dayjs/plugin/advancedFormat";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+import localeData from "dayjs/plugin/localeData";
+import quarterOfYear from "dayjs/plugin/quarterOfYear";
+import weekOfYear from "dayjs/plugin/weekOfYear";
+import weekYear from "dayjs/plugin/weekYear";
+import weekday from "dayjs/plugin/weekday";
 dayjs.extend(advancedFormat);
 dayjs.extend(customParseFormat);
 dayjs.extend(localeData);

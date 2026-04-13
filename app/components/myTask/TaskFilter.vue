@@ -1,45 +1,40 @@
 <template>
   <div class="task-filter">
-    <div class="filter-nav-box">
-      <div class="filter-nav-item">
-        <span>Status:</span>
-        <MyTaskTagSelect
-          :options="TASK_STATUS_OPTIONS"
-          :value="filterState.taskStatus"
-          @onChange="handleTaskStatusChange"
-        />
+    <div class="filter-nav-box-wrap">
+      <div class="filter-nav-box">
+        <div class="filter-nav-item">
+          <span>Status:</span>
+          <MyTaskTagSelect
+            :options="TASK_STATUS_OPTIONS"
+            :value="filterState.taskStatus"
+            @onChange="handleTaskStatusChange"
+          />
+        </div>
+        <div class="filter-nav-item">
+          <span>Subtasking:</span>
+          <MyTaskTagSelect
+            :options="SUB_TASK_STATUS_OPTIONS"
+            :value="filterState.subTaskStatus"
+            @onChange="handleSubTaskStatusChange"
+          />
+        </div>
       </div>
-      <div class="filter-nav-item">
-        <span>Subtasking:</span>
-        <MyTaskTagSelect
-          :options="SUB_TASK_STATUS_OPTIONS"
-          :value="filterState.subTaskStatus"
-          @onChange="handleSubTaskStatusChange"
-        />
-      </div>
+      <a-button type="primary" @click="handleAddTaskClick">
+        <PlusOutlined />
+        タスクを追加
+      </a-button>
     </div>
     <div class="filter-select-box">
       <div class="filter-select-item">
         <span>Issue Type</span>
-        <a-select
-          allowClear
-          v-model:value="filterState.issueType"
-          show-search
-          placeholder="Select issue type"
-          style="width: 160px"
-          :options="ISSUE_TYPE_OPTIONS"
-          :filter-option="filterOption"
-        ></a-select>
+        <IssueTypeSelect v-model="filterState.issueType" style="width: 160px" />
       </div>
       <div class="filter-select-item">
         <span>Category</span>
-        <a-select
-          allowClear
-          v-model:value="filterState.category"
-          placeholder="Select category"
+        <TaskCategorySelect
+          v-model="filterState.category"
           style="width: 160px"
-          :options="TASK_CATEGORY_OPTIONS"
-        ></a-select>
+        />
       </div>
       <div class="filter-select-item">
         <span>Keyword</span>
@@ -55,12 +50,9 @@
 </template>
 
 <script lang="ts" setup>
-import {
-  TASK_STATUS_OPTIONS,
-  SUB_TASK_STATUS_OPTIONS,
-  ISSUE_TYPE_OPTIONS,
-  TASK_CATEGORY_OPTIONS,
-} from "@/common";
+import { PlusOutlined } from "@ant-design/icons-vue";
+import { TASK_STATUS_OPTIONS, SUB_TASK_STATUS_OPTIONS } from "@/common";
+const router = useRouter();
 const filterState = ref<{
   taskStatus: string;
   subTaskStatus: string;
@@ -75,16 +67,16 @@ const filterState = ref<{
   keyword: "",
 });
 
-const filterOption = (input: string, option: any) => {
-  return option.value.toLowerCase().indexOf(input.toLowerCase()) >= 0;
-};
-
 const handleTaskStatusChange = (value: string) => {
   filterState.value.taskStatus = value;
 };
 
 const handleSubTaskStatusChange = (value: string) => {
   filterState.value.subTaskStatus = value;
+};
+
+const handleAddTaskClick = () => {
+  router.push("/create-task");
 };
 
 watch(
@@ -104,6 +96,12 @@ watch(
 <style scoped>
 .task-filter {
   margin-bottom: 20px;
+}
+
+.filter-nav-box-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .filter-nav-box {

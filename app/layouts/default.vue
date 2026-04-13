@@ -3,6 +3,7 @@
     :theme="{
       token: {},
     }"
+    :locale="jaJP"
   >
     <a-layout style="min-height: 100vh">
       <a-layout-sider v-model:collapsed="collapsed" collapsible width="240px">
@@ -56,7 +57,7 @@
         <a-layout-content style="margin: 0 16px">
           <a-breadcrumb style="margin: 16px 0">
             <a-breadcrumb-item
-              v-for="(item, index) in breadcrumbItems"
+              v-for="(item, index) in breadcrumbConfig"
               :key="index"
               :href="item.href"
               @click.stop="handleBreadcrumbClick(item.href)"
@@ -68,7 +69,10 @@
             :style="{
               padding: '24px',
               background: '#fff',
-              height: breadcrumbItems.length > 0 ? 'calc(100vh - 140px)' : 'calc(100vh - 120px)',
+              height:
+                breadcrumbConfig.length > 0
+                  ? 'calc(100vh - 140px)'
+                  : 'calc(100vh - 120px)',
               overflowY: 'auto',
             }"
           >
@@ -80,6 +84,7 @@
   </a-config-provider>
 </template>
 <script lang="ts" setup>
+import jaJP from 'ant-design-vue/es/locale/ja_JP';
 import {
   HomeOutlined,
   FundProjectionScreenOutlined,
@@ -91,7 +96,7 @@ import type { MenuProps } from "ant-design-vue";
 import { ref, onMounted, computed, watch } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import UserInfo from "../components/UserInfo.vue";
-import { ROUTE_TITLE_MAP, HIDE_BREADCRUMB_ROUTES } from "../layouts/common";
+import { ROUTE_TITLE_MAP, BREADCRUMB_CONFIG } from "../layouts/common";
 
 interface MenuItem {
   key: string;
@@ -106,6 +111,10 @@ const route = useRoute();
 
 const currentPageTitle = computed(
   () => ROUTE_TITLE_MAP[`${route.path}${route.hash}`],
+);
+
+const breadcrumbConfig = computed(
+  () => BREADCRUMB_CONFIG[`${route.path}${route.hash}`] || [],
 );
 
 const collapsed = ref<boolean>(false);
@@ -195,42 +204,6 @@ const handleBreadcrumbClick = (href?: string) => {
   }
 };
 
-const breadcrumbItems = computed(() => {
-  const path = route.path;
-
-  if (HIDE_BREADCRUMB_ROUTES.includes(path)) {
-    return [];
-  }
-  const items: { title: string; href?: string }[] = [
-    { title: "ホーム", href: "/home" },
-  ];
-
-  if (path === "/project-management") {
-    items.push({ title: "プロジェクト管理" });
-  } else if (path === "/user-info") {
-    items.push({ title: "ユーザー情報" });
-    const hash = route.hash;
-    if (hash === "#basic-info") {
-      items.push({ title: "基本情報" });
-    } else if (hash === "#personnel-info") {
-      items.push({ title: "人事情報" });
-    } else if (hash === "#salary-info") {
-      items.push({ title: "給与情報" });
-    }
-  } else if (path.startsWith("/other")) {
-    items.push({ title: "その他" });
-    if (path.includes("contact")) {
-      items.push({ title: "お問い合わせ" });
-    } else if (path.includes("terms")) {
-      items.push({ title: "利用規約" });
-    } else if (path.includes("privacy")) {
-      items.push({ title: "プライバシーポリシー" });
-    }
-  }
-
-  return items;
-});
-
 const fetchMenuData = (): Promise<MenuItem[]> => {
   return new Promise<MenuItem[]>((resolve) => {
     // setTimeout(() => {
@@ -266,8 +239,6 @@ const updateSelectedKeysByRoute = () => {
       return;
     }
   }
-
-  selectedKeys.value = ["/home"];
   scrollToAnchor(currentHash);
 };
 

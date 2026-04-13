@@ -29,7 +29,9 @@
           </span>
         </template>
         <template v-else-if="column.key === 'issueKey'">
-          <span class="issue-id">{{ record.issueKey }}</span>
+          <span class="issue-id" @click="handleTaskClick(record)">{{
+            record.issueKey
+          }}</span>
         </template>
         <template v-else-if="column.key === 'status'">
           <span
@@ -79,6 +81,10 @@
                     <EditOutlined />
                     <span>期限を編集</span>
                   </a-menu-item>
+                  <a-menu-item style="color: #ff4d4f">
+                    <DeleteOutlined />
+                    <span>削除</span>
+                  </a-menu-item>
                 </a-menu>
               </template>
             </a-dropdown>
@@ -88,7 +94,7 @@
               size="small"
               @click="emit('toggle-fav', record)"
             >
-              <StarFilled v-if="record.fav" style="color: #1677FF" />
+              <StarFilled v-if="record.fav" style="color: #1677ff" />
               <StarOutlined v-else />
             </a-button>
           </div>
@@ -105,6 +111,7 @@ import {
   StarFilled,
   ArrowUpOutlined,
   EditOutlined,
+  DeleteOutlined,
 } from "@ant-design/icons-vue";
 import type { Task } from "../../types/task";
 
@@ -120,7 +127,7 @@ const emit = defineEmits<{
   (e: "size-change", size: number): void;
   (e: "toggle-fav", task: Task): void;
 }>();
-
+const router = useRouter();
 const scrollX = computed(() => window.innerWidth - 300);
 const scrollY = computed(() => window.innerHeight - 400);
 
@@ -208,6 +215,10 @@ const handleSizeChange = (current: number, size: number) => {
 const formatDate = (dateString: string) => {
   const date = new Date(dateString);
   return date.toLocaleString("ja-JP");
+};
+
+const handleTaskClick = (record: Task) => {
+  router.push(`/task-detail?taskId=${record.id}`);
 };
 </script>
 
