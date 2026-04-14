@@ -25,7 +25,7 @@
       </div>
 
       <div class="parent-issue-box-right">
-        <a-button>Preview</a-button>
+        <!-- <a-button>Preview</a-button> -->
         <a-button type="primary" style="width: 80px">Add</a-button>
       </div>
     </div>
@@ -114,7 +114,7 @@
     </div>
 
     <div class="page-footer">
-      <a-button>Preview</a-button>
+      <!-- <a-button>Preview</a-button> -->
       <a-button type="primary" style="width: 80px">Add</a-button>
     </div>
     <AssociationTasksDialog

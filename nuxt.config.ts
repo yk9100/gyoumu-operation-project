@@ -10,18 +10,21 @@ export default defineNuxtConfig({
   build: {
     transpile: ["ant-design-vue"],
   },
+  routeRules: {
+    "/": { redirect: "/home" },
+  },
   vite: {
     optimizeDeps: {
       include: [
-        'dayjs',
-        'dayjs/plugin/advancedFormat',
-        'dayjs/plugin/customParseFormat',
-        'dayjs/plugin/localeData',
-        'dayjs/plugin/quarterOfYear',
-        'dayjs/plugin/weekOfYear',
-        'dayjs/plugin/weekYear',
-        'dayjs/plugin/weekday'
-      ]
+        "dayjs",
+        "dayjs/plugin/advancedFormat",
+        "dayjs/plugin/customParseFormat",
+        "dayjs/plugin/localeData",
+        "dayjs/plugin/quarterOfYear",
+        "dayjs/plugin/weekOfYear",
+        "dayjs/plugin/weekYear",
+        "dayjs/plugin/weekday",
+      ],
     },
     css: {
       preprocessorOptions: {

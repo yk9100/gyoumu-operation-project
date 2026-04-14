@@ -108,8 +108,6 @@ onMounted(() => {
     setCurrentPage(1);
   }
 });
-
-console.log("tasks", tasks.value);
 </script>
 
 <style scoped>

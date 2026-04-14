@@ -5,7 +5,10 @@
         <div class="filter-nav-item">
           <span>Status:</span>
           <MyTaskTagSelect
-            :options="TASK_STATUS_OPTIONS"
+            :options="[
+              { label: 'All', value: ETaskStatus.All },
+              ...TASK_STATUS_OPTIONS,
+            ]"
             :value="filterState.taskStatus"
             @onChange="handleTaskStatusChange"
           />
@@ -52,6 +55,7 @@
 <script lang="ts" setup>
 import { PlusOutlined } from "@ant-design/icons-vue";
 import { TASK_STATUS_OPTIONS, SUB_TASK_STATUS_OPTIONS } from "@/common";
+import { ETaskStatus } from "~/types";
 const router = useRouter();
 const filterState = ref<{
   taskStatus: string;
@@ -60,7 +64,7 @@ const filterState = ref<{
   category: string;
   keyword: string;
 }>({
-  taskStatus: TASK_STATUS_OPTIONS[0]!.value,
+  taskStatus: ETaskStatus.All,
   subTaskStatus: SUB_TASK_STATUS_OPTIONS[0]!.value,
   issueType: "",
   category: "",

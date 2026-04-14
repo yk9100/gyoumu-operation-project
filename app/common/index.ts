@@ -7,10 +7,6 @@ import {
 
 export const TASK_STATUS_OPTIONS = [
   {
-    label: "All",
-    value: ETaskStatus.All,
-  },
-  {
     label: "Open",
     value: ETaskStatus.Open,
   },
