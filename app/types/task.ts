@@ -107,5 +107,5 @@ export interface Task {
   mentionsInDescription: any | null;
   ext: Ext;
   childIssueSummary: any | null;
-  childIssues: any[];
+  childIssues: Task[];
 }

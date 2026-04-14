@@ -65,6 +65,10 @@
         </div>
       </div>
     </div>
+
+    <div class="attachment-sub-task-tabs">
+      <TaskDetailAttachmentSubTaskTabs :attachments="attachments" />
+    </div>
   </div>
 </template>
 
@@ -90,6 +94,7 @@ const {
   description,
   priority,
   assignee,
+  attachments,
 } = taskDetailMock;
 console.log("taskDetailMock", taskDetailMock);
 
@@ -251,5 +256,9 @@ const renderedContent = computed(() => {
 
 .form-item-content {
   flex: 1 1 70%;
+}
+
+.attachment-sub-task-tabs {
+  margin-top: 20px;
 }
 </style>
