@@ -1,5 +1,5 @@
 <template>
-    <a-dropdown @visibleChange="handleVisibleChange">
+    <a-dropdown @onOpenChange="handleVisibleChange">
         <a class="user-info" href="#" @click.stop>
             <a-avatar :size="32" :src="userInfo.avatar" :alt="userInfo.name" />
             <span class="user-name">{{ userInfo.name }}</span>

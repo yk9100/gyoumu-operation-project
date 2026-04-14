@@ -1,7 +1,7 @@
 <template>
   <div class="sub-task-list-box">
     <div class="action-box">
-      <a-button>
+      <a-button @click="addChildTaskDialogVisible = true">
         <PlusOutlined />
         Add child issue</a-button
       >
@@ -44,6 +44,10 @@
         </template>
       </a-table>
     </div>
+    <AddChildTaskDialog
+      v-model:visible="addChildTaskDialogVisible"
+      @update:visible="handleVisibleChange"
+    />
   </div>
 </template>
 <script lang="ts" setup>
@@ -57,6 +61,11 @@ const props = defineProps<{
   subTasks: Task[];
 }>();
 const subTasks = ref(props.subTasks);
+const addChildTaskDialogVisible = ref(false);
+
+const handleVisibleChange = (value: boolean) => {
+  addChildTaskDialogVisible.value = value;
+};
 
 const columns = [
   {
