@@ -3,14 +3,17 @@
     <a-tab-pane key="attachment-list" tab="Attachments">
       <TaskDetailAttachmentList :attachments="attachments" />
     </a-tab-pane>
-    <a-tab-pane key="sub-tasks" tab="Subtasking"> Subtasking </a-tab-pane>
+    <a-tab-pane key="sub-tasks" tab="Subtasking">
+      <TaskDetailSubTaskList :subTasks="subTasks" />
+    </a-tab-pane>
   </a-tabs>
 </template>
 <script lang="ts" setup>
-import type { Attachment } from "~/types/task";
+import type { Attachment, Task } from "~/types/task";
 
 const props = defineProps<{
   attachments: Attachment[];
+  subTasks: Task[];
 }>();
 </script>
 <style scoped>

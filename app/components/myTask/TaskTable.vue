@@ -1,6 +1,5 @@
 <template>
   <div class="task-table-container">
-    <!-- 任务表格 -->
     <a-table
       :columns="columns"
       :data-source="tasks"
@@ -17,8 +16,118 @@
         (_record: any, index: number) =>
           index % 2 === 1 ? 'table-striped' : null
       "
+      :rowExpandable="
+        (record: Task) => {
+          return record.childIssues && record.childIssues.length > 0;
+        }
+      "
     >
-      <!-- Issue Type 列 -->
+      <template #expandIcon="{ record, expanded, onExpand }">
+        <span
+          v-if="record.childIssues && record.childIssues.length"
+          class="expand-icon-wrapper"
+          @click="onExpand(record, $event)"
+        >
+          <RightOutlined :class="{ expanded }" />
+        </span>
+      </template>
+
+      <!-- 子任务表格 -->
+      <template #expandedRowRender="{ record }">
+        <div style="padding-left: 32px">
+          <a-table
+            :columns="columns"
+            :data-source="record.childIssues || []"
+            row-key="id"
+            :scroll="{ x: scrollX }"
+            :pagination="false"
+            :show-header="false"
+          >
+            <template #bodyCell="{ column, record: childRecord }">
+              <template v-if="column.key === 'issueType'">
+                <span
+                  class="td-tag"
+                  :style="{ backgroundColor: childRecord.issueType.color }"
+                >
+                  {{ childRecord.issueType.name }}
+                </span>
+              </template>
+              <template v-else-if="column.key === 'issueKey'">
+                <span class="issue-id" @click="handleTaskClick(childRecord)">{{
+                  childRecord.issueKey
+                }}</span>
+              </template>
+              <template v-else-if="column.key === 'status'">
+                <span
+                  class="td-tag"
+                  :style="{ backgroundColor: childRecord.status.color }"
+                >
+                  {{ childRecord.status.name }}
+                </span>
+              </template>
+              <template v-else-if="column.key === 'assignee'">
+                <div class="assignee-info">
+                  <a-avatar
+                    :size="24"
+                    :src="
+                      childRecord.assignee?.icon
+                        ? `https://assets.backlog.jp/playassets/1.78.2/${childRecord.assignee.icon}`
+                        : ''
+                    "
+                    :alt="childRecord.assignee?.name"
+                  />
+                  <span>{{ childRecord.assignee?.name }}</span>
+                </div>
+              </template>
+              <template v-else-if="column.key === 'category'">
+                <span>{{
+                  childRecord.category.length > 0
+                    ? childRecord.category.map((c: any) => c.name).join(", ")
+                    : "-"
+                }}</span>
+              </template>
+              <template v-else-if="column.key === 'created'">
+                <span>{{ formatDate(childRecord.created) }}</span>
+              </template>
+              <template v-else-if="column.key === 'operation'">
+                <div class="operation-buttons">
+                  <a-dropdown trigger="click">
+                    <a class="ant-dropdown-link" @click.prevent>
+                      <MoreOutlined style="font-size: 18px; color: #111" />
+                    </a>
+                    <template #overlay>
+                      <a-menu>
+                        <a-menu-item>
+                          <ArrowUpOutlined />
+                          <span>一番上に移動</span>
+                        </a-menu-item>
+                        <a-menu-item>
+                          <EditOutlined />
+                          <span>期限を編集</span>
+                        </a-menu-item>
+                        <a-menu-item style="color: #ff4d4f">
+                          <DeleteOutlined />
+                          <span>削除</span>
+                        </a-menu-item>
+                      </a-menu>
+                    </template>
+                  </a-dropdown>
+                  <a-button
+                    class="ant-dropdown-link"
+                    type="danger"
+                    size="small"
+                    @click="emit('toggle-fav', childRecord)"
+                  >
+                    <StarFilled v-if="childRecord.fav" style="color: #1677ff" />
+                    <StarOutlined v-else />
+                  </a-button>
+                </div>
+              </template>
+            </template>
+          </a-table>
+        </div>
+      </template>
+
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'issueType'">
           <span
@@ -112,6 +221,7 @@ import {
   ArrowUpOutlined,
   EditOutlined,
   DeleteOutlined,
+  RightOutlined,
 } from "@ant-design/icons-vue";
 import type { Task } from "../../types/task";
 
@@ -301,5 +411,36 @@ const handleTaskClick = (record: Task) => {
   display: flex;
   align-items: center;
   gap: 4px;
+}
+
+:deep(.ant-table-expanded-row-fixed) {
+  padding-right: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.expand-icon-wrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.expand-icon-wrapper:hover {
+  background-color: rgba(0, 0, 0, 0.06);
+  color: #1890ff;
+}
+
+.expand-icon-wrapper .anticon {
+  transition: transform 0.2s ease;
+  font-size: 12px;
+}
+
+.expand-icon-wrapper .anticon.expanded {
+  transform: rotate(90deg);
 }
 </style>

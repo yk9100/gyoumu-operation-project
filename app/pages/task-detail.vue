@@ -67,7 +67,10 @@
     </div>
 
     <div class="attachment-sub-task-tabs">
-      <TaskDetailAttachmentSubTaskTabs :attachments="attachments" />
+      <TaskDetailAttachmentSubTaskTabs
+        :attachments="attachments"
+        :subTasks="childIssues"
+      />
     </div>
   </div>
 </template>
@@ -95,6 +98,7 @@ const {
   priority,
   assignee,
   attachments,
+  childIssues,
 } = taskDetailMock;
 console.log("taskDetailMock", taskDetailMock);
 

@@ -7,8 +7,8 @@ export interface IssueType {
   color: string;
   displayOrder: number;
   keyword: string;
-  tempSummary: string;
-  tempDescription: string;
+  tempSummary?: string | null;
+  tempDescription?: string | null;
 }
 
 export interface Priority {

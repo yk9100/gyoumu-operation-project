@@ -26,7 +26,9 @@
 
       <div class="parent-issue-box-right">
         <!-- <a-button>Preview</a-button> -->
-        <a-button type="primary" style="width: 80px">Add</a-button>
+        <a-button type="primary" style="width: 80px" @click="handleAddTaskClick"
+          >Add</a-button
+        >
       </div>
     </div>
     <div class="create-task-form">
@@ -115,7 +117,9 @@
 
     <div class="page-footer">
       <!-- <a-button>Preview</a-button> -->
-      <a-button type="primary" style="width: 80px">Add</a-button>
+      <a-button type="primary" style="width: 80px" @click="handleAddTaskClick"
+        >Add</a-button
+      >
     </div>
     <AssociationTasksDialog
       v-model:visible="showParentIssueDialog"
@@ -127,10 +131,10 @@
 <script lang="ts" setup>
 import { ApartmentOutlined, CloseOutlined } from "@ant-design/icons-vue";
 import dayjs from "dayjs";
-import { useRoute } from "vue-router";
+import { useRouter } from "vue-router";
 import { EIssueType, ETaskStatus } from "~/types";
 import type { Task } from "~/types/task";
-const route = useRoute();
+const router = useRouter();
 const parentTask = ref<Task | null>(null);
 const showParentIssueDialog = ref(false);
 const createTaskState = ref({
@@ -156,6 +160,10 @@ const handleParentTaskSelect = (item: Task) => {
 
 const handleCancel = () => {
   showParentIssueDialog.value = false;
+};
+
+const handleAddTaskClick = () => {
+  router.push("/my-task");
 };
 </script>
 <style scoped>

@@ -1,4 +1,6 @@
-export const taskDetailMock = {
+import type { Task } from "~/types/task";
+
+export const taskDetailMock: Task = {
   id: 58716203,
   projectId: 200462,
   issueKey: "YOUKOU_EDITOR-119",
