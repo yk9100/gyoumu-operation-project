@@ -70,6 +70,44 @@ export interface Ext {
   updated: string;
 }
 
+export interface Changelog {
+  field: string;
+  fieldType: string;
+  hasAttribute: boolean;
+  isText: boolean;
+  isNotification: boolean;
+  type?: string;
+  newValue: string | null;
+  originalValue: string | null;
+  attachment: any | null;
+  commit: any | null;
+  renderingNewValue?: any | null;
+  renderingOriginalValue?: any | null;
+}
+
+export interface NotifyResource {
+  notificationId: number;
+  userId: string;
+  user: User;
+  alreadyRead: boolean;
+  resource: string;
+}
+
+export interface TaskComment {
+  id: number;
+  name: string;
+  icon: string;
+  createdUserId: string;
+  createdUser: User;
+  createdOn: string;
+  updatedOn: string;
+  content: string | null;
+  plainContent: string | null;
+  changelog: Changelog[];
+  notifyResource: NotifyResource[];
+  mentionsInContent: any | null;
+}
+
 export interface Task {
   fav?: boolean;
   id: number;

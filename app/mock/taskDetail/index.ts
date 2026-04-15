@@ -1,4 +1,4 @@
-import type { Task } from "~/types/task";
+import type { Task, TaskComment } from "~/types/task";
 
 export const taskDetailMock: Task = {
   id: 58716203,
@@ -520,3 +520,118 @@ export const taskDetailMock: Task = {
     },
   ],
 };
+
+export const taskDetailCommentsMock: TaskComment[] = [
+  {
+    id: 288163699,
+    name: "金光泰",
+    icon: "icons/default/100/04.png",
+    createdUserId: "kim",
+    createdUser: {
+      id: 339880,
+      userId: "kim",
+      uniqueId: "kimkwangtae",
+      name: "金光泰",
+      mailAddress: "kim.kwangtae@daiichihoki.com",
+      roleType: 94,
+      keyword: "金光泰  KANEMITUKONKOUYASUSHITAI",
+      lang: "ja",
+      icon: "icons/default/100/04.png",
+    },
+    createdOn: "Aug. 08, 2025 08:40:12",
+    updatedOn: "Aug. 08, 2025 08:40:12",
+    content: null,
+    plainContent: null,
+    changelog: [
+      {
+        field: "Description",
+        fieldType: "description",
+        hasAttribute: false,
+        isText: true,
+        isNotification: false,
+        newValue:
+          "これまで検証用（別団体の検証用）に用意していた以下書名について、\n現状はASA口座ではないものの、今後のために利用しないことにしたいと思います。\n\n* 団体ID：30317　団体名：D1-LAWGUE検証用２\n* 書名CD：33461Z（検証用（矢掛町））\n* 要綱管理ツール用書名CD：33461Y\n\n※参考：アカウント情報\nhttps://docs.google.com/spreadsheets/d/1JzKOzJfIay5bY2-crrtvfOJDOR_rjsct_YEcGzwsHxs/edit?usp=sharing\n\n## 削除対象データ\n* monogoDB削除：　@鄭軍(bs) \n* infinibox削除：　@鄭軍(bs) \n* elasticsearch削除：　@金光泰 \n\n## 対応流れ\n\n###　①検証環境にて削除実施とともに手順確率\n　　鄭さん、キム\n\n###　②検証環境にて動作確認\n　　小林さん、鄭さん、キム\n* 以下の書名コードにアクセスしデータがないことを確認\n* 書名CD：33461Z\n* 他書名にて「新規→編集→保存→確定→マスタ更新」庁内・公開プレビュー確認\n\n###　③本番機実施Goサイン\n　　小林さん、鄭さん、キム\n* 本番対応は念のため、業務後時間帯に実施する。\n* サービス停止はないため、業務後時間帯いつでも良い。\n\n###　④本番環境にて削除実施\n　　鄭さん、キム\n\n###　⑤本番環境にて確認\n　　小林さん、鄭さん、キム\n",
+        originalValue:
+          "これまで検証用（別団体の検証用）に用意していた以下書名について、\n現状はASA口座ではないものの、今後のために利用しないことにしたいと思います。\n\n* 団体ID：30317　団体名：D1-LAWGUE検証用２\n* 書名CD：33461Z（検証用（矢掛町））\n\n※参考：アカウント情報\nhttps://docs.google.com/spreadsheets/d/1JzKOzJfIay5bY2-crrtvfOJDOR_rjsct_YEcGzwsHxs/edit?usp=sharing\n\n## 削除対象データ\n* monogoDB削除：　@鄭軍(bs) \n* infinibox削除：　@鄭軍(bs) \n* elasticsearch削除：　@金光泰 \n\n## 対応流れ\n\n###　①検証環境にて削除実施とともに手順確率\n　　鄭さん、キム\n\n###　②検証環境にて動作確認\n　　小林さん、鄭さん、キム\n* 以下の書名コードにアクセスしデータがないことを確認\n* 書名CD：33461Z\n* 他書名にて「新規→編集→保存→確定→マスタ更新」庁内・公開プレビュー確認\n\n###　③本番機実施Goサイン\n　　小林さん、鄭さん、キム\n* 本番対応は念のため、業務後時間帯に実施する。\n* サービス停止はないため、業務後時間帯いつでも良い。\n\n###　④本番環境にて削除実施\n　　鄭さん、キム\n\n###　⑤本番環境にて確認\n　　小林さん、鄭さん、キム\n",
+        attachment: null,
+        commit: null,
+      },
+    ],
+    notifyResource: [],
+    mentionsInContent: null,
+  },
+  {
+    id: 287653563,
+    name: "金光泰",
+    icon: "icons/default/100/04.png",
+    createdUserId: "kim",
+    createdUser: {
+      id: 339880,
+      userId: "kim",
+      uniqueId: "kimkwangtae",
+      name: "金光泰",
+      mailAddress: "kim.kwangtae@daiichihoki.com",
+      roleType: 94,
+      keyword: "金光泰  KANEMITUKONKOUYASUSHITAI",
+      lang: "ja",
+      icon: "icons/default/100/04.png",
+    },
+    createdOn: "Aug. 05, 2025 14:10:15",
+    updatedOn: "Aug. 05, 2025 14:10:15",
+    content: null,
+    plainContent: null,
+    changelog: [
+      {
+        field: "Notification",
+        fieldType: "notification",
+        hasAttribute: false,
+        isText: false,
+        isNotification: true,
+        type: "Add Issue",
+        newValue: null,
+        originalValue: null,
+        attachment: null,
+        commit: null,
+        renderingNewValue: null,
+        renderingOriginalValue: null,
+      },
+    ],
+    notifyResource: [
+      {
+        notificationId: 359525085,
+        userId: "brave.teigun",
+        user: {
+          id: 316791,
+          userId: "brave.teigun",
+          uniqueId: "teigun",
+          name: "鄭軍(bs)",
+          mailAddress: "teigun@bravesoft.co.jp",
+          roleType: 94,
+          keyword: "鄭軍(bs)  TEIGUN(bs)",
+          lang: "ja",
+          icon: "icons/default/100/17.png",
+        },
+        alreadyRead: true,
+        resource: "comment-200462-53213792-287653563",
+      },
+      {
+        notificationId: 359525086,
+        userId: "kobayashi.m",
+        user: {
+          id: 145044,
+          userId: "kobayashi.m",
+          uniqueId: "mizue_kobayashi",
+          name: "6238小林瑞枝",
+          mailAddress: "mizue.kobayashi@daiichihoki.com",
+          roleType: 255,
+          keyword: "6238小林瑞枝  6238KOBAYASHIMIZUE",
+          lang: "ja",
+          icon: "UserLargeIcon.action?iconId=145044&t=20190328165430",
+        },
+        alreadyRead: true,
+        resource: "comment-200462-53213792-287653563",
+      },
+    ],
+    mentionsInContent: null,
+  },
+];

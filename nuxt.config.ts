@@ -5,6 +5,10 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   // 注册客户端插件
   plugins: ["~/plugins/antdv.client.ts"],
+  // 添加 pinia 模块
+  modules: ["@pinia/nuxt"],
+  // pinia 配置
+  pinia: {},
 
   // 关键：将 ant-design-vue 加入转译列表，解决 SSR 兼容问题
   build: {

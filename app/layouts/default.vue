@@ -6,7 +6,7 @@
     :locale="jaJP"
   >
     <a-layout style="min-height: 100vh">
-      <a-layout-sider v-model:collapsed="collapsed" collapsible width="240px">
+      <a-layout-sider :collapsed="!layoutStore.sidebarOpen" @update:collapsed="handleCollapseChange" collapsible width="240px">
         <div class="logo" />
         <a-skeleton v-if="loading" :active="true" :paragraph="{ rows: 10 }" />
         <a-menu
@@ -97,6 +97,7 @@ import { ref, onMounted, computed, watch } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import UserInfo from "../components/UserInfo.vue";
 import { ROUTE_TITLE_MAP, BREADCRUMB_CONFIG } from "../layouts/common";
+import { useLayoutStore } from "../stores/layout";
 
 interface MenuItem {
   key: string;
@@ -108,6 +109,7 @@ interface MenuItem {
 
 const router = useRouter();
 const route = useRoute();
+const layoutStore = useLayoutStore();
 
 const currentPageTitle = computed(
   () => ROUTE_TITLE_MAP[`${route.path}${route.hash}`],
@@ -117,7 +119,6 @@ const breadcrumbConfig = computed(
   () => BREADCRUMB_CONFIG[`${route.path}${route.hash}`] || [],
 );
 
-const collapsed = ref<boolean>(false);
 const selectedKeys = ref<string[]>([]);
 const loading = ref<boolean>(true);
 const menuData = ref<MenuItem[]>([]);
@@ -202,6 +203,10 @@ const handleBreadcrumbClick = (href?: string) => {
   if (href) {
     router.push(href);
   }
+};
+
+const handleCollapseChange = (collapsed: boolean) => {
+  layoutStore.setSidebarOpen(!collapsed);
 };
 
 const fetchMenuData = (): Promise<MenuItem[]> => {

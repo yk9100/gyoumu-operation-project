@@ -72,6 +72,11 @@
         :subTasks="childIssues"
       />
     </div>
+
+    <div class="comment-list-wrap">
+      <TaskDetailCommentList />
+    </div>
+    <TaskDetailCommentBar v-model:attachmentList="attachmentList" />
   </div>
 </template>
 
@@ -101,6 +106,7 @@ const {
   childIssues,
 } = taskDetailMock;
 console.log("taskDetailMock", taskDetailMock);
+const attachmentList = ref<File[]>([]);
 
 const renderedContent = computed(() => {
   // 预处理：将 Slack ID 转换为可读格式
@@ -114,6 +120,7 @@ const renderedContent = computed(() => {
 <style scoped>
 .task-detail-page {
   /* padding: 20px; */
+  padding-bottom: 68px;
 }
 
 .task-detail-header {
@@ -264,5 +271,9 @@ const renderedContent = computed(() => {
 
 .attachment-sub-task-tabs {
   margin-top: 20px;
+}
+
+.comment-list-wrap {
+  margin-top: 30px;
 }
 </style>
