@@ -1,11 +1,9 @@
 <template>
   <div>
-    <div class="comment-list-title">
-      Comments ({{ taskDetailCommentsMock.length }})
-    </div>
+    <div class="comment-list-title">Comments ({{ props.comments.length }})</div>
     <div class="comment-list">
       <div
-        v-for="comment in taskDetailCommentsMock"
+        v-for="comment in props.comments"
         :key="comment.id"
         class="comment-item"
       >
@@ -34,11 +32,9 @@
 </template>
 
 <script lang="ts" setup>
-import { taskDetailCommentsMock } from "../../mock/taskDetail";
+import type { TaskComment } from "~/types/task";
 
-const taskDetailComments = ref(taskDetailCommentsMock);
-
-console.log("taskDetailComments", taskDetailComments.value);
+const props = defineProps<{ comments: TaskComment[] }>();
 </script>
 
 <style scoped>

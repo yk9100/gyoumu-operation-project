@@ -7,3 +7,12 @@ html {
     font-family: "LINE Seed JP App_OTF";
     overscroll-behavior: none;
 }
+
+span[data-at-embedded] {
+    background-color: #e6f4ff !important;
+    color: #1677ff !important;
+    border-radius: 4px !important;
+    padding: 0 4px !important;
+    margin: 0 2px !important;
+    background: #e6f4ff !important;
+}

@@ -1,5 +1,5 @@
 <template>
-  <div class="task-detail-page">
+  <div class="task-detail-page" ref="pageRef">
     <div class="task-detail-header">
       <div class="task-detail-header-left">
         <span
@@ -74,22 +74,27 @@
     </div>
 
     <div class="comment-list-wrap">
-      <TaskDetailCommentList />
+      <TaskDetailCommentList :comments="comments" />
     </div>
-    <TaskDetailCommentBar v-model:attachmentList="attachmentList" />
+    <TaskDetailCommentBar
+      v-model:attachmentList="attachmentList"
+      @sendComment="sendComment"
+    />
   </div>
 </template>
 
 <script lang="ts" setup>
 import { useRoute } from "vue-router";
-import { taskDetailMock } from "../mock/taskDetail";
+import { taskDetailCommentsMock, taskDetailMock } from "../mock/taskDetail";
 import MarkdownIt from "markdown-it";
+import type { TaskComment } from "~/types/task";
 const md = new MarkdownIt({
   html: true, // 允许 HTML 标签
   linkify: true, // 自动识别 URL
   typographer: true, // 优化排版
 });
 const route = useRoute();
+const pageRef = ref<HTMLDivElement | null>(null);
 const {
   issueType,
   issueKey,
@@ -106,6 +111,9 @@ const {
   childIssues,
 } = taskDetailMock;
 console.log("taskDetailMock", taskDetailMock);
+const comments = ref(taskDetailCommentsMock);
+
+console.log("comments", comments.value);
 const attachmentList = ref<File[]>([]);
 
 const renderedContent = computed(() => {
@@ -116,10 +124,25 @@ const renderedContent = computed(() => {
   );
   return md.render(processed);
 });
+
+const sendComment = (comment: TaskComment) => {
+  comments.value.push(comment);
+  console.log("pageRef.value", pageRef.value);
+  if (pageRef.value) {
+    console.log("pageRef.value?.scrollHeight", pageRef.value?.scrollHeight);
+    setTimeout(() => {
+      pageRef.value?.scrollTo({
+        top: pageRef.value?.scrollHeight ? pageRef.value.scrollHeight + 64 : 0,
+      });
+    }, 200);
+  }
+};
 </script>
 <style scoped>
 .task-detail-page {
   /* padding: 20px; */
+  height: 100%;
+  overflow-y: auto;
   padding-bottom: 68px;
 }
 

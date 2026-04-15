@@ -27,11 +27,23 @@
       <div class="expand-comment-content">
         <div class="expand-comment-form-box">
           <div style="flex: 1">
-            <a-textarea
-              v-model="comment"
-              placeholder="Write a comment, use @mention to notify a colleague..."
-              :rows="10"
-            />
+            <at
+              :members="members"
+              class="antd-mention-input"
+              :keys="['@']"
+              @update:value="handleContentChange"
+            >
+              <template #embeddedItem="{ current }">
+                <span> @{{ current }} </span>
+              </template>
+              <div
+                :contenteditable="true"
+                class="antd-textarea"
+                :class="{ 'antd-textarea-focused': isFocused }"
+                @focus="isFocused = true"
+                @blur="isFocused = false"
+              ></div>
+            </at>
           </div>
           <div class="expand-comment-form">
             <div class="form-item">
@@ -88,11 +100,17 @@
 import { EditFilled } from "@ant-design/icons-vue";
 import dayjs from "dayjs";
 import { ETaskStatus } from "~/types";
+import At from "vue-at";
+import { message } from "ant-design-vue";
+import type { TaskComment } from "~/types/task";
 const layoutStore = useLayoutStore();
 const attachmentList = defineModel<File[]>("attachmentList", {
   default: () => [],
 });
+const emit = defineEmits<{ (e: "sendComment", comment: TaskComment): void }>();
 const barCollapsed = ref(true);
+const members = ["Roxie Miles", "grace.carroll", "小浩"];
+const isFocused = ref(false);
 const comment = ref("");
 const fromState = ref<{
   status: string;
@@ -111,7 +129,58 @@ const handleCollapse = () => {
 const handleExpand = () => {
   barCollapsed.value = false;
 };
-const handleSubmit = () => {};
+const handleSubmit = () => {
+  if (!comment.value || comment.value === "@") {
+    message.error("Please input a comment.");
+
+    return;
+  }
+
+  emit("sendComment", {
+    id: 28816369990,
+    name: "金光泰",
+    icon: "icons/default/100/04.png",
+    createdUserId: "kim",
+    createdUser: {
+      id: 339880,
+      userId: "kim",
+      uniqueId: "kimkwangtae",
+      name: "金光泰",
+      mailAddress: "kim.kwangtae@daiichihoki.com",
+      roleType: 94,
+      keyword: "金光泰  KANEMITUKONKOUYASUSHITAI",
+      lang: "ja",
+      icon: "icons/default/100/04.png",
+    },
+    createdOn: dayjs().format("YYYY-MM-DD HH:mm:ss"),
+    updatedOn: dayjs().format("YYYY-MM-DD HH:mm:ss"),
+    content: null,
+    plainContent: null,
+    changelog: [
+      {
+        field: "Description",
+        fieldType: "description",
+        hasAttribute: false,
+        isText: true,
+        isNotification: false,
+        newValue: comment.value,
+        originalValue: "",
+        attachment: null,
+        commit: null,
+      },
+    ],
+    notifyResource: [],
+    mentionsInContent: null,
+  });
+  barCollapsed.value = true;
+};
+
+const handleContentChange = (newValue: string) => {
+  const tempDiv = document.createElement("div");
+  tempDiv.innerHTML = newValue;
+  const plainText = tempDiv.textContent || tempDiv.innerText || "";
+  comment.value = plainText;
+};
 </script>
 
 <style scoped>
@@ -208,5 +277,55 @@ const handleSubmit = () => {};
   display: flex;
   flex-direction: column;
   gap: 4px;
+}
+
+.mention-input {
+  border: 1px solid #e8e8e8;
+  border-radius: 4px;
+  height: 300px;
+}
+
+.antd-mention-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.antd-mention-input {
+  display: block;
+  width: 100%;
+}
+
+.antd-textarea {
+  width: 100%;
+  min-height: 32px;
+  overflow-y: auto;
+  padding: 4px 11px;
+  color: rgba(0, 0, 0, 0.88);
+  font-size: 14px;
+  line-height: 1.5714285714285714;
+  background-color: #ffffff;
+  background-image: none;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #d9d9d9;
+  border-radius: 6px;
+  transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+  outline: none;
+  cursor: text;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  height: 230px;
+}
+
+.antd-textarea:hover {
+  border-color: #4096ff;
+}
+
+.antd-textarea-focused,
+.antd-textarea:focus-visible {
+  border-color: #4096ff;
+  box-shadow: 0 0 0 2px rgba(5, 145, 255, 0.1);
+  outline: 0;
 }
 </style>
