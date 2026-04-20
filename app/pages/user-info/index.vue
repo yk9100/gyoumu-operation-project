@@ -1,38 +1,104 @@
 <template>
   <div>
-    <h1>用户情報</h1>
-    
     <!-- 导航链接 -->
-    <div class="nav-links">
+    <!-- <div class="nav-links">
       <a href="#basic-info">基本情報</a>
       <a href="#personnel-info">人事情報</a>
       <a href="#salary-info">給与情報</a>
-    </div>
-    
+    </div> -->
+
     <!-- 基本情報部分 -->
     <section id="basic-info" class="info-section">
-      <h2>基本情報</h2>
-      <p>ここは基本情報の内容です。</p>
+      <div class="form-title">
+        本人情報
+        <a-button @click="baseFormPreviewMode = !baseFormPreviewMode">
+          {{ baseFormPreviewMode ? "変更する" : "変更完了" }}
+        </a-button>
+      </div>
       <div class="content">
-        <p>名前: 山田太郎</p>
-        <p>生年月日: 1990年1月1日</p>
-        <p>住所: 東京都新宿区</p>
-        <p>電話番号: 0123-456-7890</p>
+        <DynamicForm
+          :config="BASE_FORM_CONFIG"
+          v-model:modelValue="baseFormData"
+          :preview-mode="baseFormPreviewMode"
+        />
+      </div>
+
+      <div class="form-title">
+        <span>
+          住民票住所
+          <a-tooltip placement="top">
+            <template #title
+              >社会保険・住民税の入退社手続きや、年末調整関係書類、労働者名簿等に記載される住所です。</template
+            >
+            <QuestionCircleOutlined style="margin-left: 2px; color: #999" />
+          </a-tooltip>
+        </span>
+      </div>
+      <div class="content">
+        <DynamicForm
+          :config="RESIDENTIAL_ADDRESS_FORM_CONFIG"
+          v-model:modelValue="residentialAddressFormData"
+          :preview-mode="baseFormPreviewMode"
+        />
+      </div>
+
+      <div class="form-title">
+        <span>
+          現住所
+          <a-tooltip placement="top">
+            <template #title
+              >　健康保険・厚生年金保険被保険者資格取得届に特定の理由で住民票住所を記載できない場合は、現住所（居所）が記載されます。</template
+            >
+            <QuestionCircleOutlined style="margin-left: 2px; color: #999" />
+          </a-tooltip>
+        </span>
+      </div>
+      <div class="content">
+        <DynamicForm
+          :config="CURRENT_RESIDENCE_FORM_CONFIG"
+          v-model:modelValue="currentResidenceFormData"
+          :preview-mode="baseFormPreviewMode"
+        />
+      </div>
+
+      <div class="form-title">外国籍情報</div>
+      <div class="content">
+        <DynamicForm
+          :config="FOREIGN_INTELLECTUAL_PROPERTY_FORM_CONFIG"
+          v-model:modelValue="foreignIntellectualPropertyFormFormData"
+          :preview-mode="baseFormPreviewMode"
+        />
       </div>
     </section>
-    
+
     <!-- 人事情報部分 -->
     <section id="personnel-info" class="info-section">
-      <h2>人事情報</h2>
-      <p>ここは人事情報の内容です。</p>
-      <div class="content">
-        <p>入社日: 2020年4月1日</p>
-        <p>所属: 開発部</p>
-        <p>役職: エンジニア</p>
-        <p>上司: 佐藤健</p>
+      <div class="form-title">
+        人事情報
+        <a-button @click="personnelFormPreviewMode = !personnelFormPreviewMode">
+          {{ personnelFormPreviewMode ? "変更する" : "変更完了" }}
+        </a-button>
+      </div>
+      <div
+        class="content"
+        v-for="(item, index) in personnelFormData"
+        :key="index"
+      >
+        <div class="multi-form-title" @click="item.expanded = !item.expanded">
+          <div>家族情報{{ index + 1 }} {{ item.title }}</div>
+
+          <UpOutlined v-if="item.expanded" />
+          <DownOutlined v-else />
+        </div>
+        <DynamicForm
+          v-if="item.expanded"
+          :config="PERSONNEL_FORM_CONFIG"
+          v-model:modelValue="item.formData"
+          :preview-mode="personnelFormPreviewMode"
+        />
       </div>
     </section>
-    
+
     <!-- 給与情報部分 -->
     <section id="salary-info" class="info-section">
       <h2>給与情報</h2>
@@ -48,7 +114,28 @@
 </template>
 
 <script lang="ts" setup>
-// 用户情報ページのロジック
+import {
+  BASE_FORM_CONFIG,
+  PERSONNEL_FORM_CONFIG,
+  RESIDENTIAL_ADDRESS_FORM_CONFIG,
+  CURRENT_RESIDENCE_FORM_CONFIG,
+  FOREIGN_INTELLECTUAL_PROPERTY_FORM_CONFIG,
+} from "~/common/form";
+import {
+  QuestionCircleOutlined,
+  UpOutlined,
+  DownOutlined,
+} from "@ant-design/icons-vue";
+
+const baseFormData = ref({});
+const baseFormPreviewMode = ref(true);
+const personnelFormData = ref([
+  { title: "xxxx", formData: {}, expanded: true },
+]);
+const personnelFormPreviewMode = ref(true);
+const residentialAddressFormData = ref({});
+const currentResidenceFormData = ref({});
+const foreignIntellectualPropertyFormFormData = ref({});
 </script>
 
 <style scoped>
@@ -70,9 +157,7 @@
 }
 
 .info-section {
-  margin: 40px 0;
-  padding: 20px;
-  background-color: #f9f9f9;
+  margin-bottom: 40px;
   border-radius: 4px;
 }
 
@@ -84,5 +169,28 @@
 .content {
   margin-top: 10px;
   line-height: 1.5;
+}
+
+.form-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f5f5f5;
+  padding: 6px 10px;
+  border-radius: 4px;
+}
+
+.multi-form-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #333;
+  font-weight: bold;
+}
+.multi-form-title:hover {
+  background-color: #f9f8f8;
 }
 </style>
