@@ -2,9 +2,9 @@ export const ROUTE_TITLE_MAP: Record<string, string> = {
   "/home": "ホーム",
   "/my-task": "マイタスク",
   "/project-management": "プロジェクト管理",
-  "/user-info#basic-info": "ユーザー情報>基本情報",
-  "/user-info#personnel-info": "ユーザー情報>人事情報",
-  "/user-info#salary-info": "ユーザー情報>給与情報",
+  "/user-info#basic-info": "アカウント情報>基本情報",
+  "/user-info#personnel-info": "アカウント情報>人事情報",
+  "/user-info#salary-info": "アカウント情報>給与情報",
   "/other/contact": "その他>お問い合わせ",
   "/other/terms": "その他>利用規約",
   "/other/privacy": "その他>プライバシーポリシー",
@@ -18,7 +18,7 @@ export const BREADCRUMB_CONFIG: Record<
 > = {
   "/user-info#basic-info": [
     {
-      title: "ユーザー情報",
+      title: "アカウント情報",
     },
     {
       title: "基本情報",
@@ -26,7 +26,7 @@ export const BREADCRUMB_CONFIG: Record<
   ],
   "/user-info#personnel-info": [
     {
-      title: "ユーザー情報",
+      title: "アカウント情報",
     },
     {
       title: "人事情報",
@@ -34,7 +34,7 @@ export const BREADCRUMB_CONFIG: Record<
   ],
   "/user-info#salary-info": [
     {
-      title: "ユーザー情報",
+      title: "アカウント情報",
     },
     {
       title: "給与情報",

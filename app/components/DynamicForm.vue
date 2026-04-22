@@ -204,7 +204,7 @@ onMounted(() => {
 }
 
 .preview-label {
-  width: 140px;
+  width: 160px;
   font-weight: 500;
   margin-right: 16px;
   text-align: left;

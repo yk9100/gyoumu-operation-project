@@ -85,10 +85,31 @@
         :key="index"
       >
         <div class="multi-form-title" @click="item.expanded = !item.expanded">
-          <div>家族情報{{ index + 1 }} {{ item.title }}</div>
+          <div>家族情報{{ index + 1 }}</div>
 
-          <UpOutlined v-if="item.expanded" />
-          <DownOutlined v-else />
+          <div style="display: flex; align-items: center">
+            <div style="position: relative" @click.stop>
+              <a-popconfirm
+                v-if="!personnelFormPreviewMode && personnelFormData.length > 1"
+                placement="left"
+                title="このデータを削除してもよろしいですか?"
+                ok-text="削除"
+                cancel-text="キャンセル"
+                @confirm="deletePersonnelFormData(index)"
+                :getPopupContainer="
+                  (trigger: HTMLElement) =>
+                    trigger.parentNode || window.document.body
+                "
+              >
+                <a-button type="danger">
+                  <DeleteOutlined style="color: red" />
+                </a-button>
+              </a-popconfirm>
+            </div>
+
+            <UpOutlined v-if="item.expanded" />
+            <DownOutlined v-else />
+          </div>
         </div>
         <DynamicForm
           v-if="item.expanded"
@@ -97,17 +118,41 @@
           :preview-mode="personnelFormPreviewMode"
         />
       </div>
+      <div
+        style="text-align: center; padding: 4px 0"
+        v-if="!personnelFormPreviewMode"
+      >
+        <a-button type="primary" @click="addPersonnelFormData">
+          <PlusOutlined />
+        </a-button>
+      </div>
     </section>
 
     <!-- 給与情報部分 -->
     <section id="salary-info" class="info-section">
-      <h2>給与情報</h2>
-      <p>ここは給与情報の内容です。</p>
-      <div class="content">
-        <p>基本給: 30万円</p>
-        <p>手当: 5万円</p>
-        <p>賞与: 年2回</p>
-        <p>休暇: 年間10日</p>
+      <div class="form-title">
+        緊急連絡先
+        <a-button @click="contactFormPreviewMode = !contactFormPreviewMode">
+          {{ contactFormPreviewMode ? "変更する" : "変更完了" }}
+        </a-button>
+      </div>
+      <div
+        class="content"
+        v-for="(item, index) in contactFormFormData"
+        :key="index"
+      >
+        <div class="multi-form-title" @click="item.expanded = !item.expanded">
+          <div>緊急連絡先{{ index + 1 }}</div>
+
+          <UpOutlined v-if="item.expanded" />
+          <DownOutlined v-else />
+        </div>
+        <DynamicForm
+          v-if="item.expanded"
+          :config="CONTACT_FORM_CONFIG"
+          v-model:modelValue="item.formData"
+          :preview-mode="contactFormPreviewMode"
+        />
       </div>
     </section>
   </div>
@@ -120,22 +165,36 @@ import {
   RESIDENTIAL_ADDRESS_FORM_CONFIG,
   CURRENT_RESIDENCE_FORM_CONFIG,
   FOREIGN_INTELLECTUAL_PROPERTY_FORM_CONFIG,
+  CONTACT_FORM_CONFIG,
 } from "~/common/form";
 import {
   QuestionCircleOutlined,
   UpOutlined,
   DownOutlined,
+  PlusOutlined,
+  DeleteOutlined,
 } from "@ant-design/icons-vue";
-
+const window = globalThis.window;
 const baseFormData = ref({});
 const baseFormPreviewMode = ref(true);
-const personnelFormData = ref([
-  { title: "xxxx", formData: {}, expanded: true },
-]);
+const personnelFormData = ref([{ formData: {}, expanded: true }]);
 const personnelFormPreviewMode = ref(true);
 const residentialAddressFormData = ref({});
 const currentResidenceFormData = ref({});
 const foreignIntellectualPropertyFormFormData = ref({});
+const contactFormFormData = ref([
+  { formData: {}, expanded: true },
+  { formData: {}, expanded: true },
+]);
+const contactFormPreviewMode = ref(true);
+
+const addPersonnelFormData = () => {
+  personnelFormData.value.push({ formData: {}, expanded: true });
+};
+
+const deletePersonnelFormData = (index: number) => {
+  personnelFormData.value.splice(index, 1);
+};
 </script>
 
 <style scoped>
@@ -192,5 +251,9 @@ const foreignIntellectualPropertyFormFormData = ref({});
 }
 .multi-form-title:hover {
   background-color: #f9f8f8;
+}
+
+:deep(.ant-popover-inner) {
+  width: 304px;
 }
 </style>

@@ -145,7 +145,7 @@ const mockMenuData: MenuItem[] = [
   },
   {
     key: "/user-info",
-    title: "ユーザー情報",
+    title: "アカウント情報",
     icon: UserOutlined,
     path: "/user-info",
     children: [
