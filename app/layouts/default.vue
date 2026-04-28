@@ -284,6 +284,45 @@ const mockMenuData: MenuItem[] = [
           },
         ],
       },
+      {
+        key: "/back-office/notification-management",
+        title: "お知らせ管理",
+        path: "/back-office/notification-management",
+        children: [
+          {
+            key: "/back-office/notification-management/manual",
+            title: "マニュアルURL",
+            path: "/back-office/notification-management/manual",
+          },
+          {
+            key: "/back-office/notification-management/list",
+            title: "お知らせー覧",
+            path: "/back-office/notification-management/list",
+          },
+          {
+            key: "/back-office/notification-management/registration",
+            title: "お知らせ追加",
+            path: "/back-office/notification-management/registration",
+          },
+        ],
+      },
+      {
+        key: "/back-office/referral-management",
+        title: "紹介元管理",
+        path: "/back-office/referral-management",
+        children: [
+          {
+            key: "/back-office/referral-management/list",
+            title: "紹介元ー覧",
+            path: "/back-office/referral-management/list",
+          },
+          {
+            key: "/back-office/referral-management/registration",
+            title: "紹介元追加",
+            path: "/back-office/referral-management/registration",
+          },
+        ],
+      },
     ],
   },
   {

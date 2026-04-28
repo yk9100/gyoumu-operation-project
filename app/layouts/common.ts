@@ -10,6 +10,22 @@ export const ROUTE_TITLE_MAP: Record<string, string> = {
   "/other/privacy": "その他>プライバシーポリシー",
   "/task-detail": "タスク詳細",
   "/create-task": "タスクを作成",
+  "/back-office/member-management/list": "メンバー一覧",
+  "/back-office/member-management/registration": "メンバー登録",
+  "/back-office/outsourcing-management/list": "外注先一覧",
+  "/back-office/outsourcing-management/registration": "外注先登録",
+  "/back-office/customer-management/list": "顧客一覧",
+  "/back-office/customer-management/registration": "顧客登録",
+  "/back-office/department-management/email": "メールアドレス更新",
+  "/back-office/department-management/list": "部署一覧",
+  "/back-office/department-management/registration": "部署登録",
+  "/back-office/employee-management/list": "雇用一覧",
+  "/back-office/employee-management/registration": "雇用登録",
+  "/back-office/referral-management/list": "紹介元一覧",
+  "/back-office/referral-management/registration": "紹介元登録",
+  "/back-office/notification-management/manual": "マニュアルURL",
+  "/back-office/notification-management/list": "お知らせー覧",
+  "/back-office/notification-management/registration": "お知らせ追加",
 };
 
 export const BREADCRUMB_CONFIG: Record<
