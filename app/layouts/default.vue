@@ -6,7 +6,12 @@
     :locale="jaJP"
   >
     <a-layout style="min-height: 100vh">
-      <a-layout-sider :collapsed="!layoutStore.sidebarOpen" @update:collapsed="handleCollapseChange" collapsible width="240px">
+      <a-layout-sider
+        :collapsed="!layoutStore.sidebarOpen"
+        @update:collapsed="handleCollapseChange"
+        collapsible
+        width="240px"
+      >
         <div class="logo" />
         <a-skeleton v-if="loading" :active="true" :paragraph="{ rows: 10 }" />
         <a-menu
@@ -28,9 +33,43 @@
                   <span>{{ item.title }}</span>
                 </span>
               </template>
-              <a-menu-item v-for="child in item.children" :key="child.key">
-                {{ child.title }}
-              </a-menu-item>
+              <template v-for="child in item.children" :key="child.key">
+                <a-sub-menu
+                  v-if="child.children && child.children.length > 0"
+                  :key="child.key"
+                >
+                  <template #title>
+                    <span>{{ child.title }}</span>
+                  </template>
+                  <template
+                    v-for="grandchild in child.children"
+                    :key="grandchild.key"
+                  >
+                    <a-sub-menu
+                      v-if="
+                        grandchild.children && grandchild.children.length > 0
+                      "
+                      :key="grandchild.key"
+                    >
+                      <template #title>
+                        <span>{{ grandchild.title }}</span>
+                      </template>
+                      <a-menu-item
+                        v-for="greatgrandchild in grandchild.children"
+                        :key="greatgrandchild.key"
+                      >
+                        {{ greatgrandchild.title }}
+                      </a-menu-item>
+                    </a-sub-menu>
+                    <a-menu-item v-else :key="grandchild.key">
+                      {{ grandchild.title }}
+                    </a-menu-item>
+                  </template>
+                </a-sub-menu>
+                <a-menu-item v-else :key="child.key">
+                  {{ child.title }}
+                </a-menu-item>
+              </template>
             </a-sub-menu>
             <a-menu-item v-else :key="item.key">
               <component :is="item.icon" />
@@ -84,13 +123,14 @@
   </a-config-provider>
 </template>
 <script lang="ts" setup>
-import jaJP from 'ant-design-vue/es/locale/ja_JP';
+import jaJP from "ant-design-vue/es/locale/ja_JP";
 import {
   HomeOutlined,
   FundProjectionScreenOutlined,
   UserOutlined,
   TagsOutlined,
   ContainerOutlined,
+  ProfileOutlined,
 } from "@ant-design/icons-vue";
 import type { MenuProps } from "ant-design-vue";
 import { ref, onMounted, computed, watch } from "vue";
@@ -167,6 +207,86 @@ const mockMenuData: MenuItem[] = [
     ],
   },
   {
+    key: "/back-office",
+    title: "バックオフィス",
+    icon: ProfileOutlined,
+    children: [
+      {
+        key: "/back-office/member-management",
+        title: "メンバー管理",
+        path: "/back-office/member-management",
+        children: [
+          {
+            key: "/back-office/member-management/list",
+            title: "メンバーー覧",
+            path: "/back-office/member-management/list",
+          },
+          {
+            key: "/back-office/member-management/registration",
+            title: "メンバー登録",
+            path: "/back-office/member-management/registration",
+          },
+        ],
+      },
+      {
+        key: "/back-office/outsourcing-management",
+        title: "外注先管理",
+        path: "/back-office/outsourcing-management",
+        children: [
+          {
+            key: "/back-office/outsourcing-management/list",
+            title: "外注先ー覧",
+            path: "/back-office/outsourcing-management/list",
+          },
+          {
+            key: "/back-office/outsourcing-management/registration",
+            title: "外注先登録",
+            path: "/back-office/outsourcing-management/registration",
+          },
+        ],
+      },
+      {
+        key: "/back-office/customer-management",
+        title: "顧客管理",
+        path: "/back-office/customer-management",
+        children: [
+          {
+            key: "/back-office/customer-management/list",
+            title: "顧客ー覧",
+            path: "/back-office/customer-management/list",
+          },
+          {
+            key: "/back-office/customer-management/registration",
+            title: "顧客登録",
+            path: "/back-office/customer-management/registration",
+          },
+        ],
+      },
+      {
+        key: "/back-office/department-management",
+        title: "部署管理",
+        path: "/back-office/department-management",
+        children: [
+          {
+            key: "/back-office/department-management/email",
+            title: "メールアドレス更新",
+            path: "/back-office/department-management/email",
+          },
+          {
+            key: "/back-office/department-management/list",
+            title: "部署ー覧",
+            path: "/back-office/department-management/list",
+          },
+          {
+            key: "/back-office/department-management/registration",
+            title: "部署登録",
+            path: "/back-office/department-management/registration",
+          },
+        ],
+      },
+    ],
+  },
+  {
     key: "/other",
     title: "その他",
     icon: TagsOutlined,
@@ -227,24 +347,31 @@ const updateSelectedKeysByRoute = () => {
   const currentHash = route.hash;
   const fullPath = currentHash ? `${currentPath}${currentHash}` : currentPath;
 
-  for (const item of menuData.value) {
-    if (item.children) {
-      for (const child of item.children) {
-        if (child.key === fullPath || child.path === fullPath) {
-          selectedKeys.value = [child.key];
-          openKeys.value = [item.key];
-          scrollToAnchor(currentHash);
-          return;
+  // 递归查找匹配的菜单项
+  const findMenuItem = (
+    items: MenuItem[],
+    parentKeys: string[] = [],
+  ): boolean => {
+    for (const item of items) {
+      if (item.key === fullPath || item.path === fullPath) {
+        selectedKeys.value = [item.key];
+        openKeys.value = parentKeys;
+        scrollToAnchor(currentHash);
+        return true;
+      }
+      if (item.children) {
+        const newParentKeys = [...parentKeys, item.key];
+        if (findMenuItem(item.children, newParentKeys)) {
+          return true;
         }
       }
     }
-    if (item.key === currentPath || item.path === currentPath) {
-      selectedKeys.value = [item.key];
-      scrollToAnchor(currentHash);
-      return;
-    }
+    return false;
+  };
+
+  if (!findMenuItem(menuData.value)) {
+    scrollToAnchor(currentHash);
   }
-  scrollToAnchor(currentHash);
 };
 
 const scrollToAnchor = (hash: string) => {

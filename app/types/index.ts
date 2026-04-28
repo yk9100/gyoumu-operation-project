@@ -37,3 +37,11 @@ export interface IOption {
   label: string;
   value: string;
 }
+
+export interface IPagination<T> {
+  dataSource: T[];
+  total: number;
+  current: number;
+  pageSize: number;
+  loading: boolean;
+}

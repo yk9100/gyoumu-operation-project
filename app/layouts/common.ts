@@ -85,4 +85,36 @@ export const BREADCRUMB_CONFIG: Record<
       title: "タスクを作成",
     },
   ],
+  "/back-office/member-management/member-list": [
+    {
+      title: "メンバー管理",
+    },
+    {
+      title: "メンバー一覧",
+    },
+  ],
+  "/back-office/member-management/member-registration": [
+    {
+      title: "メンバー管理",
+    },
+    {
+      title: "メンバー登録",
+    },
+  ],
+  "/back-office/member-management/member-import": [
+    {
+      title: "メンバー管理",
+    },
+    {
+      title: "メンバーインポート",
+    },
+  ],
+  "/back-office/member-management/member-work-time-import": [
+    {
+      title: "メンバー管理",
+    },
+    {
+      title: "作業時間インポート",
+    },
+  ],
 };

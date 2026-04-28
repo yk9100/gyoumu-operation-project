@@ -16,3 +16,11 @@ span[data-at-embedded] {
     margin: 0 2px !important;
     background: #e6f4ff !important;
 }
+
+.ant-popover-inner {
+    width: 304px !important;
+}
+
+.table-striped {
+    background-color: #fafafa !important;
+}

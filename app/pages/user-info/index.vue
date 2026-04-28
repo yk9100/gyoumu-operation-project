@@ -253,7 +253,4 @@ const deletePersonnelFormData = (index: number) => {
   background-color: #f9f8f8;
 }
 
-:deep(.ant-popover-inner) {
-  width: 304px;
-}
 </style>
