@@ -45,9 +45,6 @@
               </div>
             </div>
           </template>
-          <template v-else-if="column.key === 'segment'">
-            {{ record.segment.join(", ") }}
-          </template>
         </template>
       </a-table>
     </div>
@@ -59,16 +56,12 @@ import type { IMember } from "@/types/member";
 import type { IPagination } from "~/types";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons-vue";
 import { useRouter } from "vue-router";
-import type { INotification } from "~/types/notification";
-import { mockNotificationList } from "~/mock/notification";
+import type { IRole } from "~/types/permission";
+import { MOCK_ROLE_LIST } from "~/mock/permission";
 
-interface FormState {
-  memberName: string;
-  email: string;
-}
 const router = useRouter();
-const scrollY = computed(() => window.innerHeight - 200);
-const tableData = ref<IPagination<INotification>>({
+const scrollY = computed(() => window.innerHeight - 300);
+const tableData = ref<IPagination<IRole>>({
   dataSource: [],
   total: 0,
   current: 1,
@@ -78,25 +71,15 @@ const tableData = ref<IPagination<INotification>>({
 
 const columns = [
   {
-    title: "お知らせID",
+    title: "ID",
     dataIndex: "id",
     key: "id",
-    width: 120,
+    width: 200,
   },
   {
-    title: "タイトル",
-    dataIndex: "title",
-    key: "title",
-  },
-  {
-    title: "お知らせ内容",
-    dataIndex: "content",
-    key: "content",
-  },
-  {
-    title: "公開日時",
-    dataIndex: "createdAt",
-    key: "createdAt",
+    title: "役割",
+    dataIndex: "roleName",
+    key: "roleName",
   },
   {
     title: "操作",
@@ -122,19 +105,19 @@ const handleDelete = (id: string) => {
 
 const handleEdit = (id: string) => {
   router.push({
-    path: "/back-office/notification-management/registration",
+    path: "/back-office/permission-management/registration",
     query: {
       id,
     },
   });
 };
 
-const getDepartmentList = async () => {
+const getRoleList = async () => {
   tableData.value.loading = true;
   try {
     setTimeout(() => {
-      tableData.value.dataSource = mockNotificationList;
-      tableData.value.total = mockNotificationList.length;
+      tableData.value.dataSource = MOCK_ROLE_LIST;
+      tableData.value.total = MOCK_ROLE_LIST.length;
       tableData.value.loading = false;
     }, 2000);
   } catch (error) {
@@ -143,7 +126,7 @@ const getDepartmentList = async () => {
 };
 
 onMounted(() => {
-  getDepartmentList();
+  getRoleList();
 });
 </script>
 

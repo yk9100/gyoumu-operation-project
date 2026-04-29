@@ -26,6 +26,15 @@ export const ROUTE_TITLE_MAP: Record<string, string> = {
   "/back-office/notification-management/manual": "マニュアルURL",
   "/back-office/notification-management/list": "お知らせー覧",
   "/back-office/notification-management/registration": "お知らせ追加",
+  "/back-office/occupation-management/list": "職種一覧",
+  "/back-office/occupation-management/registration": "職種登録",
+  "/back-office/purchase-management/list": "仕入先ー覧",
+  "/back-office/purchase-management/registration": "仕入先登録",
+  "/back-office/permission-management/plist": "権限一覧",
+  "/back-office/permission-management/list": "役割ー覧",
+  "/back-office/permission-management/registration": "役割追加",
+  "/project-management/list": "プロジェクト一覧",
+  "/project-management/registration": "プロジェクト登録",
 };
 
 export const BREADCRUMB_CONFIG: Record<
@@ -59,7 +68,6 @@ export const BREADCRUMB_CONFIG: Record<
   "/other/contact": [
     {
       title: "その他",
-      href: "/other",
     },
     {
       title: "お問い合わせ",
@@ -68,7 +76,6 @@ export const BREADCRUMB_CONFIG: Record<
   "/other/terms": [
     {
       title: "その他",
-      href: "/other",
     },
     {
       title: "利用規約",
@@ -77,7 +84,6 @@ export const BREADCRUMB_CONFIG: Record<
   "/other/privacy": [
     {
       title: "その他",
-      href: "/other",
     },
     {
       title: "プライバシーポリシー",

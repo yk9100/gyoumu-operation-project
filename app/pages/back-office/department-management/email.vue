@@ -1,37 +1,45 @@
 <template>
-  <a-spin :spinning="spinning">
-    <a-form
-      :model="formState"
-      name="basic"
-      :label-col="{ span: 8 }"
-      :wrapper-col="{ span: 8 }"
-      autocomplete="off"
-      @finish="onFinish"
-      @finishFailed="onFinishFailed"
-    >
-      <a-form-item
-        label="所属セグメント"
-        name="segment"
-        :rules="[
-          { required: true, message: '所属セグメントを入力してください' },
-        ]"
-      >
-        <a-checkbox-group v-model:value="formState.segment">
-          <a-checkbox value="EE">EE</a-checkbox>
-          <a-checkbox value="FF">FF</a-checkbox>
-          <a-checkbox value="GG">GG</a-checkbox>
-        </a-checkbox-group>
-      </a-form-item>
+  <div class="page-root">
+    <GlobalHeader />
+    <div class="page-content">
+      <a-spin :spinning="spinning">
+        <a-form
+          :model="formState"
+          name="basic"
+          :label-col="{ span: 8 }"
+          :wrapper-col="{ span: 8 }"
+          autocomplete="off"
+          @finish="onFinish"
+          @finishFailed="onFinishFailed"
+        >
+          <a-form-item
+            label="所属セグメント"
+            name="segment"
+            :rules="[
+              { required: true, message: '所属セグメントを入力してください' },
+            ]"
+          >
+            <a-checkbox-group v-model:value="formState.segment">
+              <a-checkbox value="EE">EE</a-checkbox>
+              <a-checkbox value="FF">FF</a-checkbox>
+              <a-checkbox value="GG">GG</a-checkbox>
+            </a-checkbox-group>
+          </a-form-item>
 
-      <a-form-item name="email" label="メールアドレス" required>
-        <a-input v-model:value="formState.email" placeholder="oo@bravesoft.co.jp" />
-      </a-form-item>
+          <a-form-item name="email" label="メールアドレス" required>
+            <a-input
+              v-model:value="formState.email"
+              placeholder="oo@bravesoft.co.jp"
+            />
+          </a-form-item>
 
-      <a-form-item :wrapper-col="{ offset: 8, span: 8 }">
-        <a-button type="primary" html-type="submit">更新</a-button>
-      </a-form-item>
-    </a-form>
-  </a-spin>
+          <a-form-item :wrapper-col="{ offset: 8, span: 8 }">
+            <a-button type="primary" html-type="submit">更新</a-button>
+          </a-form-item>
+        </a-form>
+      </a-spin>
+    </div>
+  </div>
 </template>
 <script lang="ts" setup>
 import { reactive } from "vue";

@@ -21,6 +21,7 @@
           @select="handleSelect"
           theme="dark"
           mode="inline"
+          style="max-height: calc(100vh - 120px); overflow-y: auto"
         >
           <template v-for="item in menuData">
             <a-sub-menu
@@ -79,45 +80,7 @@
         </a-menu>
       </a-layout-sider>
       <a-layout>
-        <a-layout-header
-          style="
-            background: #fff;
-            padding: 0 24px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-          "
-        >
-          <h2 style="margin: 0; font-size: 18px; font-weight: 500">
-            {{ currentPageTitle }}
-          </h2>
-          <UserInfo />
-        </a-layout-header>
-        <a-layout-content style="margin: 0 16px">
-          <a-breadcrumb style="margin: 16px 0">
-            <a-breadcrumb-item
-              v-for="(item, index) in breadcrumbConfig"
-              :key="index"
-              :href="item.href"
-              @click.stop="handleBreadcrumbClick(item.href)"
-            >
-              {{ item.title }}
-            </a-breadcrumb-item>
-          </a-breadcrumb>
-          <div
-            :style="{
-              padding: '24px',
-              background: '#fff',
-              height:
-                breadcrumbConfig.length > 0
-                  ? 'calc(100vh - 140px)'
-                  : 'calc(100vh - 120px)',
-              overflowY: 'auto',
-            }"
-          >
-            <slot />
-          </div>
-        </a-layout-content>
+        <slot />
       </a-layout>
     </a-layout>
   </a-config-provider>
@@ -135,8 +98,7 @@ import {
 import type { MenuProps } from "ant-design-vue";
 import { ref, onMounted, computed, watch } from "vue";
 import { useRouter, useRoute } from "vue-router";
-import UserInfo from "../components/UserInfo.vue";
-import { ROUTE_TITLE_MAP, BREADCRUMB_CONFIG } from "../layouts/common";
+import { BREADCRUMB_CONFIG } from "../layouts/common";
 import { useLayoutStore } from "../stores/layout";
 
 interface MenuItem {
@@ -150,14 +112,6 @@ interface MenuItem {
 const router = useRouter();
 const route = useRoute();
 const layoutStore = useLayoutStore();
-
-const currentPageTitle = computed(
-  () => ROUTE_TITLE_MAP[`${route.path}${route.hash}`],
-);
-
-const breadcrumbConfig = computed(
-  () => BREADCRUMB_CONFIG[`${route.path}${route.hash}`] || [],
-);
 
 const selectedKeys = ref<string[]>([]);
 const loading = ref<boolean>(true);
@@ -181,7 +135,18 @@ const mockMenuData: MenuItem[] = [
     key: "/project-management",
     title: "プロジェクト管理",
     icon: FundProjectionScreenOutlined,
-    path: "/project-management",
+    children: [
+      {
+        key: "/project-management/list",
+        title: "プロジェクトー覧",
+        path: "/project-management/list",
+      },
+      {
+        key: "/project-management/registration",
+        title: "プロジェクト登録",
+        path: "/project-management/registration",
+      },
+    ],
   },
   {
     key: "/user-info",
@@ -285,6 +250,45 @@ const mockMenuData: MenuItem[] = [
         ],
       },
       {
+        key: "/back-office/occupation-management",
+        title: "職種管理",
+        path: "/back-office/occupation-management",
+        children: [
+          {
+            key: "/back-office/occupation-management/list",
+            title: "職種ー覧",
+            path: "/back-office/occupation-management/list",
+          },
+          {
+            key: "/back-office/occupation-management/registration",
+            title: "職種登録",
+            path: "/back-office/occupation-management/registration",
+          },
+        ],
+      },
+      {
+        key: "/back-office/permission-management",
+        title: "権限管理",
+        path: "/back-office/permission-management",
+        children: [
+          {
+            key: "/back-office/permission-management/plist",
+            title: "権限ー覧",
+            path: "/back-office/permission-management/plist",
+          },
+          {
+            key: "/back-office/permission-management/list",
+            title: "役割ー覧",
+            path: "/back-office/permission-management/list",
+          },
+          {
+            key: "/back-office/permission-management/registration",
+            title: "役割追加",
+            path: "/back-office/permission-management/registration",
+          },
+        ],
+      },
+      {
         key: "/back-office/notification-management",
         title: "お知らせ管理",
         path: "/back-office/notification-management",
@@ -320,6 +324,23 @@ const mockMenuData: MenuItem[] = [
             key: "/back-office/referral-management/registration",
             title: "紹介元追加",
             path: "/back-office/referral-management/registration",
+          },
+        ],
+      },
+      {
+        key: "/back-office/purchase-management",
+        title: "仕入先管理",
+        path: "/back-office/purchase-management",
+        children: [
+          {
+            key: "/back-office/purchase-management/list",
+            title: "仕入先ー覧",
+            path: "/back-office/purchase-management/list",
+          },
+          {
+            key: "/back-office/purchase-management/registration",
+            title: "仕入先追加",
+            path: "/back-office/purchase-management/registration",
           },
         ],
       },

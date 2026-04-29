@@ -1,160 +1,157 @@
 <template>
-  <div>
-    <!-- 导航链接 -->
-    <!-- <div class="nav-links">
-      <a href="#basic-info">基本情報</a>
-      <a href="#personnel-info">人事情報</a>
-      <a href="#salary-info">給与情報</a>
-    </div> -->
+  <div class="page-root">
+    <GlobalHeader />
+    <div class="page-content">
+      <section id="basic-info" class="info-section">
+        <div class="form-title">
+          本人情報
+          <a-button @click="baseFormPreviewMode = !baseFormPreviewMode">
+            {{ baseFormPreviewMode ? "変更する" : "変更完了" }}
+          </a-button>
+        </div>
+        <div class="content">
+          <DynamicForm
+            :config="BASE_FORM_CONFIG"
+            v-model:modelValue="baseFormData"
+            :preview-mode="baseFormPreviewMode"
+          />
+        </div>
 
-    <!-- 基本情報部分 -->
-    <section id="basic-info" class="info-section">
-      <div class="form-title">
-        本人情報
-        <a-button @click="baseFormPreviewMode = !baseFormPreviewMode">
-          {{ baseFormPreviewMode ? "変更する" : "変更完了" }}
-        </a-button>
-      </div>
-      <div class="content">
-        <DynamicForm
-          :config="BASE_FORM_CONFIG"
-          v-model:modelValue="baseFormData"
-          :preview-mode="baseFormPreviewMode"
-        />
-      </div>
-
-      <div class="form-title">
-        <span>
-          住民票住所
-          <a-tooltip placement="top">
-            <template #title
-              >社会保険・住民税の入退社手続きや、年末調整関係書類、労働者名簿等に記載される住所です。</template
-            >
-            <QuestionCircleOutlined style="margin-left: 2px; color: #999" />
-          </a-tooltip>
-        </span>
-      </div>
-      <div class="content">
-        <DynamicForm
-          :config="RESIDENTIAL_ADDRESS_FORM_CONFIG"
-          v-model:modelValue="residentialAddressFormData"
-          :preview-mode="baseFormPreviewMode"
-        />
-      </div>
-
-      <div class="form-title">
-        <span>
-          現住所
-          <a-tooltip placement="top">
-            <template #title
-              >　健康保険・厚生年金保険被保険者資格取得届に特定の理由で住民票住所を記載できない場合は、現住所（居所）が記載されます。</template
-            >
-            <QuestionCircleOutlined style="margin-left: 2px; color: #999" />
-          </a-tooltip>
-        </span>
-      </div>
-      <div class="content">
-        <DynamicForm
-          :config="CURRENT_RESIDENCE_FORM_CONFIG"
-          v-model:modelValue="currentResidenceFormData"
-          :preview-mode="baseFormPreviewMode"
-        />
-      </div>
-
-      <div class="form-title">外国籍情報</div>
-      <div class="content">
-        <DynamicForm
-          :config="FOREIGN_INTELLECTUAL_PROPERTY_FORM_CONFIG"
-          v-model:modelValue="foreignIntellectualPropertyFormFormData"
-          :preview-mode="baseFormPreviewMode"
-        />
-      </div>
-    </section>
-
-    <!-- 人事情報部分 -->
-    <section id="personnel-info" class="info-section">
-      <div class="form-title">
-        人事情報
-        <a-button @click="personnelFormPreviewMode = !personnelFormPreviewMode">
-          {{ personnelFormPreviewMode ? "変更する" : "変更完了" }}
-        </a-button>
-      </div>
-      <div
-        class="content"
-        v-for="(item, index) in personnelFormData"
-        :key="index"
-      >
-        <div class="multi-form-title" @click="item.expanded = !item.expanded">
-          <div>家族情報{{ index + 1 }}</div>
-
-          <div style="display: flex; align-items: center">
-            <div style="position: relative" @click.stop>
-              <a-popconfirm
-                v-if="!personnelFormPreviewMode && personnelFormData.length > 1"
-                placement="left"
-                title="このデータを削除してもよろしいですか?"
-                ok-text="削除"
-                cancel-text="キャンセル"
-                @confirm="deletePersonnelFormData(index)"
-                :getPopupContainer="
-                  (trigger: HTMLElement) =>
-                    trigger.parentNode || window.document.body
-                "
+        <div class="form-title">
+          <span>
+            住民票住所
+            <a-tooltip placement="top">
+              <template #title
+                >社会保険・住民税の入退社手続きや、年末調整関係書類、労働者名簿等に記載される住所です。</template
               >
-                <a-button type="danger">
-                  <DeleteOutlined style="color: red" />
-                </a-button>
-              </a-popconfirm>
+              <QuestionCircleOutlined style="margin-left: 2px; color: #999" />
+            </a-tooltip>
+          </span>
+        </div>
+        <div class="content">
+          <DynamicForm
+            :config="RESIDENTIAL_ADDRESS_FORM_CONFIG"
+            v-model:modelValue="residentialAddressFormData"
+            :preview-mode="baseFormPreviewMode"
+          />
+        </div>
+
+        <div class="form-title">
+          <span>
+            現住所
+            <a-tooltip placement="top">
+              <template #title
+                >　健康保険・厚生年金保険被保険者資格取得届に特定の理由で住民票住所を記載できない場合は、現住所（居所）が記載されます。</template
+              >
+              <QuestionCircleOutlined style="margin-left: 2px; color: #999" />
+            </a-tooltip>
+          </span>
+        </div>
+        <div class="content">
+          <DynamicForm
+            :config="CURRENT_RESIDENCE_FORM_CONFIG"
+            v-model:modelValue="currentResidenceFormData"
+            :preview-mode="baseFormPreviewMode"
+          />
+        </div>
+
+        <div class="form-title">外国籍情報</div>
+        <div class="content">
+          <DynamicForm
+            :config="FOREIGN_INTELLECTUAL_PROPERTY_FORM_CONFIG"
+            v-model:modelValue="foreignIntellectualPropertyFormFormData"
+            :preview-mode="baseFormPreviewMode"
+          />
+        </div>
+      </section>
+
+      <section id="personnel-info" class="info-section">
+        <div class="form-title">
+          人事情報
+          <a-button
+            @click="personnelFormPreviewMode = !personnelFormPreviewMode"
+          >
+            {{ personnelFormPreviewMode ? "変更する" : "変更完了" }}
+          </a-button>
+        </div>
+        <div
+          class="content"
+          v-for="(item, index) in personnelFormData"
+          :key="index"
+        >
+          <div class="multi-form-title" @click="item.expanded = !item.expanded">
+            <div>家族情報{{ index + 1 }}</div>
+
+            <div style="display: flex; align-items: center">
+              <div style="position: relative" @click.stop>
+                <a-popconfirm
+                  v-if="
+                    !personnelFormPreviewMode && personnelFormData.length > 1
+                  "
+                  placement="left"
+                  title="このデータを削除してもよろしいですか?"
+                  ok-text="削除"
+                  cancel-text="キャンセル"
+                  @confirm="deletePersonnelFormData(index)"
+                  :getPopupContainer="
+                    (trigger: HTMLElement) =>
+                      trigger.parentNode || window.document.body
+                  "
+                >
+                  <a-button type="danger">
+                    <DeleteOutlined style="color: red" />
+                  </a-button>
+                </a-popconfirm>
+              </div>
+
+              <UpOutlined v-if="item.expanded" />
+              <DownOutlined v-else />
             </div>
+          </div>
+          <DynamicForm
+            v-if="item.expanded"
+            :config="PERSONNEL_FORM_CONFIG"
+            v-model:modelValue="item.formData"
+            :preview-mode="personnelFormPreviewMode"
+          />
+        </div>
+        <div
+          style="text-align: center; padding: 4px 0"
+          v-if="!personnelFormPreviewMode"
+        >
+          <a-button type="primary" @click="addPersonnelFormData">
+            <PlusOutlined />
+          </a-button>
+        </div>
+      </section>
+
+      <section id="salary-info" class="info-section">
+        <div class="form-title">
+          緊急連絡先
+          <a-button @click="contactFormPreviewMode = !contactFormPreviewMode">
+            {{ contactFormPreviewMode ? "変更する" : "変更完了" }}
+          </a-button>
+        </div>
+        <div
+          class="content"
+          v-for="(item, index) in contactFormFormData"
+          :key="index"
+        >
+          <div class="multi-form-title" @click="item.expanded = !item.expanded">
+            <div>緊急連絡先{{ index + 1 }}</div>
 
             <UpOutlined v-if="item.expanded" />
             <DownOutlined v-else />
           </div>
+          <DynamicForm
+            v-if="item.expanded"
+            :config="CONTACT_FORM_CONFIG"
+            v-model:modelValue="item.formData"
+            :preview-mode="contactFormPreviewMode"
+          />
         </div>
-        <DynamicForm
-          v-if="item.expanded"
-          :config="PERSONNEL_FORM_CONFIG"
-          v-model:modelValue="item.formData"
-          :preview-mode="personnelFormPreviewMode"
-        />
-      </div>
-      <div
-        style="text-align: center; padding: 4px 0"
-        v-if="!personnelFormPreviewMode"
-      >
-        <a-button type="primary" @click="addPersonnelFormData">
-          <PlusOutlined />
-        </a-button>
-      </div>
-    </section>
-
-    <!-- 給与情報部分 -->
-    <section id="salary-info" class="info-section">
-      <div class="form-title">
-        緊急連絡先
-        <a-button @click="contactFormPreviewMode = !contactFormPreviewMode">
-          {{ contactFormPreviewMode ? "変更する" : "変更完了" }}
-        </a-button>
-      </div>
-      <div
-        class="content"
-        v-for="(item, index) in contactFormFormData"
-        :key="index"
-      >
-        <div class="multi-form-title" @click="item.expanded = !item.expanded">
-          <div>緊急連絡先{{ index + 1 }}</div>
-
-          <UpOutlined v-if="item.expanded" />
-          <DownOutlined v-else />
-        </div>
-        <DynamicForm
-          v-if="item.expanded"
-          :config="CONTACT_FORM_CONFIG"
-          v-model:modelValue="item.formData"
-          :preview-mode="contactFormPreviewMode"
-        />
-      </div>
-    </section>
+      </section>
+    </div>
   </div>
 </template>
 
@@ -252,5 +249,4 @@ const deletePersonnelFormData = (index: number) => {
 .multi-form-title:hover {
   background-color: #f9f8f8;
 }
-
 </style>

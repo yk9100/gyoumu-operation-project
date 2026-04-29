@@ -9,21 +9,12 @@
           @finishFailed="onFinishFailed"
           layout="inline"
         >
-          <a-form-item label="顧客名" name="frontName">
-            <a-input v-model:value="formState.customerName" />
+          <a-form-item label="仕入先名" name="purchaseName">
+            <a-input v-model:value="formState.purchaseName" />
           </a-form-item>
           <a-button type="primary" html-type="submit">絞り込み</a-button>
         </a-form>
-
-        <a-upload
-          :show-upload-list="false"
-          :before-upload="customerImport"
-          :accept="'.csv'"
-        >
-          <a-button type="primary">顧客インポート</a-button>
-        </a-upload>
       </div>
-
       <div>
         <a-table
           :columns="columns"
@@ -76,44 +67,45 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive } from "vue";
 import type { IMember } from "@/types/member";
 import type { IPagination } from "~/types";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons-vue";
 import { useRouter } from "vue-router";
-import Papa from "papaparse";
-import { mockCustomerList } from "~/mock/customer";
-import type { ICustomer } from "~/types/customer";
-import dayjs from "dayjs";
+import type { IPurchase } from "~/types/purchase";
+import { mockPurchaseList } from "~/mock/purchase";
 
 interface FormState {
-  customerName: string;
+  purchaseName: string;
 }
 const router = useRouter();
 const scrollY = computed(() => window.innerHeight - 300);
-const tableData = ref<IPagination<ICustomer>>({
+const tableData = ref<IPagination<IPurchase>>({
   dataSource: [],
   total: 0,
   current: 1,
   pageSize: 10,
   loading: false,
 });
-
 const formState = reactive<FormState>({
-  customerName: "",
+  purchaseName: "",
 });
 
 const columns = [
   {
-    title: "顧客ID",
+    title: "仕入先ID",
     dataIndex: "id",
     key: "id",
     width: 120,
   },
   {
-    title: "顧客名",
-    dataIndex: "customerName",
-    key: "customerName",
+    title: "仕入先名",
+    dataIndex: "purchaseName",
+    key: "purchaseName",
+  },
+  {
+    title: "連絡先",
+    dataIndex: "phoneNumber",
+    key: "phoneNumber",
   },
   {
     title: "登録時間",
@@ -144,19 +136,19 @@ const handleDelete = (id: string) => {
 
 const handleEdit = (id: string) => {
   router.push({
-    path: "/back-office/customer-management/registration",
+    path: "/back-office/purchase-management/registration",
     query: {
       id,
     },
   });
 };
 
-const getCustomerList = async () => {
+const getReferralList = async () => {
   tableData.value.loading = true;
   try {
     setTimeout(() => {
-      tableData.value.dataSource = mockCustomerList;
-      tableData.value.total = mockCustomerList.length;
+      tableData.value.dataSource = mockPurchaseList;
+      tableData.value.total = mockPurchaseList.length;
       tableData.value.loading = false;
     }, 2000);
   } catch (error) {
@@ -164,38 +156,8 @@ const getCustomerList = async () => {
   }
 };
 
-const customerImport = (file: File) => {
-  console.log(file);
-  tableData.value.loading = true;
-  setTimeout(() => {
-    Papa.parse(file, {
-      header: true,
-      skipEmptyLines: true,
-      complete: (results) => {
-        console.log("解析结果:", results.data);
-        console.log("错误信息:", results.errors);
-
-        tableData.value.dataSource = (results.data as ICustomer[])
-          .map((i, index) => {
-            return {
-              id: `testID${index + 1}`,
-              customerName: i.customerName,
-              createdAt: dayjs().format("YYYY-MM-DD HH:mm:ss"),
-            };
-          })
-          .concat(tableData.value.dataSource);
-        tableData.value.loading = false;
-      },
-      error: (error) => {
-        tableData.value.loading = false;
-        console.error("解析失败:", error);
-      },
-    });
-  }, 1000);
-};
-
 onMounted(() => {
-  getCustomerList();
+  getReferralList();
 });
 </script>
 

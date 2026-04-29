@@ -1,15 +1,18 @@
 <template>
-  <div class="my-task-page">
-    <TaskFilter @search="handleSearch" />
-    <TaskTable
-      :tasks="tasks"
-      :total="total"
-      :current-page="currentPage"
-      :page-size="pageSize"
-      @page-change="handlePageChange"
-      @size-change="handleSizeChange"
-      @toggle-fav="toggleFav"
-    />
+  <div class="page-root">
+    <GlobalHeader />
+    <div class="page-content">
+      <TaskFilter @search="handleSearch" />
+      <TaskTable
+        :tasks="tasks"
+        :total="total"
+        :current-page="currentPage"
+        :page-size="pageSize"
+        @page-change="handlePageChange"
+        @size-change="handleSizeChange"
+        @toggle-fav="toggleFav"
+      />
+    </div>
   </div>
 </template>
 

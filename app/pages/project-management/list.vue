@@ -1,6 +1,14 @@
 <template>
   <div class="page-root">
-    <GlobalHeader />
+    <GlobalHeader>
+      <div class="header-button-box">
+        <a-button>案件CSVインポート</a-button>
+        <a-button>PJリストCSV出力</a-button>
+        <a-button>帳票CSV出力</a-button>
+        <a-button style="margin-right: 12px">案件CSV出力</a-button>
+        <a-button type="primary" @click="handleRegistration">新規登録</a-button>
+      </div>
+    </GlobalHeader>
     <div class="page-content">
       <div class="search-form">
         <a-form
@@ -9,19 +17,14 @@
           @finishFailed="onFinishFailed"
           layout="inline"
         >
-          <a-form-item label="顧客名" name="frontName">
-            <a-input v-model:value="formState.customerName" />
+          <a-form-item label="メンバー姓" name="frontName">
+            <a-input v-model:value="formState.memberName" />
+          </a-form-item>
+          <a-form-item label="メールアドレス" name="email">
+            <a-input v-model:value="formState.email" />
           </a-form-item>
           <a-button type="primary" html-type="submit">絞り込み</a-button>
         </a-form>
-
-        <a-upload
-          :show-upload-list="false"
-          :before-upload="customerImport"
-          :accept="'.csv'"
-        >
-          <a-button type="primary">顧客インポート</a-button>
-        </a-upload>
       </div>
 
       <div>
@@ -79,19 +82,18 @@
 import { reactive } from "vue";
 import type { IMember } from "@/types/member";
 import type { IPagination } from "~/types";
+import { mockMemberList } from "~/mock/member";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons-vue";
 import { useRouter } from "vue-router";
 import Papa from "papaparse";
-import { mockCustomerList } from "~/mock/customer";
-import type { ICustomer } from "~/types/customer";
-import dayjs from "dayjs";
 
 interface FormState {
-  customerName: string;
+  memberName: string;
+  email: string;
 }
 const router = useRouter();
 const scrollY = computed(() => window.innerHeight - 300);
-const tableData = ref<IPagination<ICustomer>>({
+const tableData = ref<IPagination<IMember>>({
   dataSource: [],
   total: 0,
   current: 1,
@@ -100,25 +102,26 @@ const tableData = ref<IPagination<ICustomer>>({
 });
 
 const formState = reactive<FormState>({
-  customerName: "",
+  memberName: "",
+  email: "",
 });
 
 const columns = [
   {
-    title: "顧客ID",
+    title: "メンバー番号",
     dataIndex: "id",
     key: "id",
     width: 120,
   },
   {
-    title: "顧客名",
-    dataIndex: "customerName",
-    key: "customerName",
+    title: "メンバー姓",
+    dataIndex: "frontName",
+    key: "frontName",
   },
   {
-    title: "登録時間",
-    dataIndex: "createdAt",
-    key: "createdAt",
+    title: "メールアドレス",
+    dataIndex: "email",
+    key: "email",
   },
   {
     title: "操作",
@@ -144,19 +147,19 @@ const handleDelete = (id: string) => {
 
 const handleEdit = (id: string) => {
   router.push({
-    path: "/back-office/customer-management/registration",
+    path: "/back-office/member-management/registration",
     query: {
       id,
     },
   });
 };
 
-const getCustomerList = async () => {
+const getMemberList = async () => {
   tableData.value.loading = true;
   try {
     setTimeout(() => {
-      tableData.value.dataSource = mockCustomerList;
-      tableData.value.total = mockCustomerList.length;
+      tableData.value.dataSource = mockMemberList;
+      tableData.value.total = mockMemberList.length;
       tableData.value.loading = false;
     }, 2000);
   } catch (error) {
@@ -164,7 +167,7 @@ const getCustomerList = async () => {
   }
 };
 
-const customerImport = (file: File) => {
+const memberImport = (file: File) => {
   console.log(file);
   tableData.value.loading = true;
   setTimeout(() => {
@@ -175,12 +178,12 @@ const customerImport = (file: File) => {
         console.log("解析结果:", results.data);
         console.log("错误信息:", results.errors);
 
-        tableData.value.dataSource = (results.data as ICustomer[])
+        tableData.value.dataSource = (results.data as IMember[])
           .map((i, index) => {
             return {
-              id: `testID${index + 1}`,
-              customerName: i.customerName,
-              createdAt: dayjs().format("YYYY-MM-DD HH:mm:ss"),
+              id: `test番号${index + 1}`,
+              frontName: i.frontName,
+              email: i.email,
             };
           })
           .concat(tableData.value.dataSource);
@@ -194,8 +197,14 @@ const customerImport = (file: File) => {
   }, 1000);
 };
 
+const handleRegistration = () => {
+  router.push({
+    path: "/project-management/registration",
+  });
+};
+
 onMounted(() => {
-  getCustomerList();
+  getMemberList();
 });
 </script>
 
@@ -228,5 +237,10 @@ onMounted(() => {
 
 :deep(.ant-table-placeholder) {
   height: 300px;
+}
+
+.header-button-box {
+  display: flex;
+  gap: 12px;
 }
 </style>

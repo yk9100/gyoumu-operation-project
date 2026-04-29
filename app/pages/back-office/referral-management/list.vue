@@ -1,64 +1,67 @@
 <template>
-  <div>
-    <div class="search-form">
-      <a-form
-        :model="formState"
-        @finish="onFinish"
-        @finishFailed="onFinishFailed"
-        layout="inline"
-      >
-        <a-form-item label="紹介元名" name="referralName">
-          <a-input v-model:value="formState.referralName" />
-        </a-form-item>
-        <a-button type="primary" html-type="submit">絞り込み</a-button>
-      </a-form>
-    </div>
-    <div>
-      <a-table
-        :columns="columns"
-        :data-source="tableData.dataSource"
-        :pagination="{
-          total: tableData.total,
-          current: tableData.current,
-          pageSize: tableData.pageSize,
-        }"
-        :loading="tableData.loading"
-        :scroll="{ y: scrollY }"
-        :row-class-name="
-          (_record: IMember, index: number) =>
-            index % 2 === 1 ? 'table-striped' : null
-        "
-      >
-        <template #bodyCell="{ column, record }">
-          <template v-if="column.key === 'operation'">
-            <div class="operation-buttons">
-              <a-button
-                type="primary"
-                size="small"
-                @click="handleEdit(record.id)"
-              >
-                <EditOutlined />
-              </a-button>
-              <div class="delete-button-container">
-                <a-popconfirm
-                  placement="topRight"
-                  title="このデータを削除してもよろしいですか?"
-                  ok-text="削除"
-                  cancel-text="キャンセル"
-                  @confirm="handleDelete(record.id)"
-                  :getPopupContainer="
-                    (trigger: HTMLElement) => trigger.parentNode
-                  "
+  <div class="page-root">
+    <GlobalHeader />
+    <div class="page-content">
+      <div class="search-form">
+        <a-form
+          :model="formState"
+          @finish="onFinish"
+          @finishFailed="onFinishFailed"
+          layout="inline"
+        >
+          <a-form-item label="紹介元名" name="referralName">
+            <a-input v-model:value="formState.referralName" />
+          </a-form-item>
+          <a-button type="primary" html-type="submit">絞り込み</a-button>
+        </a-form>
+      </div>
+      <div>
+        <a-table
+          :columns="columns"
+          :data-source="tableData.dataSource"
+          :pagination="{
+            total: tableData.total,
+            current: tableData.current,
+            pageSize: tableData.pageSize,
+          }"
+          :loading="tableData.loading"
+          :scroll="{ y: scrollY }"
+          :row-class-name="
+            (_record: IMember, index: number) =>
+              index % 2 === 1 ? 'table-striped' : null
+          "
+        >
+          <template #bodyCell="{ column, record }">
+            <template v-if="column.key === 'operation'">
+              <div class="operation-buttons">
+                <a-button
+                  type="primary"
+                  size="small"
+                  @click="handleEdit(record.id)"
                 >
-                  <a-button class="delete-button" type="danger" size="small">
-                    <DeleteOutlined />
-                  </a-button>
-                </a-popconfirm>
+                  <EditOutlined />
+                </a-button>
+                <div class="delete-button-container">
+                  <a-popconfirm
+                    placement="topRight"
+                    title="このデータを削除してもよろしいですか?"
+                    ok-text="削除"
+                    cancel-text="キャンセル"
+                    @confirm="handleDelete(record.id)"
+                    :getPopupContainer="
+                      (trigger: HTMLElement) => trigger.parentNode
+                    "
+                  >
+                    <a-button class="delete-button" type="danger" size="small">
+                      <DeleteOutlined />
+                    </a-button>
+                  </a-popconfirm>
+                </div>
               </div>
-            </div>
+            </template>
           </template>
-        </template>
-      </a-table>
+        </a-table>
+      </div>
     </div>
   </div>
 </template>
@@ -75,7 +78,7 @@ interface FormState {
   referralName: string;
 }
 const router = useRouter();
-const scrollY = computed(() => window.innerHeight - 400);
+const scrollY = computed(() => window.innerHeight - 300);
 const tableData = ref<IPagination<IReferral>>({
   dataSource: [],
   total: 0,

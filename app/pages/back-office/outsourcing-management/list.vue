@@ -15,13 +15,13 @@
           <a-button type="primary" html-type="submit">絞り込み</a-button>
         </a-form>
 
-        <a-upload
-          :show-upload-list="false"
-          :before-upload="customerImport"
-          :accept="'.csv'"
-        >
-          <a-button type="primary">顧客インポート</a-button>
-        </a-upload>
+        <!-- <a-upload
+        :show-upload-list="false"
+        :before-upload="outsourceImport"
+        :accept="'.csv'"
+      >
+        <a-button type="primary">外注先インポート</a-button>
+      </a-upload> -->
       </div>
 
       <div>
@@ -82,8 +82,8 @@ import type { IPagination } from "~/types";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons-vue";
 import { useRouter } from "vue-router";
 import Papa from "papaparse";
-import { mockCustomerList } from "~/mock/customer";
-import type { ICustomer } from "~/types/customer";
+import { mockOutsourceSourceList } from "~/mock/outsource";
+import type { IOutsource } from "~/types/outsource";
 import dayjs from "dayjs";
 
 interface FormState {
@@ -91,7 +91,7 @@ interface FormState {
 }
 const router = useRouter();
 const scrollY = computed(() => window.innerHeight - 300);
-const tableData = ref<IPagination<ICustomer>>({
+const tableData = ref<IPagination<IOutsource>>({
   dataSource: [],
   total: 0,
   current: 1,
@@ -105,7 +105,7 @@ const formState = reactive<FormState>({
 
 const columns = [
   {
-    title: "顧客ID",
+    title: "外注先ID",
     dataIndex: "id",
     key: "id",
     width: 120,
@@ -144,19 +144,19 @@ const handleDelete = (id: string) => {
 
 const handleEdit = (id: string) => {
   router.push({
-    path: "/back-office/customer-management/registration",
+    path: "/back-office/outsourcing-management/registration",
     query: {
       id,
     },
   });
 };
 
-const getCustomerList = async () => {
+const getOutsourceList = async () => {
   tableData.value.loading = true;
   try {
     setTimeout(() => {
-      tableData.value.dataSource = mockCustomerList;
-      tableData.value.total = mockCustomerList.length;
+      tableData.value.dataSource = mockOutsourceSourceList;
+      tableData.value.total = mockOutsourceSourceList.length;
       tableData.value.loading = false;
     }, 2000);
   } catch (error) {
@@ -164,7 +164,7 @@ const getCustomerList = async () => {
   }
 };
 
-const customerImport = (file: File) => {
+const outsourceImport = (file: File) => {
   console.log(file);
   tableData.value.loading = true;
   setTimeout(() => {
@@ -175,7 +175,7 @@ const customerImport = (file: File) => {
         console.log("解析结果:", results.data);
         console.log("错误信息:", results.errors);
 
-        tableData.value.dataSource = (results.data as ICustomer[])
+        tableData.value.dataSource = (results.data as IOutsource[])
           .map((i, index) => {
             return {
               id: `testID${index + 1}`,
@@ -195,7 +195,7 @@ const customerImport = (file: File) => {
 };
 
 onMounted(() => {
-  getCustomerList();
+  getOutsourceList();
 });
 </script>
 

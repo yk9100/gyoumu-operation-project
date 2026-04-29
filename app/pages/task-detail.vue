@@ -1,85 +1,90 @@
 <template>
-  <div class="task-detail-page" ref="pageRef">
-    <div class="task-detail-header">
-      <div class="task-detail-header-left">
-        <span
-          class="issue-type"
-          :style="{ backgroundColor: issueType.color }"
-          >{{ issueType.name }}</span
-        >
-        <span>{{ issueKey }}</span>
+  <div class="page-root">
+    <GlobalHeader />
+    <div class="page-content task-detail-page" ref="pageRef">
+      <div class="task-detail-header">
+        <div class="task-detail-header-left">
+          <span
+            class="issue-type"
+            :style="{ backgroundColor: issueType.color }"
+            >{{ issueType.name }}</span
+          >
+          <span>{{ issueKey }}</span>
+        </div>
+        <div class="task-detail-header-right">
+          <span
+            ><span class="date-label">Start Date</span
+            ><span class="date-value">{{ startDate }}</span></span
+          >
+          <span
+            ><span class="date-label">Due Date</span
+            ><span class="date-value">{{ dueDate }}</span></span
+          >
+          <span
+            class="task-status"
+            :style="{ backgroundColor: status.color }"
+            >{{ status.name }}</span
+          >
+        </div>
       </div>
-      <div class="task-detail-header-right">
-        <span
-          ><span class="date-label">Start Date</span
-          ><span class="date-value">{{ startDate }}</span></span
-        >
-        <span
-          ><span class="date-label">Due Date</span
-          ><span class="date-value">{{ dueDate }}</span></span
-        >
-        <span class="task-status" :style="{ backgroundColor: status.color }">{{
-          status.name
-        }}</span>
+      <div class="task-detail-title">
+        {{ summary }}
       </div>
-    </div>
-    <div class="task-detail-title">
-      {{ summary }}
-    </div>
-    <div class="task-detail-content">
-      <div class="created-info">
-        <a-avatar
-          src="https://assets.backlog.jp/playassets/1.78.2/icons/default/100/10.png"
-          :alt="createdUser.name"
-          size="small"
-          class="avatar"
+      <div class="task-detail-content">
+        <div class="created-info">
+          <a-avatar
+            src="https://assets.backlog.jp/playassets/1.78.2/icons/default/100/10.png"
+            :alt="createdUser.name"
+            size="small"
+            class="avatar"
+          />
+          <div class="created-user-info">
+            <span class="created-user-name">{{ createdUser.name }}</span>
+            <span class="created-date">Created {{ created }}</span>
+          </div>
+        </div>
+        <div class="release-note" v-html="renderedContent"></div>
+        <div class="form-item-box">
+          <div class="form-item">
+            <span class="form-item-label">Priority</span>
+            <div class="form-item-content">
+              {{ priority.name }}
+            </div>
+          </div>
+          <div class="form-item">
+            <span class="form-item-label">Assignee</span>
+            <div class="form-item-content">
+              <a-avatar
+                :src="`https://assets.backlog.jp/playassets/1.78.2/${assignee.icon}`"
+                :alt="assignee.name"
+                size="small"
+              />
+              {{ assignee.name }}
+            </div>
+          </div>
+
+          <div class="form-item">
+            <span class="form-item-label">Category</span>
+            <div class="form-item-content"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="attachment-sub-task-tabs">
+        <TaskDetailAttachmentSubTaskTabs
+          :attachments="attachments"
+          :subTasks="childIssues"
         />
-        <div class="created-user-info">
-          <span class="created-user-name">{{ createdUser.name }}</span>
-          <span class="created-date">Created {{ created }}</span>
-        </div>
       </div>
-      <div class="release-note" v-html="renderedContent"></div>
-      <div class="form-item-box">
-        <div class="form-item">
-          <span class="form-item-label">Priority</span>
-          <div class="form-item-content">
-            {{ priority.name }}
-          </div>
-        </div>
-        <div class="form-item">
-          <span class="form-item-label">Assignee</span>
-          <div class="form-item-content">
-            <a-avatar
-              :src="`https://assets.backlog.jp/playassets/1.78.2/${assignee.icon}`"
-              :alt="assignee.name"
-              size="small"
-            />
-            {{ assignee.name }}
-          </div>
-        </div>
 
-        <div class="form-item">
-          <span class="form-item-label">Category</span>
-          <div class="form-item-content"></div>
-        </div>
+      <div class="comment-list-wrap">
+        <TaskDetailCommentList :comments="comments" />
       </div>
-    </div>
-
-    <div class="attachment-sub-task-tabs">
-      <TaskDetailAttachmentSubTaskTabs
-        :attachments="attachments"
-        :subTasks="childIssues"
+      <TaskDetailCommentBar
+        v-model:attachmentList="attachmentList"
+        @sendComment="sendComment"
       />
     </div>
-
-    <div class="comment-list-wrap">
-      <TaskDetailCommentList :comments="comments" />
-    </div>
-    <TaskDetailCommentBar
-      v-model:attachmentList="attachmentList"
-      @sendComment="sendComment"
-    />
   </div>
 </template>
 
@@ -141,7 +146,6 @@ const sendComment = (comment: TaskComment) => {
 <style scoped>
 .task-detail-page {
   /* padding: 20px; */
-  height: 100%;
   overflow-y: auto;
   padding-bottom: 68px;
 }

@@ -1,131 +1,140 @@
 <template>
-  <div class="create-task-page">
-    <div class="parent-issue-box">
-      <a-button
-        v-if="!parentTask"
-        type="link"
-        style="padding-left: 8px"
-        @click="showParentIssueDialog = true"
-      >
-        <ApartmentOutlined />Add Parent Issue
-      </a-button>
-      <div class="parent-issue-info" v-else>
-        <div class="issue-info">
-          <ApartmentOutlined />
-          <span class="issue-key">{{ parentTask.issueKey }}</span>
-          <span class="issue-title">{{ parentTask.summary }}</span>
-        </div>
+  <div class="page-root">
+    <GlobalHeader />
+    <div class="page-content">
+      <div class="parent-issue-box">
         <a-button
+          v-if="!parentTask"
           type="link"
-          style="padding-left: 2px; padding-right: 2px"
-          @click="parentTask = null"
+          style="padding-left: 8px"
+          @click="showParentIssueDialog = true"
         >
-          <CloseOutlined />
+          <ApartmentOutlined />Add Parent Issue
         </a-button>
+        <div class="parent-issue-info" v-else>
+          <div class="issue-info">
+            <ApartmentOutlined />
+            <span class="issue-key">{{ parentTask.issueKey }}</span>
+            <span class="issue-title">{{ parentTask.summary }}</span>
+          </div>
+          <a-button
+            type="link"
+            style="padding-left: 2px; padding-right: 2px"
+            @click="parentTask = null"
+          >
+            <CloseOutlined />
+          </a-button>
+        </div>
+
+        <div class="parent-issue-box-right">
+          <!-- <a-button>Preview</a-button> -->
+          <a-button
+            type="primary"
+            style="width: 80px"
+            @click="handleAddTaskClick"
+            >Add</a-button
+          >
+        </div>
+      </div>
+      <div class="create-task-form">
+        <IssueTypeSelect
+          v-model="createTaskState.issueType"
+          :allowClear="false"
+        />
+        <a-input
+          v-model:value="createTaskState.title"
+          placeholder="Add title"
+        />
+        <div class="summary-box">
+          <a-textarea
+            class="summary-input"
+            v-model:value="createTaskState.summary"
+            placeholder="Add summary"
+          />
+          <div class="form-item-box">
+            <div class="form-item">
+              <span class="form-item-label">Status</span>
+              <div class="form-item-content">
+                <TaskStatusSelect
+                  v-model="createTaskState.status"
+                  style="width: 210px"
+                />
+              </div>
+            </div>
+            <div class="form-item">
+              <span class="form-item-label">Assignee</span>
+              <div class="form-item-content">
+                <AssigneeSelect
+                  v-model="createTaskState.assignee"
+                  style="width: 210px"
+                />
+              </div>
+            </div>
+            <div class="form-item">
+              <span class="form-item-label">Priority</span>
+              <div class="form-item-content">
+                <a-select
+                  v-model:value="createTaskState.priority"
+                  style="width: 210px"
+                  :options="[
+                    { value: 'High', label: 'High' },
+                    { value: 'Normal', label: 'Normal' },
+                    { value: 'Low', label: 'Low' },
+                  ]"
+                ></a-select>
+              </div>
+            </div>
+            <div class="form-item">
+              <span class="form-item-label">Category</span>
+              <div class="form-item-content">
+                <TaskCategorySelect
+                  v-model="createTaskState.category"
+                  style="width: 210px"
+                />
+              </div>
+            </div>
+            <div class="form-item">
+              <span class="form-item-label">Start Date</span>
+              <div class="form-item-content">
+                <a-date-picker
+                  v-model:value="createTaskState.startDate"
+                  format="YYYY-MM-DD HH:mm"
+                  :show-time="{ defaultValue: dayjs('00:00:00', 'HH:mm') }"
+                  style="width: 210px"
+                />
+              </div>
+            </div>
+            <div class="form-item">
+              <span class="form-item-label">End Date</span>
+              <div class="form-item-content">
+                <a-date-picker
+                  v-model:value="createTaskState.endDate"
+                  format="YYYY-MM-DD HH:mm"
+                  :show-time="{ defaultValue: dayjs('00:00:00', 'HH:mm') }"
+                  style="width: 210px"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div class="parent-issue-box-right">
+      <div style="margin-top: 24px">
+        <FileUploadArea />
+      </div>
+
+      <div class="page-footer">
         <!-- <a-button>Preview</a-button> -->
         <a-button type="primary" style="width: 80px" @click="handleAddTaskClick"
           >Add</a-button
         >
       </div>
-    </div>
-    <div class="create-task-form">
-      <IssueTypeSelect
-        v-model="createTaskState.issueType"
-        :allowClear="false"
+      <AssociationTasksDialog
+        v-model:visible="showParentIssueDialog"
+        @cancel="handleCancel"
+        @onTaskSelect="handleParentTaskSelect"
       />
-      <a-input v-model:value="createTaskState.title" placeholder="Add title" />
-      <div class="summary-box">
-        <a-textarea
-          class="summary-input"
-          v-model:value="createTaskState.summary"
-          placeholder="Add summary"
-        />
-        <div class="form-item-box">
-          <div class="form-item">
-            <span class="form-item-label">Status</span>
-            <div class="form-item-content">
-              <TaskStatusSelect
-                v-model="createTaskState.status"
-                style="width: 210px"
-              />
-            </div>
-          </div>
-          <div class="form-item">
-            <span class="form-item-label">Assignee</span>
-            <div class="form-item-content">
-              <AssigneeSelect
-                v-model="createTaskState.assignee"
-                style="width: 210px"
-              />
-            </div>
-          </div>
-          <div class="form-item">
-            <span class="form-item-label">Priority</span>
-            <div class="form-item-content">
-              <a-select
-                v-model:value="createTaskState.priority"
-                style="width: 210px"
-                :options="[
-                  { value: 'High', label: 'High' },
-                  { value: 'Normal', label: 'Normal' },
-                  { value: 'Low', label: 'Low' },
-                ]"
-              ></a-select>
-            </div>
-          </div>
-          <div class="form-item">
-            <span class="form-item-label">Category</span>
-            <div class="form-item-content">
-              <TaskCategorySelect
-                v-model="createTaskState.category"
-                style="width: 210px"
-              />
-            </div>
-          </div>
-          <div class="form-item">
-            <span class="form-item-label">Start Date</span>
-            <div class="form-item-content">
-              <a-date-picker
-                v-model:value="createTaskState.startDate"
-                format="YYYY-MM-DD HH:mm"
-                :show-time="{ defaultValue: dayjs('00:00:00', 'HH:mm') }"
-                style="width: 210px"
-              />
-            </div>
-          </div>
-          <div class="form-item">
-            <span class="form-item-label">End Date</span>
-            <div class="form-item-content">
-              <a-date-picker
-                v-model:value="createTaskState.endDate"
-                format="YYYY-MM-DD HH:mm"
-                :show-time="{ defaultValue: dayjs('00:00:00', 'HH:mm') }"
-                style="width: 210px"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
-
-    <div style="margin-top: 24px">
-      <FileUploadArea />
-    </div>
-
-    <div class="page-footer">
-      <!-- <a-button>Preview</a-button> -->
-      <a-button type="primary" style="width: 80px" @click="handleAddTaskClick"
-        >Add</a-button
-      >
-    </div>
-    <AssociationTasksDialog
-      v-model:visible="showParentIssueDialog"
-      @cancel="handleCancel"
-      @onTaskSelect="handleParentTaskSelect"
-    />
   </div>
 </template>
 <script lang="ts" setup>

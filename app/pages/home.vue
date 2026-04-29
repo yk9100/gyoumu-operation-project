@@ -1,7 +1,10 @@
 <template>
-  <div class="home-container">
-    <Notification />
-    <Performance />
+  <div class="page-root">
+    <GlobalHeader />
+    <div class="page-content home-container">
+      <Notification />
+      <Performance />
+    </div>
   </div>
 </template>
 

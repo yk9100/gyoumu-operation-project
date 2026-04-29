@@ -12,15 +12,14 @@
           @finish="onFinish"
           @finishFailed="onFinishFailed"
         >
-          <a-form-item label="タイトル" name="title" required>
-            <a-input v-model:value="formState.title" />
+          <a-form-item label="職種名" name="occupationName" required>
+            <a-input v-model:value="formState.occupationName" />
           </a-form-item>
-          <a-form-item label="お知らせ内容" name="content" required>
-            <a-textarea v-model:value="formState.content" />
+          <a-form-item label="単価" name="price" required>
+            <a-input v-model:value="formState.price" type="number" min="0" />
           </a-form-item>
-
           <a-form-item :wrapper-col="{ offset: 8, span: 8 }">
-            <a-button type="primary" html-type="submit">確認</a-button>
+            <a-button type="primary" html-type="submit">登録</a-button>
           </a-form-item>
         </a-form>
       </a-spin>
@@ -33,37 +32,36 @@ import { useRouter, useRoute } from "vue-router";
 import { message } from "ant-design-vue";
 
 interface FormState {
-  title: string;
-  content: string;
+  occupationName: string;
+  price: number;
 }
 
 const route = useRoute();
 const spinning = ref(false);
 
 const formState = reactive<FormState>({
-  title: "",
-  content: "",
+  occupationName: "",
+  price: 0,
 });
 const router = useRouter();
 
 const onFinish = (values: any) => {
   console.log("Success:", values);
-  message.success("お知らせ確認成功しました");
   // router.push("/back-office/notification-management/list");
 };
 
 const onFinishFailed = (errorInfo: any) => {
   console.log("Failed:", errorInfo);
-  router.push("/back-office/notification-management/list");
+  router.push("/back-office/occupation-management/list");
 };
 
-const getNotificationDetail = async (id: string) => {
+const getOccupationDetail = async (id: string) => {
   spinning.value = true;
   try {
     setTimeout(() => {
       Object.assign(formState, {
-        title: "タイトル1",
-        content: "お知らせ内容1",
+        occupationName: "職種1",
+        price: 1000,
       });
       spinning.value = false;
     }, 2000);
@@ -77,7 +75,7 @@ const getNotificationDetail = async (id: string) => {
 onMounted(() => {
   const id = route.query.id as string;
   if (id) {
-    getNotificationDetail(id);
+    getOccupationDetail(id);
   }
 });
 </script>

@@ -27,6 +27,13 @@
             <a-input v-model:value="formState.postalCode" />
           </a-form-item>
           <a-form-item
+            label="電話番号"
+            name="phoneNumber"
+            :rules="[{ required: true, message: '電話番号を入力してください' }]"
+          >
+            <a-input v-model:value="formState.phoneNumber" />
+          </a-form-item>
+          <a-form-item
             label="住所"
             name="address"
             :rules="[{ required: true, message: '住所を入力してください' }]"
@@ -59,61 +66,6 @@
               <a-select-option value="D">D</a-select-option>
             </a-select>
           </a-form-item>
-          <a-form-item name="isCompany" label="反社チェック" required>
-            <a-radio-group v-model:value="formState.isCompany">
-              <a-radio value="false">未</a-radio>
-              <a-radio value="true">済</a-radio>
-            </a-radio-group>
-          </a-form-item>
-
-          <a-form-item name="memo" label="メモ">
-            <a-textarea v-model:value="formState.memo" />
-          </a-form-item>
-
-          <a-form-item name="paymentSite" label="支払サイト">
-            <a-form-item
-              class="vertical-form-item"
-              name="lineDay"
-              label="締め日"
-            >
-              <a-select v-model:value="formState.lineDay">
-                <a-select-option value="lineDay1">締め日1</a-select-option>
-                <a-select-option value="lineDay2">締め日2</a-select-option>
-                <a-select-option value="lineDay3">締め日3</a-select-option>
-                <a-select-option value="lineDay4">締め日4</a-select-option>
-              </a-select>
-            </a-form-item>
-
-            <a-form-item
-              class="vertical-form-item"
-              name="paymentMonth"
-              label="支払月"
-            >
-              <a-select v-model:value="formState.paymentMonth">
-                <a-select-option value="paymentMonth1">支払月1</a-select-option>
-                <a-select-option value="paymentMonth2">支払月2</a-select-option>
-                <a-select-option value="paymentMonth3">支払月3</a-select-option>
-                <a-select-option value="paymentMonth4">支払月4</a-select-option>
-              </a-select>
-            </a-form-item>
-
-            <a-form-item
-              class="vertical-form-item"
-              name="paymentDay"
-              label="支払日"
-            >
-              <a-select v-model:value="formState.paymentDay">
-                <a-select-option value="paymentDay1">支払日1</a-select-option>
-                <a-select-option value="paymentDay2">支払日2</a-select-option>
-                <a-select-option value="paymentDay3">支払日3</a-select-option>
-                <a-select-option value="paymentDay4">支払日4</a-select-option>
-              </a-select>
-            </a-form-item>
-          </a-form-item>
-
-          <a-form-item name="requestDate" label="請求書必着日">
-            <a-textarea v-model:value="formState.requestDate" />
-          </a-form-item>
 
           <a-form-item :wrapper-col="{ offset: 8, span: 8 }">
             <a-button type="primary" html-type="submit">登録</a-button>
@@ -132,15 +84,9 @@ interface FormState {
   buildingName: string;
   tdbRating: string;
   rankLevel: string;
-  isCompany: string;
-  memo: string;
-  paymentSite: string;
-  lineDay: string;
-  paymentMonth: string;
-  paymentDay: string;
-  requestDate: string;
   postalCode: string;
   address: string;
+  phoneNumber: string;
 }
 
 const route = useRoute();
@@ -151,29 +97,23 @@ const formState = reactive<FormState>({
   buildingName: "",
   tdbRating: "",
   rankLevel: "",
-  isCompany: "false",
-  memo: "",
-  paymentSite: "",
-  lineDay: "",
-  paymentMonth: "",
-  paymentDay: "",
-  requestDate: "",
   postalCode: "",
   address: "",
+  phoneNumber: "",
 });
 const router = useRouter();
 
 const onFinish = (values: any) => {
   console.log("Success:", values);
-  router.push("/back-office/customer-management/list");
+  router.push("/back-office/outsourcing-management/list");
 };
 
 const onFinishFailed = (errorInfo: any) => {
   console.log("Failed:", errorInfo);
-  router.push("/back-office/customer-management/list");
+  router.push("/back-office/outsourcing-management/list");
 };
 
-const getCustomerDetail = async (id: string) => {
+const getOutsourcingDetail = async (id: string) => {
   spinning.value = true;
   try {
     setTimeout(() => {
@@ -182,15 +122,9 @@ const getCustomerDetail = async (id: string) => {
         buildingName: "建物1",
         tdbRating: "A",
         rankLevel: "A",
-        isCompany: "false",
-        memo: "メモ1",
-        paymentSite: "paymentSite1",
-        lineDay: "lineDay1",
-        paymentMonth: "paymentMonth1",
-        paymentDay: "paymentDay1",
-        requestDate: "2023-01-01",
         postalCode: "123456",
         address: "地址1",
+        phoneNumber: "09012345678",
       });
       spinning.value = false;
     }, 2000);
@@ -204,7 +138,7 @@ const getCustomerDetail = async (id: string) => {
 onMounted(() => {
   const id = route.query.id as string;
   if (id) {
-    getCustomerDetail(id);
+    getOutsourcingDetail(id);
   }
 });
 </script>

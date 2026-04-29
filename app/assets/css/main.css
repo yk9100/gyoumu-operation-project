@@ -24,3 +24,19 @@ span[data-at-embedded] {
 .table-striped {
     background-color: #fafafa !important;
 }
+
+/* .ant-menu::-webkit-scrollbar {
+    -webkit-appearance: none;
+}
+
+.ant-menu::-webkit-scrollbar-track {
+    background-color: transparent !important;
+} */
+
+.page-content {
+    height: calc(100vh - 64px - 16px - 16px);
+    overflow-y: auto;
+    background-color: #fff;
+    margin: 16px;
+    padding: 16px;
+}

@@ -12,15 +12,23 @@
           @finish="onFinish"
           @finishFailed="onFinishFailed"
         >
-          <a-form-item label="タイトル" name="title" required>
-            <a-input v-model:value="formState.title" />
+          <a-form-item label="仕入先名" name="purchaseName" required>
+            <a-input v-model:value="formState.purchaseName" />
           </a-form-item>
-          <a-form-item label="お知らせ内容" name="content" required>
-            <a-textarea v-model:value="formState.content" />
+          <a-form-item label="郵便番号" name="postalCode" required>
+            <a-input v-model:value="formState.postalCode" />
           </a-form-item>
-
+          <a-form-item label="電話番号" name="phoneNumber" required>
+            <a-input v-model:value="formState.phoneNumber" />
+          </a-form-item>
+          <a-form-item label="住所" name="address" required>
+            <a-input v-model:value="formState.address" />
+          </a-form-item>
+          <a-form-item label="ビル名" name="buildingName" required>
+            <a-input v-model:value="formState.buildingName" />
+          </a-form-item>
           <a-form-item :wrapper-col="{ offset: 8, span: 8 }">
-            <a-button type="primary" html-type="submit">確認</a-button>
+            <a-button type="primary" html-type="submit">登録</a-button>
           </a-form-item>
         </a-form>
       </a-spin>
@@ -33,37 +41,45 @@ import { useRouter, useRoute } from "vue-router";
 import { message } from "ant-design-vue";
 
 interface FormState {
-  title: string;
-  content: string;
+  purchaseName: string;
+  postalCode: string;
+  phoneNumber: string;
+  address: string;
+  buildingName: string;
 }
 
 const route = useRoute();
 const spinning = ref(false);
 
 const formState = reactive<FormState>({
-  title: "",
-  content: "",
+  purchaseName: "",
+  postalCode: "",
+  phoneNumber: "",
+  address: "",
+  buildingName: "",
 });
 const router = useRouter();
 
 const onFinish = (values: any) => {
   console.log("Success:", values);
-  message.success("お知らせ確認成功しました");
   // router.push("/back-office/notification-management/list");
 };
 
 const onFinishFailed = (errorInfo: any) => {
   console.log("Failed:", errorInfo);
-  router.push("/back-office/notification-management/list");
+  router.push("/back-office/purchase-management/list");
 };
 
-const getNotificationDetail = async (id: string) => {
+const getPurchaseDetail = async (id: string) => {
   spinning.value = true;
   try {
     setTimeout(() => {
       Object.assign(formState, {
-        title: "タイトル1",
-        content: "お知らせ内容1",
+        purchaseName: "仕入先1",
+        postalCode: "123456",
+        phoneNumber: "09012345678",
+        address: "住所1",
+        buildingName: "ビル1",
       });
       spinning.value = false;
     }, 2000);
@@ -77,7 +93,7 @@ const getNotificationDetail = async (id: string) => {
 onMounted(() => {
   const id = route.query.id as string;
   if (id) {
-    getNotificationDetail(id);
+    getPurchaseDetail(id);
   }
 });
 </script>
