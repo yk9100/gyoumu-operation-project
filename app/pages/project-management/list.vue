@@ -10,22 +10,7 @@
       </div>
     </GlobalHeader>
     <div class="page-content">
-      <div class="search-form">
-        <a-form
-          :model="formState"
-          @finish="onFinish"
-          @finishFailed="onFinishFailed"
-          layout="inline"
-        >
-          <a-form-item label="メンバー姓" name="frontName">
-            <a-input v-model:value="formState.memberName" />
-          </a-form-item>
-          <a-form-item label="メールアドレス" name="email">
-            <a-input v-model:value="formState.email" />
-          </a-form-item>
-          <a-button type="primary" html-type="submit">絞り込み</a-button>
-        </a-form>
-      </div>
+      <ProjectManagementFilter />
 
       <div>
         <a-table
