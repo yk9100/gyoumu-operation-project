@@ -37,263 +37,266 @@
           >条件リセット</a-button
         >
       </div>
-      <div v-if="filterExpanded" class="complicated-filter">
-        <a-form-item name="status">
-          <ProjectManagementStatusSelect v-model="formState.status" />
-        </a-form-item>
+      <Transition>
+        <div v-if="filterExpanded" class="complicated-filter">
+          <a-form-item name="status">
+            <ProjectManagementStatusSelect v-model="formState.status" />
+          </a-form-item>
 
-        <div class="date-picker-box">
-          <a-row :gutter="[16, 16]" style="width: 100%">
-            <a-col :span="12">
-              <a-form-item name="undertakeProjectDate">
-                <div class="project-form-field">受注月</div>
-                <ProjectManagementDatePicker
-                  v-model="formState.undertakeProjectDate"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item name="inspectionProjectDate">
-                <div class="project-form-field">検収月</div>
-                <ProjectManagementDatePicker
-                  v-model="formState.inspectionProjectDate"
-                />
-              </a-form-item>
-            </a-col>
-          </a-row>
-        </div>
-
-        <div class="jyoutai-filter">
-          <div class="project-form-field">状態</div>
-          <a-row :gutter="[16, 16]" style="margin-bottom: 16px">
-            <a-col :span="6">
-              <div>見積</div>
-              <a-form-item name="mitsumori">
-                <a-select
-                  v-model:value="formState.mitsumori"
-                  :options="MITSUMORI_OPITIONS"
-                  mode="multiple"
-                  :show-search="false"
-                  show-arrow
-                >
-                </a-select>
-              </a-form-item>
-            </a-col>
-            <a-col :span="6">
-              <div>注文</div>
-              <a-form-item name="tyuumon">
-                <a-select
-                  v-model:value="formState.tyuumon"
-                  :options="TYUUMON_OPTIONS"
-                  mode="multiple"
-                  :show-search="false"
-                  show-arrow
-                >
-                </a-select>
-              </a-form-item>
-            </a-col>
-            <a-col :span="6">
-              <div>外注</div>
-              <a-form-item name="gaityuu">
-                <a-select
-                  v-model:value="formState.gaityuu"
-                  :options="GAITYUU_OPTIONS"
-                  mode="multiple"
-                  :show-search="false"
-                  show-arrow
-                >
-                </a-select>
-              </a-form-item>
-            </a-col>
-            <a-col :span="6">
-              <div>検収</div>
-              <a-form-item name="kainnsyuu">
-                <a-select
-                  v-model:value="formState.kainnsyuu"
-                  :options="KAINNSYUU_OPTIONS"
-                  mode="multiple"
-                  :show-search="false"
-                  show-arrow
-                >
-                </a-select>
-              </a-form-item>
-            </a-col>
-          </a-row>
-
-          <a-row :gutter="[16, 16]">
-            <a-col :span="6">
-              <div>開発</div>
-              <a-form-item name="kaihatu">
-                <a-select
-                  v-model:value="formState.kaihatu"
-                  :options="KAIHATU_OPTIONS"
-                  mode="multiple"
-                  :show-search="false"
-                  show-arrow
-                >
-                </a-select>
-              </a-form-item>
-            </a-col>
-            <a-col :span="6">
-              <div>前金請求</div>
-              <a-form-item name="zennkinn">
-                <a-select
-                  v-model:value="formState.zennkinn"
-                  :options="ZENNKINN_OPTIONS"
-                  mode="multiple"
-                  :show-search="false"
-                  show-arrow
-                >
-                </a-select>
-              </a-form-item>
-            </a-col>
-            <a-col :span="6">
-              <div>請求</div>
-              <a-form-item name="seikyuu">
-                <a-select
-                  v-model:value="formState.seikyuu"
-                  :options="SEIKYUU_OPTIONS"
-                  mode="multiple"
-                  :show-search="false"
-                  show-arrow
-                >
-                </a-select>
-              </a-form-item>
-            </a-col>
-            <a-col :span="6"> </a-col>
-          </a-row>
-        </div>
-
-        <div class="other-filter">
-          <div class="project-form-field">その他</div>
-          <a-row :gutter="[16, 16]" style="margin-bottom: 16px">
-            <a-col :span="6">
-              <div>案件番号</div>
-              <a-form-item name="banngou">
-                <a-input
-                  v-model:value="formState.banngou"
-                  placeholder="案件番号で検索"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="6">
-              <div>ジョブカンPJ名</div>
-              <a-form-item name="jobkanpjin">
-                <a-input
-                  v-model:value="formState.jobkanpjin"
-                  placeholder="ジョブカンPJ名で検索"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="6">
-              <div>PM</div>
-              <a-form-item name="pm">
-                <a-select
-                  v-model:value="formState.pm"
-                  :show-search="false"
-                  show-arrow
-                  placeholder="選択してください"
-                >
-                  <a-option value="PM1">PM1</a-option>
-                  <a-option value="PM2">PM2</a-option>
-                </a-select>
-              </a-form-item>
-            </a-col>
-            <a-col :span="6">
-              <div>営業者担当者</div>
-              <a-form-item name="tanntousya">
-                <a-select
-                  v-model:value="formState.tanntousya"
-                  :show-search="false"
-                  show-arrow
-                  placeholder="選択してください"
-                >
-                  <a-option value="担当者1">担当者1</a-option>
-                  <a-option value="担当者2">担当者2</a-option>
-                </a-select>
-              </a-form-item>
-            </a-col>
-          </a-row>
-
-          <a-row :gutter="[16, 16]">
-            <a-col :span="12">
-              <div>受注金額</div>
-              <div class="input-range">
-                <a-form-item name="minKinngaku">
-                  <a-input
-                    type="number"
-                    v-model:value="formState.minKinngaku"
-                    placeholder="最低額"
+          <div class="date-picker-box">
+            <a-row :gutter="[16, 16]" style="width: 100%">
+              <a-col :span="12">
+                <a-form-item name="undertakeProjectDate">
+                  <div class="project-form-field">受注月</div>
+                  <ProjectManagementDatePicker
+                    v-model="formState.undertakeProjectDate"
                   />
                 </a-form-item>
-                <div class="input-range-separator">~</div>
-                <a-form-item name="maxKinngaku">
-                  <a-input
-                    type="number"
-                    v-model:value="formState.maxKinngaku"
-                    placeholder="最高額"
+              </a-col>
+              <a-col :span="12">
+                <a-form-item name="inspectionProjectDate">
+                  <div class="project-form-field">検収月</div>
+                  <ProjectManagementDatePicker
+                    v-model="formState.inspectionProjectDate"
                   />
                 </a-form-item>
-              </div>
-            </a-col>
-            <a-col :span="6">
-              <div>顧客（社内外）</div>
-              <a-form-item name="kokyaku">
-                <a-select
-                  v-model:value="formState.kokyaku"
-                  :show-search="false"
-                  show-arrow
-                >
-                  <a-option value="顧客1">顧客1</a-option>
-                  <a-option value="顧客2">顧客2</a-option>
-                </a-select>
-              </a-form-item>
-            </a-col>
-            <a-col :span="6">
-              <div>発注（外注·仕入先·社内部署）</div>
-              <a-form-item name="hattyuu">
-                <a-select
-                  v-model:value="formState.hattyuu"
-                  :show-search="false"
-                  show-arrow
-                >
-                  <a-option value="外注">外注</a-option>
-                  <a-option value="仕入先">仕入先</a-option>
-                  <a-option value="社内部署">社内部署</a-option>
-                </a-select>
-              </a-form-item>
-            </a-col>
-            <a-col :span="6"> </a-col>
-          </a-row>
+              </a-col>
+            </a-row>
+          </div>
 
-          <a-row :gutter="[16, 16]">
-            <a-col :span="12">
-              <a-form-item name="gaityuuInspectionProjectDate">
-                <div>外注検収月</div>
-                <ProjectManagementDatePicker
-                  v-model="formState.gaityuuInspectionProjectDate"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="6">
-              <a-form-item label="部署" name="department">
-                <a-select
-                  v-model:value="formState.department"
-                  style="width: 200px"
-                  :show-search="false"
-                  :show-arrow="true"
-                  mode="multiple"
-                >
-                  <a-select-option value="部署1">部署1</a-select-option>
-                  <a-select-option value="部署2">部署2</a-select-option>
-                  <a-select-option value="部署3">部署3</a-select-option>
-                  <a-select-option value="部署4">部署4</a-select-option>
-                </a-select>
-              </a-form-item>
-            </a-col>
-          </a-row>
+          <div class="jyoutai-filter">
+            <div class="project-form-field">状態</div>
+            <a-row :gutter="[16, 16]" style="margin-bottom: 16px">
+              <a-col :span="6">
+                <div>見積</div>
+                <a-form-item name="mitsumori">
+                  <a-select
+                    v-model:value="formState.mitsumori"
+                    :options="MITSUMORI_OPITIONS"
+                    mode="multiple"
+                    :show-search="false"
+                    show-arrow
+                  >
+                  </a-select>
+                </a-form-item>
+              </a-col>
+              <a-col :span="6">
+                <div>注文</div>
+                <a-form-item name="tyuumon">
+                  <a-select
+                    v-model:value="formState.tyuumon"
+                    :options="TYUUMON_OPTIONS"
+                    mode="multiple"
+                    :show-search="false"
+                    show-arrow
+                  >
+                  </a-select>
+                </a-form-item>
+              </a-col>
+              <a-col :span="6">
+                <div>外注</div>
+                <a-form-item name="gaityuu">
+                  <a-select
+                    v-model:value="formState.gaityuu"
+                    :options="GAITYUU_OPTIONS"
+                    mode="multiple"
+                    :show-search="false"
+                    show-arrow
+                  >
+                  </a-select>
+                </a-form-item>
+              </a-col>
+              <a-col :span="6">
+                <div>検収</div>
+                <a-form-item name="kainnsyuu">
+                  <a-select
+                    v-model:value="formState.kainnsyuu"
+                    :options="KAINNSYUU_OPTIONS"
+                    mode="multiple"
+                    :show-search="false"
+                    show-arrow
+                  >
+                  </a-select>
+                </a-form-item>
+              </a-col>
+            </a-row>
+
+            <a-row :gutter="[16, 16]">
+              <a-col :span="6">
+                <div>開発</div>
+                <a-form-item name="kaihatu">
+                  <a-select
+                    v-model:value="formState.kaihatu"
+                    :options="KAIHATU_OPTIONS"
+                    mode="multiple"
+                    :show-search="false"
+                    show-arrow
+                  >
+                  </a-select>
+                </a-form-item>
+              </a-col>
+              <a-col :span="6">
+                <div>前金請求</div>
+                <a-form-item name="zennkinn">
+                  <a-select
+                    v-model:value="formState.zennkinn"
+                    :options="ZENNKINN_OPTIONS"
+                    mode="multiple"
+                    :show-search="false"
+                    show-arrow
+                  >
+                  </a-select>
+                </a-form-item>
+              </a-col>
+              <a-col :span="6">
+                <div>請求</div>
+                <a-form-item name="seikyuu">
+                  <a-select
+                    v-model:value="formState.seikyuu"
+                    :options="SEIKYUU_OPTIONS"
+                    mode="multiple"
+                    :show-search="false"
+                    show-arrow
+                  >
+                  </a-select>
+                </a-form-item>
+              </a-col>
+              <a-col :span="6"> </a-col>
+            </a-row>
+          </div>
+
+          <div class="other-filter">
+            <div class="project-form-field">その他</div>
+            <a-row :gutter="[16, 16]" style="margin-bottom: 16px">
+              <a-col :span="6">
+                <div>案件番号</div>
+                <a-form-item name="banngou">
+                  <a-input
+                    v-model:value="formState.banngou"
+                    placeholder="案件番号で検索"
+                  />
+                </a-form-item>
+              </a-col>
+              <a-col :span="6">
+                <div>ジョブカンPJ名</div>
+                <a-form-item name="jobkanpjin">
+                  <a-input
+                    v-model:value="formState.jobkanpjin"
+                    placeholder="ジョブカンPJ名で検索"
+                  />
+                </a-form-item>
+              </a-col>
+              <a-col :span="6">
+                <div>PM</div>
+                <a-form-item name="pm">
+                  <a-select
+                    v-model:value="formState.pm"
+                    :show-search="false"
+                    show-arrow
+                    placeholder="選択してください"
+                  >
+                    <a-option value="PM1">PM1</a-option>
+                    <a-option value="PM2">PM2</a-option>
+                  </a-select>
+                </a-form-item>
+              </a-col>
+              <a-col :span="6">
+                <div>営業者担当者</div>
+                <a-form-item name="tanntousya">
+                  <a-select
+                    v-model:value="formState.tanntousya"
+                    :show-search="false"
+                    show-arrow
+                    placeholder="選択してください"
+                  >
+                    <a-option value="担当者1">担当者1</a-option>
+                    <a-option value="担当者2">担当者2</a-option>
+                  </a-select>
+                </a-form-item>
+              </a-col>
+            </a-row>
+
+            <a-row :gutter="[16, 16]">
+              <a-col :span="12">
+                <div>受注金額</div>
+                <div class="input-range">
+                  <a-form-item name="minKinngaku">
+                    <a-input
+                      type="number"
+                      v-model:value="formState.minKinngaku"
+                      placeholder="最低額"
+                    />
+                  </a-form-item>
+                  <div class="input-range-separator">~</div>
+                  <a-form-item name="maxKinngaku">
+                    <a-input
+                      type="number"
+                      v-model:value="formState.maxKinngaku"
+                      placeholder="最高額"
+                    />
+                  </a-form-item>
+                </div>
+              </a-col>
+              <a-col :span="6">
+                <div>顧客（社内外）</div>
+                <a-form-item name="kokyaku">
+                  <a-select
+                    v-model:value="formState.kokyaku"
+                    :show-search="false"
+                    show-arrow
+                  >
+                    <a-option value="顧客1">顧客1</a-option>
+                    <a-option value="顧客2">顧客2</a-option>
+                  </a-select>
+                </a-form-item>
+              </a-col>
+              <a-col :span="6">
+                <div>発注（外注·仕入先·社内部署）</div>
+                <a-form-item name="hattyuu">
+                  <a-select
+                    v-model:value="formState.hattyuu"
+                    :show-search="false"
+                    show-arrow
+                  >
+                    <a-option value="外注">外注</a-option>
+                    <a-option value="仕入先">仕入先</a-option>
+                    <a-option value="社内部署">社内部署</a-option>
+                  </a-select>
+                </a-form-item>
+              </a-col>
+              <a-col :span="6"> </a-col>
+            </a-row>
+
+            <a-row :gutter="[16, 16]">
+              <a-col :span="12">
+                <a-form-item name="gaityuuInspectionProjectDate">
+                  <div>外注検収月</div>
+                  <ProjectManagementDatePicker
+                    v-model="formState.gaityuuInspectionProjectDate"
+                  />
+                </a-form-item>
+              </a-col>
+              <a-col :span="6">
+                <div>部署</div>
+                <a-form-item name="department">
+                  <a-select
+                    v-model:value="formState.department"
+                    style="width: 100%"
+                    :show-search="false"
+                    :show-arrow="true"
+                    mode="multiple"
+                  >
+                    <a-select-option value="部署1">部署1</a-select-option>
+                    <a-select-option value="部署2">部署2</a-select-option>
+                    <a-select-option value="部署3">部署3</a-select-option>
+                    <a-select-option value="部署4">部署4</a-select-option>
+                  </a-select>
+                </a-form-item>
+              </a-col>
+            </a-row>
+          </div>
         </div>
-      </div>
+      </Transition>
     </a-form>
   </div>
 </template>
@@ -370,7 +373,7 @@ export interface ProjectFilterState {
 }
 const formState = ref<ProjectFilterState>(getDefaultFilterState());
 
-const filterExpanded = ref(true);
+const filterExpanded = ref(false);
 
 const handleFinish = (values: ProjectFilterState) => {
   console.log(values);
