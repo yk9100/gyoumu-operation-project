@@ -57,3 +57,7 @@ span[data-at-embedded] {
 .v-leave-to {
     opacity: 0;
 }
+
+label[title=" "]::after {
+    display: none;
+}

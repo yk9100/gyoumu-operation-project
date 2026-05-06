@@ -7,113 +7,173 @@
           :model="formState"
           name="basic"
           :label-col="{ span: 8 }"
-          :wrapper-col="{ span: 8 }"
+          :wrapper-col="{ span: 10 }"
           autocomplete="off"
           @finish="onFinish"
           @finishFailed="onFinishFailed"
+          ref="formRef"
+          :rules="rules"
         >
-          <a-form-item
-            label="顧客名"
-            name="customerName"
-            :rules="[{ required: true, message: '顧客名を入力してください' }]"
-          >
-            <a-input v-model:value="formState.customerName" />
+          <div>
+            <div class="form-title">案件詳細</div>
+            <a-form-item label="PJコード" name="pjCode" required>
+              <ProjectManagementPJCodeInput v-model:value="formState.pjCode" />
+            </a-form-item>
+            <a-form-item
+              label="案件名"
+              name="projectName"
+              :rules="[
+                { required: true, message: '案件番号名を入力してください' },
+              ]"
+            >
+              <a-input v-model:value="formState.projectName" />
+            </a-form-item>
+            <a-form-item label="プロダクト名" name="productName" required>
+              <InputableSelect
+                v-model:value="formState.productName"
+                :options="[
+                  { label: 'プロダクト1', value: 'プロダクト1' },
+                  { label: 'プロダクト2', value: 'プロダクト2' },
+                ]"
+              />
+            </a-form-item>
+            <a-form-item label="詳細" name="detail">
+              <a-textarea v-model:value="formState.detail" />
+            </a-form-item>
+            <a-form-item label="PM" name="pm" required>
+              <a-select v-model:value="formState.pm">
+                <a-select-option value="pm1">PM1</a-select-option>
+                <a-select-option value="pm2">PM2</a-select-option>
+              </a-select>
+            </a-form-item>
+            <a-form-item label="営業担当者" name="salesPerson" required>
+              <a-select v-model:value="formState.salesPerson">
+                <a-select-option value="営業担当者1"
+                  >営業担当者1</a-select-option
+                >
+                <a-select-option value="営業担当者2"
+                  >営業担当者2</a-select-option
+                >
+              </a-select>
+            </a-form-item>
+            <a-form-item label="部署" name="department" required>
+              <a-select v-model:value="formState.department">
+                <a-select-option value="部署1">部署1</a-select-option>
+                <a-select-option value="部署2">部署2</a-select-option>
+              </a-select>
+            </a-form-item>
+            <a-form-item label="ステータス" name="projectStatus" required>
+              <a-select
+                v-model:value="formState.projectStatus"
+                :options="PROJECT_STATUS"
+              >
+              </a-select>
+            </a-form-item>
+          </div>
+          <a-form-item name="projectStartDate" label="開発開始予定日" required>
+            <a-date-picker v-model:value="formState.projectStartDate" />
           </a-form-item>
-          <a-form-item
-            label="郵便番号"
-            name="postalCode"
-            :rules="[{ required: true, message: '郵便番号を入力してください' }]"
-          >
-            <a-input v-model:value="formState.postalCode" />
+          <a-form-item name="projectEndDate" label="納品予定日" required>
+            <a-date-picker v-model:value="formState.projectEndDate" />
           </a-form-item>
-          <a-form-item
-            label="住所"
-            name="address"
-            :rules="[{ required: true, message: '住所を入力してください' }]"
-          >
-            <a-input v-model:value="formState.address" />
+          <a-form-item name="inspectionDate" label="検収予定日" required>
+            <a-date-picker v-model:value="formState.inspectionDate" />
           </a-form-item>
-          <a-form-item
-            label="ビル名"
-            name="buildingName"
-            :rules="[{ required: true, message: 'ビル名を入力してください' }]"
-          >
-            <a-input v-model:value="formState.buildingName" />
-          </a-form-item>
-          <a-form-item
-            label="TDB評点"
-            name="tdbRating"
-            :rules="[{ required: true, message: 'TDB評点を入力してください' }]"
-          >
-            <a-input v-model:value="formState.tdbRating" />
-          </a-form-item>
-          <a-form-item name="rankLevel" label="与信ランク" required>
-            <a-input v-model:value="formState.rankLevel" />
-          </a-form-item>
-
-          <a-form-item name="rankLevel" label="与信ランク変更" required>
-            <a-select v-model:value="formState.rankLevel">
-              <a-select-option value="A">A</a-select-option>
-              <a-select-option value="B">B</a-select-option>
-              <a-select-option value="C">C</a-select-option>
-              <a-select-option value="D">D</a-select-option>
-            </a-select>
-          </a-form-item>
-          <a-form-item name="isCompany" label="反社チェック" required>
-            <a-radio-group v-model:value="formState.isCompany">
-              <a-radio value="false">未</a-radio>
-              <a-radio value="true">済</a-radio>
+          <a-form-item name="isDiscount" label="割引検収するかどうか" required>
+            <a-radio-group v-model:value="formState.isDiscount">
+              <a-radio value="しない">しない</a-radio>
+              <a-radio value="する">する</a-radio>
             </a-radio-group>
           </a-form-item>
-
-          <a-form-item name="memo" label="メモ">
-            <a-textarea v-model:value="formState.memo" />
+          <a-form-item name="isEffect" label=" ">
+            <div style="display: flex; flex-direction: column; gap: 8px">
+              <div>
+                営業部判断となりリスクを保有している契約に対して、今回の請負範囲が影響しないか？
+              </div>
+              <div style="color: red">2021年9月以降の案件は選択必須</div>
+              <div style="color: red">
+                影響ありの場合、本案がリスクを保有していることになります。
+              </div>
+              <a-radio-group v-model:value="formState.isEffect">
+                <a-radio value="影響あり">影響あり</a-radio>
+                <a-radio value="影響なし">影響なし</a-radio>
+              </a-radio-group>
+            </div>
+          </a-form-item>
+          <a-form-item name="isEffectMemo" label=" ">
+            <div>
+              <div>影響ありの場合またはなしと判断した理由</div>
+              <a-textarea v-model:value="formState.isEffectMemo" />
+            </div>
           </a-form-item>
 
-          <a-form-item name="paymentSite" label="支払サイト">
+          <div>
+            <div class="form-title">顧客情報</div>
+            <a-form-item name="customerName" label="顧客" required>
+              <div>
+                <a-select v-model:value="formState.customerName">
+                  <a-select-option value="顧客1">顧客1</a-select-option>
+                  <a-select-option value="顧客2">顧客2</a-select-option>
+                </a-select>
+                <div
+                  v-if="formState.customerName"
+                  style="color: blue; font-size: 16px"
+                >
+                  与信ランクB、5000万円未満
+                </div>
+              </div>
+            </a-form-item>
             <a-form-item
-              class="vertical-form-item"
-              name="lineDay"
-              label="締め日"
+              name="firstPartyResponsible"
+              label="先方担当者部署又は役職名"
             >
-              <a-select v-model:value="formState.lineDay">
-                <a-select-option value="lineDay1">締め日1</a-select-option>
-                <a-select-option value="lineDay2">締め日2</a-select-option>
-                <a-select-option value="lineDay3">締め日3</a-select-option>
-                <a-select-option value="lineDay4">締め日4</a-select-option>
+              <a-select v-model:value="formState.firstPartyResponsible">
+                <a-select-option value="部署1">部署1</a-select-option>
+                <a-select-option value="部署2">部署2</a-select-option>
               </a-select>
             </a-form-item>
-
-            <a-form-item
-              class="vertical-form-item"
-              name="paymentMonth"
-              label="支払月"
-            >
-              <a-select v-model:value="formState.paymentMonth">
-                <a-select-option value="paymentMonth1">支払月1</a-select-option>
-                <a-select-option value="paymentMonth2">支払月2</a-select-option>
-                <a-select-option value="paymentMonth3">支払月3</a-select-option>
-                <a-select-option value="paymentMonth4">支払月4</a-select-option>
+            <div v-if="formState.customerName">
+              <a-form-item name="customerAddressType" label="住所" required>
+                <a-radio-group v-model:value="formState.customerAddressType">
+                  <a-radio value="既定の住所">既定の住所</a-radio>
+                  <a-radio value="既定以外の住所を使用"
+                    >既定以外の住所を使用</a-radio
+                  >
+                </a-radio-group>
+              </a-form-item>
+              <a-form-item name="postalCode" label="郵便番号" required>
+                <DoubleInput
+                  v-model:value="formState.postalCode"
+                  :disabled="formState.customerAddressType === '既定の住所'"
+                />
+              </a-form-item>
+              <a-form-item name="customerAddress" label="住所" required>
+                <a-input
+                  v-model:value="formState.customerAddress"
+                  :disabled="formState.customerAddressType === '既定の住所'"
+                />
+              </a-form-item>
+              <a-form-item name="buildingName" label="ビル名" required>
+                <a-input
+                  v-model:value="formState.buildingName"
+                  :disabled="formState.customerAddressType === '既定の住所'"
+                />
+              </a-form-item>
+            </div>
+            <a-form-item name="undertaker" label="担当者名" required>
+              <a-select v-model:value="formState.undertaker">
+                <a-select-option value="担当者1">担当者1</a-select-option>
+                <a-select-option value="担当者2">担当者2</a-select-option>
               </a-select>
             </a-form-item>
+          </div>
 
-            <a-form-item
-              class="vertical-form-item"
-              name="paymentDay"
-              label="支払日"
-            >
-              <a-select v-model:value="formState.paymentDay">
-                <a-select-option value="paymentDay1">支払日1</a-select-option>
-                <a-select-option value="paymentDay2">支払日2</a-select-option>
-                <a-select-option value="paymentDay3">支払日3</a-select-option>
-                <a-select-option value="paymentDay4">支払日4</a-select-option>
-              </a-select>
+          <div>
+            <div class="form-title">見積明細</div>
+            <a-form-item name="feeCalc" label="種類">
+              <ProjectManagementFeeCalc v-model:value="formState.feeCalc" />
             </a-form-item>
-          </a-form-item>
-
-          <a-form-item name="requestDate" label="請求書必着日">
-            <a-textarea v-model:value="formState.requestDate" />
-          </a-form-item>
+          </div>
 
           <a-form-item :wrapper-col="{ offset: 8, span: 8 }">
             <a-button type="primary" html-type="submit">登録</a-button>
@@ -124,44 +184,97 @@
   </div>
 </template>
 <script lang="ts" setup>
+import type { Rule } from "ant-design-vue/es/form";
 import { reactive } from "vue";
 import { useRouter, useRoute } from "vue-router";
+import { PROJECT_STATUS } from "~/components/projectManagement/common";
+import type { FeeCalc } from "~/components/projectManagement/FeeCalc.vue";
 
 interface FormState {
+  pjCode: string;
+  projectName: string;
+  productName: string;
+  detail: string;
+  pm: string;
+  salesPerson: string;
+  department: string;
+  projectStatus: string;
+  projectStartDate: string;
+  projectEndDate: string;
+  inspectionDate: string;
+  isDiscount: string;
+  isEffect: string;
+  isEffectMemo: string;
   customerName: string;
-  buildingName: string;
-  tdbRating: string;
-  rankLevel: string;
-  isCompany: string;
-  memo: string;
-  paymentSite: string;
-  lineDay: string;
-  paymentMonth: string;
-  paymentDay: string;
-  requestDate: string;
+  firstPartyResponsible: string;
+  undertaker: string;
+  customerAddressType: string;
   postalCode: string;
-  address: string;
+  customerAddress: string;
+  buildingName: string;
+  feeCalc: FeeCalc;
 }
 
 const route = useRoute();
 const spinning = ref(false);
 
 const formState = reactive<FormState>({
+  pjCode: "",
+  projectName: "",
+  productName: "",
+  detail: "",
+  pm: "",
+  salesPerson: "",
+  department: "",
+  projectStatus: "",
+  projectStartDate: "",
+  projectEndDate: "",
+  inspectionDate: "",
+  isDiscount: "しない",
+  isEffect: "",
+  isEffectMemo: "",
   customerName: "",
-  buildingName: "",
-  tdbRating: "",
-  rankLevel: "",
-  isCompany: "false",
-  memo: "",
-  paymentSite: "",
-  lineDay: "",
-  paymentMonth: "",
-  paymentDay: "",
-  requestDate: "",
-  postalCode: "",
-  address: "",
+  firstPartyResponsible: "",
+  undertaker: "",
+  customerAddressType: "既定の住所",
+  postalCode: "0-1",
+  customerAddress: "customerAddress",
+  buildingName: "buildingName",
+  feeCalc: {
+    categoryType: "受託",
+    fee: [],
+  },
 });
 const router = useRouter();
+const formRef = ref<any>();
+
+const rules: Record<string, Rule[]> = {
+  feeCalc: [
+    {
+      required: true,
+      validator: (_rule: Rule, value: FeeCalc) => {
+        if (!value.categoryType || value.fee.length === 0) {
+          return Promise.reject(new Error("入力してください"));
+        }
+
+        if (
+          value.fee.some(
+            (item) =>
+              item.name === "" ||
+              item.count === "" ||
+              item.unit === "" ||
+              item.price === "",
+          )
+        ) {
+          return Promise.reject(new Error("入力してください"));
+        } else {
+          return Promise.resolve();
+        }
+      },
+      trigger: "change",
+    },
+  ],
+};
 
 const onFinish = (values: any) => {
   console.log("Success:", values);
@@ -170,7 +283,6 @@ const onFinish = (values: any) => {
 
 const onFinishFailed = (errorInfo: any) => {
   console.log("Failed:", errorInfo);
-  router.push("/back-office/customer-management/list");
 };
 
 const getCustomerDetail = async (id: string) => {
@@ -207,6 +319,23 @@ onMounted(() => {
     getCustomerDetail(id);
   }
 });
+
+watch(
+  [() => formState.pjCode, () => formState.productName],
+
+  async (newVal) => {
+    if (newVal[0] && newVal[0].trim() !== "") {
+      await nextTick();
+      formRef.value?.clearValidate("pjCode");
+    }
+
+    if (newVal[1] && newVal[1].trim() !== "") {
+      await nextTick();
+      formRef.value?.clearValidate("productName");
+    }
+  },
+  { immediate: true },
+);
 </script>
 <style scoped>
 .vertical-form-item {
@@ -221,5 +350,12 @@ onMounted(() => {
 
 .vertical-form-item :deep(.ant-form-item-label) {
   text-align: left !important;
+}
+
+.form-title {
+  padding: 8px 0;
+  font-size: 16px;
+  font-weight: bold;
+  border-top: 2px solid #e8e8e8;
 }
 </style>

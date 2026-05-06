@@ -9,10 +9,19 @@
         <a-button type="primary" @click="handleRegistration">新規登録</a-button>
       </div>
     </GlobalHeader>
-    <div class="page-content" ref="contentRef">
+    <div class="page-content" ref="contentRef" @scroll="handleContentScroll">
       <ProjectManagementFilter />
 
       <div>
+        <div class="pagination-warp">
+          <a-pagination
+            v-model:current="tableData.current"
+            v-model:page-size="tableData.pageSize"
+            show-quick-jumper
+            :total="500"
+            @change="onPageChange"
+          />
+        </div>
         <a-table
           :columns="columns"
           :data-source="tableData.dataSource"
@@ -22,6 +31,7 @@
             (_record: IProject, index: number) =>
               index % 2 === 1 ? 'table-striped' : null
           "
+          :pagination="false"
         >
           <template #bodyCell="{ column, record }">
             <template v-if="column.key === 'operation'">
@@ -35,14 +45,43 @@
                 </a-button>
               </div>
             </template>
+            <template v-if="column.key === 'status'">
+              <a-select
+                v-model:value="record.status"
+                :options="PROJECT_STATUS"
+                style="width: 200px"
+              >
+              </a-select>
+            </template>
+            <template v-if="column.key === 'busyo'">
+              <a-select v-model:value="record.busyo" style="width: 200px">
+                <a-select-option value="1">部署1</a-select-option>
+                <a-select-option value="2">部署2</a-select-option>
+              </a-select>
+            </template>
           </template>
         </a-table>
+        <div class="pagination-warp">
+          <a-pagination
+            v-model:current="tableData.current"
+            v-model:page-size="tableData.pageSize"
+            show-quick-jumper
+            :total="500"
+            @change="onPageChange"
+          />
+        </div>
       </div>
     </div>
 
-    <div class="scroll-top-button" @click="handleScrollTop">
-      <ArrowUpOutlined />
-    </div>
+    <Transition>
+      <div
+        v-if="showScrollTopButton"
+        class="scroll-top-button"
+        @click="handleScrollTop"
+      >
+        <ArrowUpOutlined />
+      </div>
+    </Transition>
   </div>
 </template>
 
@@ -57,6 +96,7 @@ import {
   ArrowUpOutlined,
 } from "@ant-design/icons-vue";
 import { useRouter } from "vue-router";
+import { PROJECT_STATUS } from "~/components/projectManagement/common";
 
 interface FormState {
   memberName: string;
@@ -77,7 +117,7 @@ const formState = reactive<FormState>({
   memberName: "",
   email: "",
 });
-
+const showScrollTopButton = ref(false);
 const contentRef = ref<HTMLDivElement | null>(null);
 
 const columns = [
@@ -121,7 +161,7 @@ const columns = [
     title: "部署",
     dataIndex: "busyo",
     key: "busyo",
-    width: 200,
+    width: 230,
   },
   {
     title: "PM",
@@ -139,7 +179,7 @@ const columns = [
     title: "ステータス",
     dataIndex: "status",
     key: "status",
-    width: 150,
+    width: 230,
   },
   {
     title: "受注日",
@@ -361,6 +401,16 @@ const handleScrollTop = () => {
   }
 };
 
+const onPageChange = (pageNo: number, pageSize: number) => {
+  console.log("onPageChange", pageNo, pageSize);
+};
+
+const handleContentScroll = () => {
+  if (!contentRef.value) return;
+
+  showScrollTopButton.value = contentRef.value.scrollTop > 100;
+};
+
 onMounted(() => {
   getProjectList();
 });
@@ -405,8 +455,8 @@ onMounted(() => {
 .scroll-top-button {
   cursor: pointer;
   position: fixed;
-  bottom: 24px;
-  right: 24px;
+  bottom: 75px;
+  right: 50px;
   width: 40px;
   height: 40px;
   display: flex;
@@ -423,5 +473,13 @@ onMounted(() => {
 
 :deep(.ant-pagination) {
   justify-content: flex-start;
+}
+
+.pagination-warp {
+  margin: 12px 0;
+}
+
+:deep(.ant-pagination-options) {
+  float: right;
 }
 </style>
