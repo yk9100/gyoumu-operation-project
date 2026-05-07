@@ -395,6 +395,118 @@
                 formName="outsourcing"
               />
             </div>
+
+            <div>
+              <div class="form-sub-title-wrap">
+                <div class="form-sub-title">その他原価</div>
+              </div>
+              <ProjectManagementOtherPrice
+                v-model:value="formState.otherPrice"
+                formName="otherPrice"
+              />
+            </div>
+
+            <div>
+              <div class="form-sub-title-wrap">
+                <div class="form-sub-title">紹介手数料</div>
+              </div>
+              <ProjectManagementReferrer
+                v-model:value="formState.referrer"
+                formName="referrer"
+              />
+            </div>
+          </div>
+
+          <div>
+            <div class="form-title">予算と見込みの差異の理由</div>
+            <a-form-item
+              label="詳細"
+              :labelCol="{ span: 2 }"
+              :wrapperCol="{ span: 10 }"
+            >
+              <a-textarea v-model:value="formState.reasonForDifference" />
+            </a-form-item>
+          </div>
+
+          <div>
+            <div class="form-title">財務会計集計</div>
+            <a-row>
+              <a-col :span="12">
+                <div class="form-sub-title-wrap">
+                  <div class="form-sub-title">財務会計集計予算</div>
+                </div>
+              </a-col>
+              <a-col :span="12">
+                <div class="form-sub-title-wrap">
+                  <div class="form-sub-title">財務会計集計見込み</div>
+                </div>
+              </a-col>
+            </a-row>
+
+            <a-row>
+              <a-col :span="12">
+                <a-form-item label="受注額">
+                  <a-input disabled />
+                </a-form-item>
+              </a-col>
+              <a-col :span="12">
+                <a-form-item label="受注額">
+                  <a-input disabled />
+                </a-form-item>
+              </a-col>
+            </a-row>
+
+            <a-row>
+              <a-col :span="12">
+                <a-form-item label="原価">
+                  <a-input disabled />
+                </a-form-item>
+              </a-col>
+              <a-col :span="12">
+                <a-form-item label="原価">
+                  <a-input disabled />
+                </a-form-item>
+              </a-col>
+            </a-row>
+
+            <a-row>
+              <a-col :span="12">
+                <a-form-item label="紹介料">
+                  <a-input disabled />
+                </a-form-item>
+              </a-col>
+              <a-col :span="12">
+                <a-form-item label="紹介料">
+                  <a-input disabled />
+                </a-form-item>
+              </a-col>
+            </a-row>
+
+            <a-row>
+              <a-col :span="12">
+                <a-form-item label="粗利">
+                  <a-input disabled />
+                </a-form-item>
+              </a-col>
+              <a-col :span="12">
+                <a-form-item label="粗利">
+                  <a-input disabled />
+                </a-form-item>
+              </a-col>
+            </a-row>
+
+            <a-row>
+              <a-col :span="12">
+                <a-form-item label="粗利率">
+                  <a-input disabled />
+                </a-form-item>
+              </a-col>
+              <a-col :span="12">
+                <a-form-item label="粗利率">
+                  <a-input disabled />
+                </a-form-item>
+              </a-col>
+            </a-row>
           </div>
 
           <a-form-item :wrapper-col="{ offset: 8, span: 8 }">
@@ -411,7 +523,9 @@ import { reactive } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { PROJECT_STATUS } from "~/components/projectManagement/common";
 import type { FeeCalc } from "~/components/projectManagement/FeeCalc.vue";
+import type { OtherPriceValue } from "~/components/projectManagement/OtherPrice.vue";
 import type { OutsourcingValue } from "~/components/projectManagement/Outsourcing.vue";
+import type { ReferrerValue } from "~/components/projectManagement/Referrer.vue";
 import type { ServiceFeeCalcValue } from "~/components/projectManagement/ServiceFeeCalc.vue";
 
 interface FormState {
@@ -449,6 +563,9 @@ interface FormState {
   laborCostBudget: ServiceFeeCalcValue[];
   estimatedLaborCostBudget: ServiceFeeCalcValue[];
   outsourcing: OutsourcingValue[];
+  otherPrice: OtherPriceValue[];
+  referrer: ReferrerValue[];
+  reasonForDifference: string;
 }
 
 const route = useRoute();
@@ -492,6 +609,9 @@ const formState = reactive<FormState>({
   laborCostBudget: [],
   estimatedLaborCostBudget: [],
   outsourcing: [],
+  otherPrice: [],
+  referrer: [],
+  reasonForDifference: "",
 });
 const router = useRouter();
 const formRef = ref<any>();

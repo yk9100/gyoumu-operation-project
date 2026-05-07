@@ -3,30 +3,30 @@
     <a-row>
       <a-col :span="12">
         <a-form-item
-          label="外注"
+          label="紹介手数料"
           :labelCol="{ span: 4 }"
           :wrapperCol="{ span: 10 }"
         >
-          <a-radio-group v-model:value="hasOutsourcing">
+          <a-radio-group v-model:value="hasReferrer">
             <a-radio value="なし">なし</a-radio>
             <a-radio value="あり">あり</a-radio>
           </a-radio-group>
         </a-form-item>
       </a-col>
     </a-row>
-    <div v-if="hasOutsourcing === 'あり'" class="split-line"></div>
-    <template v-if="hasOutsourcing === 'あり'">
+    <div v-if="hasReferrer === 'あり'" class="split-line"></div>
+    <template v-if="hasReferrer === 'あり'">
       <div v-for="(item, index) in state" :key="index">
         <a-row>
           <a-col :span="12">
             <a-form-item
-              label="外注先"
-              :labelCol="{ span: 4 }"
-              :wrapperCol="{ span: 10 }"
+              label="紹介元名"
+              :labelCol="labelCol"
+              :wrapperCol="wrapperCol"
             >
-              <a-select v-model:value="item.outsourcingTarget">
-                <a-option value="外注先1">外注先1</a-option>
-                <a-option value="外注先2">外注先2</a-option>
+              <a-select v-model:value="item.referrerName">
+                <a-option value="紹介元名1">紹介元名1</a-option>
+                <a-option value="紹介元名2">紹介元名2</a-option>
               </a-select>
             </a-form-item>
           </a-col>
@@ -36,36 +36,40 @@
             >
           </a-col>
         </a-row>
+
         <a-row>
-          <a-col :span="12">
+          <a-col :span="24">
             <a-form-item
-              label="外注情報"
-              :labelCol="{ span: 4 }"
+              label="紹介元情報"
+              :labelCol="{ span: 2 }"
               :wrapperCol="{ span: 10 }"
             >
-              <a-textarea v-model:value="item.outsourcingDesc"> </a-textarea>
+              <a-textarea v-model:value="item['紹介元情報']"> </a-textarea>
             </a-form-item>
           </a-col>
+        </a-row>
 
-          <a-col :span="12">
+        <a-row>
+          <a-col :span="24">
             <a-form-item
               label="役職名"
-              :labelCol="{ span: 4 }"
+              :labelCol="{ span: 2 }"
               :wrapperCol="{ span: 10 }"
             >
-              <a-select v-model:value="item.responsiblePerson">
+              <a-select v-model:value="item['役職名']">
                 <a-option value="役職名1">役職名1</a-option>
                 <a-option value="役職名2">役職名2</a-option>
               </a-select>
             </a-form-item>
           </a-col>
         </a-row>
+
         <a-row>
           <a-col :span="12">
             <a-form-item
               label="担当者名"
-              :labelCol="{ span: 4 }"
-              :wrapperCol="{ span: 10 }"
+              :labelCol="labelCol"
+              :wrapperCol="wrapperCol"
             >
               <a-select v-model:value="item.undertakerName">
                 <a-option value="担当者名1">担当者名1</a-option>
@@ -77,8 +81,8 @@
           <a-col :span="12">
             <a-form-item
               label="メールアドレス"
-              :labelCol="{ span: 4 }"
-              :wrapperCol="{ span: 10 }"
+              :labelCol="labelCol"
+              :wrapperCol="wrapperCol"
             >
               <a-input v-model:value="item.email" />
             </a-form-item>
@@ -88,25 +92,22 @@
         <a-row>
           <a-col :span="12">
             <a-form-item
-              label="外注予算金額"
-              :labelCol="{ span: 4 }"
-              :wrapperCol="{ span: 10 }"
+              label="予算金額"
+              :labelCol="labelCol"
+              :wrapperCol="wrapperCol"
               required
             >
               <div>
                 <a-input v-model:value="item.outsourcingBudget" type="number" />
-                <div class="tip">
-                  外注に対して発生する費用を記入してください。
-                </div>
               </div>
             </a-form-item>
           </a-col>
 
           <a-col :span="12">
             <a-form-item
-              label="外注見込み金額"
-              :labelCol="{ span: 4 }"
-              :wrapperCol="{ span: 10 }"
+              label="見込み金額"
+              :labelCol="labelCol"
+              :wrapperCol="wrapperCol"
               required
             >
               <div>
@@ -115,87 +116,64 @@
                   type="number"
                   disabled
                 />
-                <div class="tip">
-                  外注に対して発生する費用を記入してください。
-                </div>
               </div>
             </a-form-item>
           </a-col>
         </a-row>
 
         <a-row>
+          <a-col :span="24">
+            <a-form-item
+              label="紹介された経験"
+              :labelCol="{ span: 2 }"
+              :wrapperCol="{ span: 10 }"
+            >
+              <a-textarea v-model:value="item['紹介された経験']"> </a-textarea>
+            </a-form-item>
+          </a-col>
+        </a-row>
+
+        <!-- <a-row>
           <a-col :span="12">
             <a-form-item
-              label="納品日"
-              :labelCol="{ span: 4 }"
-              :wrapperCol="{ span: 10 }"
-              required
+              label="予算合計額"
+              :labelCol="labelCol"
+              :wrapperCol="wrapperCol"
             >
-              <a-date-picker
-                v-model:value="item.deliveryDate"
-                type="date"
-                style="width: 100%"
+              <a-input
+                :value="
+                  state.reduce(
+                    (acc, cur) => acc + (cur?.outsourcingBudget || 0),
+                    0,
+                  )
+                "
+                disabled
               />
             </a-form-item>
           </a-col>
-        </a-row>
 
-        <a-row>
-          <a-col :span="24">
-            <a-form-item
-              label="外注見積書"
-              :labelCol="{ span: 2 }"
-              :wrapperCol="{ span: 22 }"
-            >
-              <FileUploadArea />
-            </a-form-item>
-          </a-col>
-        </a-row>
-
-        <a-row>
           <a-col :span="12">
             <a-form-item
-              label="相見積もり"
-              :labelCol="{ span: 4 }"
-              :wrapperCol="{ span: 10 }"
-              required
+              label="見込み合計額"
+              :labelCol="labelCol"
+              :wrapperCol="wrapperCol"
             >
-              <a-radio-group v-model:value="item.phaseEstimation">
-                <a-radio value="なし">なし</a-radio>
-                <a-radio value="あり">あり</a-radio>
-              </a-radio-group>
+              <a-input
+                :value="
+                  state.reduce(
+                    (acc, cur) => acc + (cur?.outsourcingBudget || 0),
+                    0,
+                  )
+                "
+                disabled
+              />
             </a-form-item>
           </a-col>
-        </a-row>
-
-        <a-row>
-          <a-col :span="24">
-            <a-form-item
-              label="外注相見積書"
-              :labelCol="{ span: 2 }"
-              :wrapperCol="{ span: 22 }"
-            >
-              <FileUploadArea />
-            </a-form-item>
-          </a-col>
-        </a-row>
-
-        <a-row v-if="item.phaseEstimation === 'なし'">
-          <a-col :span="12">
-            <a-form-item
-              label="相見積もりなしの理由"
-              :labelCol="{ span: 4 }"
-              :wrapperCol="{ span: 10 }"
-            >
-              <a-input v-model:value="item.phaseEstimationReason"> </a-input>
-            </a-form-item>
-          </a-col>
-        </a-row>
+        </a-row> -->
       </div>
-
       <div class="add-btn-wrap">
         <a-form-item
-          label="外注先追加"
+          label="追加"
           :labelCol="{ span: 2 }"
           :wrapperCol="{ span: 10 }"
         >
@@ -204,54 +182,16 @@
           </a-button>
         </a-form-item>
       </div>
-
-      <a-row>
-        <a-col :span="12">
-          <a-form-item
-            label="外注予算合計額"
-            :labelCol="{ span: 4 }"
-            :wrapperCol="{ span: 10 }"
-          >
-            <a-input
-              :value="
-                state.reduce(
-                  (acc, cur) => acc + (cur?.outsourcingBudget || 0),
-                  0,
-                )
-              "
-              disabled
-            />
-          </a-form-item>
-        </a-col>
-
-        <a-col :span="12">
-          <a-form-item
-            label="外注見込み合計額"
-            :labelCol="{ span: 4 }"
-            :wrapperCol="{ span: 10 }"
-          >
-            <a-input
-              :value="
-                state.reduce(
-                  (acc, cur) => acc + (cur?.outsourcingBudget || 0),
-                  0,
-                )
-              "
-              disabled
-            />
-          </a-form-item>
-        </a-col>
-      </a-row>
     </template>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { PlusOutlined } from "@ant-design/icons-vue";
-export type OutsourcingValue = {
-  outsourcingTarget?: string;
-  outsourcingDesc?: string;
-  responsiblePerson?: string;
+export type ReferrerValue = {
+  referrerName?: string;
+  紹介元情報?: string;
+  役職名?: string;
   undertakerName?: string;
   email?: string;
   outsourcingBudget?: number;
@@ -259,16 +199,20 @@ export type OutsourcingValue = {
   deliveryDate?: string;
   phaseEstimation?: string;
   phaseEstimationReason?: string;
+  紹介された経験?: string;
 };
 const props = defineProps<{
-  value?: OutsourcingValue[];
+  value?: ReferrerValue[];
 }>();
 
-const state = ref<OutsourcingValue[]>([
+const labelCol = { span: 4 };
+const wrapperCol = { span: 10 };
+
+const state = ref<ReferrerValue[]>([
   {
-    outsourcingTarget: "",
-    outsourcingDesc: "",
-    responsiblePerson: "",
+    referrerName: "",
+    紹介元情報: "",
+    役職名: "",
     undertakerName: "",
     email: "",
     outsourcingBudget: 0,
@@ -276,10 +220,11 @@ const state = ref<OutsourcingValue[]>([
     deliveryDate: "",
     phaseEstimation: "なし",
     phaseEstimationReason: "",
+    紹介された経験: "",
   },
 ]);
 
-const hasOutsourcing = ref("なし");
+const hasReferrer = ref("なし");
 
 const deleteItem = (index: number) => {
   state.value.splice(index, 1);
@@ -287,9 +232,9 @@ const deleteItem = (index: number) => {
 
 const addItem = () => {
   state.value.push({
-    outsourcingTarget: "",
-    outsourcingDesc: "",
-    responsiblePerson: "",
+    referrerName: "",
+    紹介元情報: "",
+    役職名: "",
     undertakerName: "",
     email: "",
     outsourcingBudget: 0,
@@ -297,6 +242,7 @@ const addItem = () => {
     deliveryDate: "",
     phaseEstimation: "なし",
     phaseEstimationReason: "",
+    紹介された経験: "",
   });
 };
 </script>
