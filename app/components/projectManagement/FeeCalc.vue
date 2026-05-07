@@ -119,9 +119,9 @@ watch(
   padding-left: 0;
   padding-right: 0;
   position: absolute;
-  top: 50%;
+  bottom: 0;
   right: 0;
-  transform: translate(120%, -50%);
+  transform: translate(120%, -2px);
   border-color: red;
   color: red;
 }

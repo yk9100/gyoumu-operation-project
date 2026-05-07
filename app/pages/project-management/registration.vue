@@ -6,8 +6,8 @@
         <a-form
           :model="formState"
           name="basic"
-          :label-col="{ span: 8 }"
-          :wrapper-col="{ span: 10 }"
+          :label-col="{ span: 6 }"
+          :wrapper-col="{ span: 12 }"
           autocomplete="off"
           @finish="onFinish"
           @finishFailed="onFinishFailed"
@@ -175,6 +175,228 @@
             </a-form-item>
           </div>
 
+          <div>
+            <div class="form-title">受注部門原価</div>
+            <div>
+              <div class="form-sub-title-wrap">
+                <div class="form-sub-title">受注予算詳細</div>
+              </div>
+              <a-row>
+                <a-col :span="12">
+                  <a-form-item
+                    name="receivedAmount"
+                    label="受注金額"
+                    :label-col="{ span: 4 }"
+                    :wrapper-col="{ span: 16 }"
+                  >
+                    <div>
+                      <a-input
+                        disabled
+                        :value="
+                          formState.feeCalc.fee.reduce(
+                            (acc, cur) =>
+                              acc + Number(cur.price) * Number(cur.count),
+                            0,
+                          )
+                        "
+                      />
+                      <div style="color: #999; font-size: 12px">
+                        [税抜]の受注詳細を記入してください
+                      </div>
+                      <div style="color: blue; font-size: 16px">
+                        この顧客の与信残高：50000000
+                      </div>
+                    </div>
+                  </a-form-item>
+                </a-col>
+                <a-col :span="12">
+                  <a-form-item
+                    name="prepaymentAmount"
+                    label="前金"
+                    :label-col="{ span: 4 }"
+                    :wrapper-col="{ span: 16 }"
+                  >
+                    <a-input v-model:value="formState.prepaymentAmount" />
+                  </a-form-item>
+                </a-col>
+              </a-row>
+              <a-row>
+                <a-col :span="12">
+                  <a-form-item
+                    name="orderDate"
+                    label="注文日"
+                    :label-col="{ span: 4 }"
+                    :wrapper-col="{ span: 16 }"
+                  >
+                    <div>
+                      <a-date-picker
+                        v-model:value="formState.orderDate"
+                        style="width: 100%"
+                      />
+                      <div style="color: #999; font-size: 12px">
+                        [注文]タグより編集してください
+                      </div>
+                    </div>
+                  </a-form-item>
+                </a-col>
+                <a-col :span="12">
+                  <a-form-item
+                    name="jopPjName"
+                    label="ジョブカンPJ名"
+                    :label-col="{ span: 4 }"
+                    :wrapper-col="{ span: 16 }"
+                  >
+                    <a-input v-model:value="formState.jopPjName" />
+                  </a-form-item>
+                </a-col>
+              </a-row>
+              <a-row>
+                <a-col :span="12">
+                  <a-form-item
+                    name="isPreRelease"
+                    label="先行開発"
+                    :label-col="{ span: 4 }"
+                    :wrapper-col="{ span: 16 }"
+                  >
+                    <div>
+                      <a-radio-group v-model:value="formState.isPreRelease">
+                        <a-radio value="なし"> なし </a-radio>
+                        <a-radio value="あり"> あり </a-radio>
+                      </a-radio-group>
+                      <div style="font-size: 12px">
+                        ラクモの申請番号発行済みではない場合は、「なし」を選択
+                      </div>
+                    </div>
+                  </a-form-item>
+                </a-col>
+              </a-row>
+            </div>
+
+            <div>
+              <div class="form-sub-title-wrap">
+                <div class="form-sub-title">受注見込み詳細</div>
+              </div>
+              <a-row>
+                <a-col :span="12">
+                  <a-form-item
+                    name="receivedAmount_m"
+                    label="受注金額"
+                    :label-col="{ span: 4 }"
+                    :wrapper-col="{ span: 16 }"
+                  >
+                    <div>
+                      <a-input disabled />
+                      <div style="color: #999; font-size: 12px">
+                        [税抜]の受注詳細を記入してください
+                      </div>
+                    </div>
+                  </a-form-item>
+                </a-col>
+                <a-col :span="12">
+                  <a-form-item
+                    name="prepaymentAmount_m"
+                    label="前金"
+                    :label-col="{ span: 4 }"
+                    :wrapper-col="{ span: 16 }"
+                  >
+                    <div>
+                      <a-input
+                        v-model:value="formState.prepaymentAmount_m"
+                        disabled
+                      />
+                    </div>
+                    <div style="color: #999; font-size: 12px">
+                      受注金額入力時に自動で入力されます（変更可）
+                    </div>
+                  </a-form-item>
+                </a-col>
+              </a-row>
+              <a-row>
+                <a-col :span="12">
+                  <a-form-item
+                    name="orderDate_m"
+                    label="注文日"
+                    :label-col="{ span: 4 }"
+                    :wrapper-col="{ span: 16 }"
+                  >
+                    <div>
+                      <a-date-picker
+                        v-model:value="formState.orderDate_m"
+                        style="width: 100%"
+                      />
+                      <div style="color: #999; font-size: 12px">
+                        [注文]タグより編集してください
+                      </div>
+                    </div>
+                  </a-form-item>
+                </a-col>
+                <a-col :span="12">
+                  <a-form-item
+                    name="jopPjName_m"
+                    label="ジョブカンPJ名"
+                    :label-col="{ span: 4 }"
+                    :wrapper-col="{ span: 16 }"
+                  >
+                    <a-input v-model:value="formState.jopPjName_m" />
+                  </a-form-item>
+                </a-col>
+              </a-row>
+              <a-row>
+                <a-col :span="12">
+                  <a-form-item
+                    name="isPreRelease_m"
+                    label="先行開発"
+                    :label-col="{ span: 4 }"
+                    :wrapper-col="{ span: 16 }"
+                  >
+                    <div>
+                      <a-radio-group v-model:value="formState.isPreRelease_m">
+                        <a-radio value="なし"> なし </a-radio>
+                        <a-radio value="あり"> あり </a-radio>
+                      </a-radio-group>
+                      <div style="font-size: 12px">
+                        ラクモの申請番号発行済みではない場合は、「なし」を選択
+                      </div>
+                    </div>
+                  </a-form-item>
+                </a-col>
+              </a-row>
+            </div>
+          </div>
+
+          <div>
+            <div class="form-title">受注詳細</div>
+            <div>
+              <div class="form-sub-title-wrap">
+                <div class="form-sub-title">労務費予算</div>
+              </div>
+              <ProjectManagementServiceFeeCalc
+                v-model:value="formState.laborCostBudget"
+                formName="laborCostBudget"
+              />
+            </div>
+
+            <div>
+              <div class="form-sub-title-wrap">
+                <div class="form-sub-title">労務費見込み</div>
+              </div>
+              <ProjectManagementServiceFeeCalc
+                v-model:value="formState.estimatedLaborCostBudget"
+                formName="estimatedLaborCostBudget"
+              />
+            </div>
+
+            <div>
+              <div class="form-sub-title-wrap">
+                <div class="form-sub-title">外注費</div>
+              </div>
+              <ProjectManagementOutsourcing
+                v-model:value="formState.outsourcing"
+                formName="outsourcing"
+              />
+            </div>
+          </div>
+
           <a-form-item :wrapper-col="{ offset: 8, span: 8 }">
             <a-button type="primary" html-type="submit">登録</a-button>
           </a-form-item>
@@ -189,6 +411,8 @@ import { reactive } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { PROJECT_STATUS } from "~/components/projectManagement/common";
 import type { FeeCalc } from "~/components/projectManagement/FeeCalc.vue";
+import type { OutsourcingValue } from "~/components/projectManagement/Outsourcing.vue";
+import type { ServiceFeeCalcValue } from "~/components/projectManagement/ServiceFeeCalc.vue";
 
 interface FormState {
   pjCode: string;
@@ -213,6 +437,18 @@ interface FormState {
   customerAddress: string;
   buildingName: string;
   feeCalc: FeeCalc;
+  receivedAmount: number;
+  prepaymentAmount: number;
+  orderDate: string;
+  jopPjName: string;
+  isPreRelease: string;
+  prepaymentAmount_m: number;
+  orderDate_m: string;
+  jopPjName_m: string;
+  isPreRelease_m: string;
+  laborCostBudget: ServiceFeeCalcValue[];
+  estimatedLaborCostBudget: ServiceFeeCalcValue[];
+  outsourcing: OutsourcingValue[];
 }
 
 const route = useRoute();
@@ -244,6 +480,18 @@ const formState = reactive<FormState>({
     categoryType: "受託",
     fee: [],
   },
+  receivedAmount: 0,
+  prepaymentAmount: 0,
+  orderDate: "",
+  jopPjName: "",
+  isPreRelease: "なし",
+  prepaymentAmount_m: 0,
+  orderDate_m: "",
+  jopPjName_m: "",
+  isPreRelease_m: "なし",
+  laborCostBudget: [],
+  estimatedLaborCostBudget: [],
+  outsourcing: [],
 });
 const router = useRouter();
 const formRef = ref<any>();
@@ -357,5 +605,17 @@ watch(
   font-size: 16px;
   font-weight: bold;
   border-top: 2px solid #e8e8e8;
+}
+
+.form-sub-title-wrap {
+  display: flex;
+  align-items: center;
+}
+
+.form-sub-title {
+  padding: 4px 8px;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+  font-size: 12px;
 }
 </style>
