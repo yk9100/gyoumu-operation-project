@@ -59,6 +59,11 @@
                 <a-select-option value="2">部署2</a-select-option>
               </a-select>
             </template>
+            <template v-if="column.key === 'kokyaku'">
+              <a-button type="link" @click="jumpToDetail(record.id)">{{
+                record.kokyaku
+              }}</a-button>
+            </template>
           </template>
         </a-table>
         <div class="pagination-warp">
@@ -409,6 +414,10 @@ const handleContentScroll = () => {
   if (!contentRef.value) return;
 
   showScrollTopButton.value = contentRef.value.scrollTop > 100;
+};
+
+const jumpToDetail = (id: string) => {
+  router.push(`/project-management/detail/${id}`);
 };
 
 onMounted(() => {
