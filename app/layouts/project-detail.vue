@@ -160,7 +160,7 @@ onMounted(() => {
 
 <style scoped>
 .project-detail-content {
-  height: calc(100vh - 330px);
+  height: calc(100vh - 260px);
   overflow-y: auto;
 }
 
