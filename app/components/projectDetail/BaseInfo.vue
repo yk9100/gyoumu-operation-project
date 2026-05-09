@@ -1,21 +1,16 @@
 <template>
-  <div>
-    <div class="edit-btn-wrap">
-      <a-button>編集</a-button>
-    </div>
-    <div class="base-info">
-      <div
-        v-for="(value, key, index) in baseInfo"
-        :key="index"
-        class="info-row"
-        :class="{ 'row-striped': index % 2 === 1 }"
-      >
-        <div class="info-key">
-          {{ key }}
-        </div>
-        <div class="info-value">
-          {{ value }}
-        </div>
+  <div class="base-info">
+    <div
+      v-for="(value, key, index) in baseInfo"
+      :key="index"
+      class="info-row"
+      :class="{ 'row-striped': index % 2 === 1 }"
+    >
+      <div class="info-key">
+        {{ key }}
+      </div>
+      <div class="info-value">
+        {{ value }}
       </div>
     </div>
   </div>

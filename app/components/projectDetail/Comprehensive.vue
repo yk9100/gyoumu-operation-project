@@ -33,13 +33,16 @@
 
     <div>
       <div class="sub-title">基本情報</div>
+      <div class="section-btn-wrap">
+        <a-button @click="navigateTo('2')">編集</a-button>
+      </div>
       <ProjectDetailBaseInfo />
     </div>
 
     <div>
       <div class="sub-title">見積</div>
       <div class="section-btn-wrap">
-        <a-button>登録</a-button>
+        <a-button @click="navigateTo('3')">登録</a-button>
       </div>
       <div>処理ステータス：<span style="color: red">未登録</span></div>
     </div>
@@ -47,7 +50,7 @@
     <div>
       <div class="sub-title">注文</div>
       <div class="section-btn-wrap">
-        <a-button>登録</a-button>
+        <a-button @click="navigateTo('4')">登録</a-button>
       </div>
       <div>処理ステータス：<span style="color: red">未登録</span></div>
     </div>
@@ -55,7 +58,7 @@
     <div>
       <div class="sub-title">開発完了</div>
       <div class="section-btn-wrap">
-        <a-button>登録</a-button>
+        <a-button @click="navigateTo('5')">登録</a-button>
       </div>
       <div style="padding: 0 12px">
         <a-row>
@@ -96,7 +99,7 @@
     <div>
       <div class="sub-title">検収</div>
       <div class="section-btn-wrap">
-        <a-button>登録</a-button>
+        <a-button @click="navigateTo('6')">登録</a-button>
       </div>
       <div>処理ステータス：<span style="color: red">未登録</span></div>
     </div>
@@ -104,7 +107,7 @@
     <div>
       <div class="sub-title">請求</div>
       <div class="section-btn-wrap">
-        <a-button>登録</a-button>
+        <a-button @click="navigateTo('7')">登録</a-button>
       </div>
       <div>処理ステータス：<span style="color: red">未登録</span></div>
     </div>
@@ -117,6 +120,8 @@
 </template>
 
 <script lang="ts" setup>
+const route = useRoute();
+const router = useRouter();
 const kousuuColumns = ref([
   {
     title: "名前",
@@ -237,12 +242,17 @@ const seisekiDataSource = ref([
     difference: "0",
   },
 ]);
+
+const navigateTo = (step: string) => {
+  router.push(`/project-management/detail/${route.params.id}/step/${step}`);
+};
 </script>
 
 <style scoped>
 .section-btn-wrap {
   display: flex;
   justify-content: flex-end;
+  margin-bottom: 12px;
 }
 .copy-btn-wrap {
   display: flex;
