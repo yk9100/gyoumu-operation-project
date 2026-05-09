@@ -35,6 +35,7 @@ export const ROUTE_TITLE_MAP: Record<string, string> = {
   "/back-office/permission-management/registration": "役割追加",
   "/project-management/list": "プロジェクト一覧",
   "/project-management/registration": "プロジェクト登録",
+  "/project-management/my": "マイページ",
 };
 
 export const BREADCRUMB_CONFIG: Record<

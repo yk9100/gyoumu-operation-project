@@ -146,6 +146,11 @@ const mockMenuData: MenuItem[] = [
         title: "プロジェクト登録",
         path: "/project-management/registration",
       },
+      {
+        key: "/project-management/my",
+        title: "マイページ",
+        path: "/project-management/my",
+      },
     ],
   },
   {
