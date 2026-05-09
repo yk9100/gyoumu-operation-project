@@ -30,6 +30,89 @@
         />
       </div>
     </div>
+
+    <div>
+      <div class="sub-title">基本情報</div>
+      <ProjectDetailBaseInfo />
+    </div>
+
+    <div>
+      <div class="sub-title">見積</div>
+      <div class="section-btn-wrap">
+        <a-button>登録</a-button>
+      </div>
+      <div>処理ステータス：<span style="color: red">未登録</span></div>
+    </div>
+
+    <div>
+      <div class="sub-title">注文</div>
+      <div class="section-btn-wrap">
+        <a-button>登録</a-button>
+      </div>
+      <div>処理ステータス：<span style="color: red">未登録</span></div>
+    </div>
+
+    <div>
+      <div class="sub-title">開発完了</div>
+      <div class="section-btn-wrap">
+        <a-button>登録</a-button>
+      </div>
+      <div style="padding: 0 12px">
+        <a-row>
+          <a-col :span="4">
+            <div>開発完了</div>
+          </a-col>
+          <a-col :span="12">
+            <div>2023-01-01</div>
+          </a-col>
+        </a-row>
+        <a-row>
+          <a-col :span="4">
+            <div>納品日</div>
+          </a-col>
+          <a-col :span="12">
+            <div>2023-01-01</div>
+          </a-col>
+        </a-row>
+        <a-row>
+          <a-col :span="4">
+            <div>請求書発行</div>
+          </a-col>
+          <a-col :span="12">
+            <div>2023-01-01</div>
+          </a-col>
+        </a-row>
+        <a-row>
+          <a-col :span="4">
+            <div>請求書発行日付</div>
+          </a-col>
+          <a-col :span="12">
+            <div>2023-01-01</div>
+          </a-col>
+        </a-row>
+      </div>
+    </div>
+
+    <div>
+      <div class="sub-title">検収</div>
+      <div class="section-btn-wrap">
+        <a-button>登録</a-button>
+      </div>
+      <div>処理ステータス：<span style="color: red">未登録</span></div>
+    </div>
+
+    <div>
+      <div class="sub-title">請求</div>
+      <div class="section-btn-wrap">
+        <a-button>登録</a-button>
+      </div>
+      <div>処理ステータス：<span style="color: red">未登録</span></div>
+    </div>
+
+    <div>
+      <div class="sub-title">社内間発注</div>
+      <a-button>子発注追加</a-button>
+    </div>
   </div>
 </template>
 
@@ -191,6 +274,7 @@ const seisekiDataSource = ref([
   border-top: 2px solid #e1e1e1;
   padding: 8px 0;
   text-indent: 4px;
+  margin-top: 12px;
 }
 .table-wrap {
   padding: 12px;
