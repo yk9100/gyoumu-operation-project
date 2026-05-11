@@ -1,6 +1,12 @@
 <template>
   <div class="page-root">
-    <GlobalHeader />
+    <GlobalHeader>
+      <template #left>
+        <NuxtLink :to="taskListPath" class="global-header-back">
+          <ArrowLeftOutlined />マイタスク
+        </NuxtLink>
+      </template>
+    </GlobalHeader>
     <div class="page-content task-detail-page" ref="pageRef">
       <div class="task-detail-header">
         <div class="task-detail-header-left">
@@ -89,8 +95,8 @@
 </template>
 
 <script lang="ts" setup>
-import { useRoute } from "vue-router";
-import { taskDetailCommentsMock, taskDetailMock } from "../mock/taskDetail";
+import { ArrowLeftOutlined } from "@ant-design/icons-vue";
+import { taskDetailCommentsMock, taskDetailMock } from "~/mock/taskDetail";
 import MarkdownIt from "markdown-it";
 import type { TaskComment } from "~/types/task";
 const md = new MarkdownIt({
@@ -120,6 +126,9 @@ const comments = ref(taskDetailCommentsMock);
 
 console.log("comments", comments.value);
 const attachmentList = ref<File[]>([]);
+const taskListPath = computed(() => {
+  return `/my-task/${route.params.projectId}/list`;
+});
 
 const renderedContent = computed(() => {
   // 预处理：将 Slack ID 转换为可读格式

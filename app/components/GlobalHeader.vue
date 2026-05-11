@@ -1,10 +1,11 @@
 <template>
   <header class="global-header">
+    <slot name="left" />
     <h2 class="global-header-title">
       {{ props.title || currentPageTitle }}
     </h2>
     <div class="global-header-right">
-      <slot />
+      <slot name="right" />
       <UserInfo />
     </div>
   </header>

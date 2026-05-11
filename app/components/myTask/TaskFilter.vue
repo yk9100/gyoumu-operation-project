@@ -56,6 +56,8 @@
 import { PlusOutlined } from "@ant-design/icons-vue";
 import { TASK_STATUS_OPTIONS, SUB_TASK_STATUS_OPTIONS } from "@/common";
 import { ETaskStatus } from "~/types";
+
+const route = useRoute();
 const router = useRouter();
 const filterState = ref<{
   taskStatus: string;
@@ -80,7 +82,7 @@ const handleSubTaskStatusChange = (value: string) => {
 };
 
 const handleAddTaskClick = () => {
-  router.push("/create-task");
+  router.push(`/my-task/${route.params.projectId}/create-task`);
 };
 
 watch(

@@ -224,7 +224,7 @@ import {
   RightOutlined,
 } from "@ant-design/icons-vue";
 import type { Task } from "../../types/task";
-
+const route = useRoute();
 const props = defineProps<{
   tasks: Task[];
   total: number;
@@ -328,7 +328,9 @@ const formatDate = (dateString: string) => {
 };
 
 const handleTaskClick = (record: Task) => {
-  router.push(`/task-detail?taskId=${record.id}`);
+  router.push(
+    `/my-task/${route.params.projectId}/task-detail?taskId=${record.id}`,
+  );
 };
 </script>
 

@@ -1,13 +1,17 @@
 <template>
   <div class="page-root">
     <GlobalHeader>
-      <div class="header-button-box">
-        <a-button>案件CSVインポート</a-button>
-        <a-button>PJリストCSV出力</a-button>
-        <a-button>帳票CSV出力</a-button>
-        <a-button style="margin-right: 12px">案件CSV出力</a-button>
-        <a-button type="primary" @click="handleRegistration">新規登録</a-button>
-      </div>
+      <template #right>
+        <div class="header-button-box">
+          <a-button>案件CSVインポート</a-button>
+          <a-button>PJリストCSV出力</a-button>
+          <a-button>帳票CSV出力</a-button>
+          <a-button style="margin-right: 12px">案件CSV出力</a-button>
+          <a-button type="primary" @click="handleRegistration"
+            >新規登録</a-button
+          >
+        </div>
+      </template>
     </GlobalHeader>
     <div class="page-content" ref="contentRef" @scroll="handleContentScroll">
       <ProjectManagementFilter />

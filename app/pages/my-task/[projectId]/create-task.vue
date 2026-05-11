@@ -1,6 +1,12 @@
 <template>
   <div class="page-root">
-    <GlobalHeader />
+    <GlobalHeader>
+      <template #left>
+        <NuxtLink :to="taskListPath" class="global-header-back">
+          <ArrowLeftOutlined />マイタスク
+        </NuxtLink>
+      </template>
+    </GlobalHeader>
     <div class="page-content">
       <div class="parent-issue-box">
         <a-button
@@ -138,11 +144,17 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { ApartmentOutlined, CloseOutlined } from "@ant-design/icons-vue";
+import {
+  ApartmentOutlined,
+  CloseOutlined,
+  ArrowLeftOutlined,
+} from "@ant-design/icons-vue";
 import dayjs from "dayjs";
 import { useRouter } from "vue-router";
 import { EIssueType, ETaskStatus } from "~/types";
 import type { Task } from "~/types/task";
+
+const route = useRoute();
 const router = useRouter();
 const parentTask = ref<Task | null>(null);
 const showParentIssueDialog = ref(false);
@@ -162,6 +174,9 @@ const createTaskState = ref({
   startDate: "",
   endDate: "",
 });
+const taskListPath = computed(() => {
+  return `/my-task/${route.params.projectId}/list`;
+});
 
 const handleParentTaskSelect = (item: Task) => {
   parentTask.value = item;
@@ -172,7 +187,7 @@ const handleCancel = () => {
 };
 
 const handleAddTaskClick = () => {
-  router.push("/my-task");
+  router.push(taskListPath.value);
 };
 </script>
 <style scoped>
