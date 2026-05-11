@@ -151,6 +151,11 @@ const mockMenuData: MenuItem[] = [
         title: "マイページ",
         path: "/project-management/my",
       },
+      {
+        key: "/project-management/customer",
+        title: "顧客ー覧",
+        path: "/project-management/customer",
+      },
     ],
   },
   {

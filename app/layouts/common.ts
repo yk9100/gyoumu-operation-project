@@ -36,6 +36,7 @@ export const ROUTE_TITLE_MAP: Record<string, string> = {
   "/project-management/list": "プロジェクト一覧",
   "/project-management/registration": "プロジェクト登録",
   "/project-management/my": "マイページ",
+  "/project-management/customer": "顧客ー覧",
 };
 
 export const BREADCRUMB_CONFIG: Record<
