@@ -1,31 +1,24 @@
 <template>
-  <div class="page-root">
-    <GlobalHeader>
-      <template #left>
-        <NuxtLink to="/my-task" class="global-header-back">
-          <ArrowLeftOutlined />マイタスク
-        </NuxtLink>
-      </template>
-    </GlobalHeader>
-    <div class="page-content">
-      <MyTaskFilter @search="handleSearch" />
-      <MyTaskTable
-        :tasks="tasks"
-        :total="total"
-        :current-page="currentPage"
-        :page-size="pageSize"
-        @page-change="handlePageChange"
-        @size-change="handleSizeChange"
-        @toggle-fav="toggleFav"
-      />
-    </div>
+  <div>
+    <MyTaskFilter @search="handleSearch" />
+    <MyTaskTable
+      :tasks="tasks"
+      :total="total"
+      :current-page="currentPage"
+      :page-size="pageSize"
+      @page-change="handlePageChange"
+      @size-change="handleSizeChange"
+      @toggle-fav="toggleFav"
+    />
   </div>
 </template>
 
 <script lang="ts" setup>
 import { useTasks } from "~/composables/useTasks";
 import { ArrowLeftOutlined } from "@ant-design/icons-vue";
-
+definePageMeta({
+  layout: "task-default",
+});
 const {
   tasks,
   total,

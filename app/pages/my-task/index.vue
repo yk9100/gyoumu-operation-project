@@ -134,7 +134,7 @@ const handleSearch = () => {
 };
 
 const navigateToProject = (projectId: string) => {
-  router.push(`/my-task/${projectId}/list`);
+  router.push(`/my-task/${projectId}/dashboard`);
 };
 </script>
 
