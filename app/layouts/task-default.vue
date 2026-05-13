@@ -39,11 +39,11 @@ const breadcrumb = computed(() => {
     },
     {
       label: "ファイル",
-      link: `/my-task/${route.params.projectId}/file`,
+      link: `/my-task/${route.params.projectId}/file-list`,
     },
     {
       label: "設定",
-      link: `/my-task/${route.params.projectId}/setting`,
+      link: `/my-task/${route.params.projectId}/setting/user`,
     },
   ];
 });

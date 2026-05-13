@@ -15,7 +15,7 @@
 
 <script lang="ts" setup>
 import { useTasks } from "~/composables/useTasks";
-import { ArrowLeftOutlined } from "@ant-design/icons-vue";
+
 definePageMeta({
   layout: "task-default",
 });
