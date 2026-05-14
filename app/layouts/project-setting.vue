@@ -40,7 +40,7 @@ const navList = computed(() => {
     },
     {
       label: "注発生バージョン/\nマイルストーン",
-      link: `/my-task/${route.params.projectId}/setting/version-milestone`,
+      link: `/my-task/${route.params.projectId}/setting/milestone`,
     },
   ];
 });
