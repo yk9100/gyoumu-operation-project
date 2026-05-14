@@ -32,7 +32,7 @@ const navList = computed(() => {
     },
     {
       label: "種別",
-      link: `/my-task/${route.params.projectId}/setting/type`,
+      link: `/my-task/${route.params.projectId}/setting/issue-type`,
     },
     {
       label: "カテゴリー",
