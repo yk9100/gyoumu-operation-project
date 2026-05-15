@@ -3,13 +3,19 @@
     <GlobalHeader />
     <div class="page-content">
       <div class="search-bar">
-        <a-input
-          v-model:value="searchKeyword"
-          placeholder="プロジェクト名またはPMで検索"
-          class="search-input"
-          @keyup.enter="handleSearch"
-        />
-        <a-button type="primary" @click="handleSearch">検索</a-button>
+        <div class="search-input-container">
+          <a-input
+            v-model:value="searchKeyword"
+            placeholder="プロジェクト名またはPMで検索"
+            class="search-input"
+            @keyup.enter="handleSearch"
+          />
+          <a-button type="primary" @click="handleSearch">検索</a-button>
+        </div>
+
+        <a-button type="primary" @click="handleCreateProject"
+          >プロジェクトを作成</a-button
+        >
       </div>
 
       <div class="project-list-wrapper">
@@ -136,6 +142,10 @@ const handleSearch = () => {
 const navigateToProject = (projectId: string) => {
   router.push(`/my-task/${projectId}/dashboard`);
 };
+
+const handleCreateProject = () => {
+  router.push(`/create-project`);
+};
 </script>
 
 <style scoped>
@@ -163,7 +173,7 @@ const navigateToProject = (projectId: string) => {
   display: flex;
   gap: 12px;
   margin: 12px 0;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
 }
 
@@ -245,5 +255,11 @@ const navigateToProject = (projectId: string) => {
   justify-content: center;
   align-items: center;
   gap: 8px;
+}
+
+.search-input-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 </style>
