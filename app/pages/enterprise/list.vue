@@ -9,21 +9,37 @@
           @finishFailed="onFinishFailed"
           layout="inline"
         >
-          <a-form-item label="顧客名" name="frontName">
-            <a-input v-model:value="formState.customerName" />
+          <a-form-item label="企業名" name="enterpriseName">
+            <a-input v-model:value="formState.enterpriseName" allowClear />
           </a-form-item>
+          <a-form-item label="契約状態" name="contractStatus">
+            <a-select
+              v-model:value="formState.contractStatus"
+              allowClear
+              style="width: 200px"
+            >
+              <a-select-option value="契約中">契約中</a-select-option>
+              <a-select-option value="契約未了">契約未了</a-select-option>
+              <a-select-option value="契約中止">契約中止</a-select-option>
+            </a-select>
+          </a-form-item>
+          <a-form-item label="営業担当" name="salesPerson">
+            <a-select
+              v-model:value="formState.salesPerson"
+              allowClear
+              style="width: 200px"
+            >
+              <a-select-option value="営業担当A">営業担当A</a-select-option>
+              <a-select-option value="営業担当B">営業担当B</a-select-option>
+              <a-select-option value="営業担当C">営業担当C</a-select-option>
+            </a-select>
+          </a-form-item>
+          <a-button style="margin-right: 12px" @click="handleReset"
+            >リセット
+          </a-button>
           <a-button type="primary" html-type="submit">絞り込み</a-button>
         </a-form>
-
-        <a-upload
-          :show-upload-list="false"
-          :before-upload="customerImport"
-          :accept="'.csv'"
-        >
-          <a-button type="primary">顧客インポート</a-button>
-        </a-upload>
       </div>
-
       <div>
         <a-table
           :columns="columns"
@@ -36,21 +52,18 @@
           :loading="tableData.loading"
           :scroll="{ y: scrollY }"
           :row-class-name="
-            (_record: IMember, index: number) =>
+            (_record: IEnterprise, index: number) =>
               index % 2 === 1 ? 'table-striped' : null
           "
         >
           <template #bodyCell="{ column, record }">
             <template v-if="column.key === 'operation'">
               <div class="operation-buttons">
-                <a-button
-                  type="primary"
-                  size="small"
-                  @click="handleEdit(record.id)"
-                >
-                  <EditOutlined />
+                <a-button @click="handleEdit(record.id)"> コピー </a-button>
+                <a-button type="primary" @click="handleEdit(record.id)">
+                  編集
                 </a-button>
-                <div class="delete-button-container">
+                <!-- <div class="delete-button-container">
                   <a-popconfirm
                     placement="topRight"
                     title="このデータを削除してもよろしいですか?"
@@ -65,7 +78,7 @@
                       <DeleteOutlined />
                     </a-button>
                   </a-popconfirm>
-                </div>
+                </div> -->
               </div>
             </template>
           </template>
@@ -76,56 +89,75 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive } from "vue";
-import type { IMember } from "@/types/member";
+import type { IEnterprise } from "~/types/enterprise";
 import type { IPagination } from "~/types";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons-vue";
 import { useRouter } from "vue-router";
-import Papa from "papaparse";
-import { mockCustomerList } from "~/mock/customer";
-import type { ICustomer } from "~/types/customer";
-import dayjs from "dayjs";
+import { mockEnterpriseList } from "~/mock/enterprise";
 
 interface FormState {
-  customerName: string;
+  enterpriseName: string;
+  contractStatus: string;
+  salesPerson: string;
 }
 const router = useRouter();
 const scrollY = computed(() => window.innerHeight - 300);
-const tableData = ref<IPagination<ICustomer>>({
+const tableData = ref<IPagination<IEnterprise>>({
   dataSource: [],
   total: 0,
   current: 1,
   pageSize: 10,
   loading: false,
 });
-
-const formState = reactive<FormState>({
-  customerName: "",
+const formState = ref<FormState>({
+  enterpriseName: "",
+  contractStatus: "",
+  salesPerson: "",
 });
 
 const columns = [
   {
-    title: "顧客ID",
+    title: "企業ID",
     dataIndex: "id",
     key: "id",
     width: 120,
+    sorter: true,
   },
   {
-    title: "顧客名",
-    dataIndex: "customerName",
-    key: "customerName",
+    title: "企業名",
+    dataIndex: "name",
+    key: "name",
   },
   {
-    title: "登録時間",
-    dataIndex: "createdAt",
-    key: "createdAt",
+    title: "企業の担当名",
+    dataIndex: "salesPerson",
+    key: "salesPerson",
+  },
+  {
+    title: "契約状態",
+    dataIndex: "contractStatus",
+    key: "contractStatus",
+    sorter: true,
+  },
+  {
+    title: "契約開始日",
+    dataIndex: "startDate",
+    key: "startDate",
+  },
+  {
+    title: "契約期限日",
+    dataIndex: "endDate",
+    key: "endDate",
+  },
+  {
+    title: "営業担当",
+    dataIndex: "operationSalesPerson",
+    key: "operationSalesPerson",
   },
   {
     title: "操作",
     dataIndex: "operation",
     key: "operation",
-    width: 200,
-    // fixed: "right",
   },
 ];
 
@@ -144,19 +176,19 @@ const handleDelete = (id: string) => {
 
 const handleEdit = (id: string) => {
   router.push({
-    path: "/back-office/customer-management/registration",
+    path: "/enterprise/registration",
     query: {
       id,
     },
   });
 };
 
-const getCustomerList = async () => {
+const getReferralList = async () => {
   tableData.value.loading = true;
   try {
     setTimeout(() => {
-      tableData.value.dataSource = mockCustomerList;
-      tableData.value.total = mockCustomerList.length;
+      tableData.value.dataSource = mockEnterpriseList;
+      tableData.value.total = mockEnterpriseList.length;
       tableData.value.loading = false;
     }, 2000);
   } catch (error) {
@@ -164,38 +196,16 @@ const getCustomerList = async () => {
   }
 };
 
-const customerImport = (file: File) => {
-  console.log(file);
-  tableData.value.loading = true;
-  setTimeout(() => {
-    Papa.parse(file, {
-      header: true,
-      skipEmptyLines: true,
-      complete: (results) => {
-        console.log("解析结果:", results.data);
-        console.log("错误信息:", results.errors);
-
-        tableData.value.dataSource = (results.data as ICustomer[])
-          .map((i, index) => {
-            return {
-              id: `testID${index + 1}`,
-              customerName: i.customerName,
-              createdAt: dayjs().format("YYYY-MM-DD HH:mm:ss"),
-            };
-          })
-          .concat(tableData.value.dataSource);
-        tableData.value.loading = false;
-      },
-      error: (error) => {
-        tableData.value.loading = false;
-        console.error("解析失败:", error);
-      },
-    });
-  }, 1000);
+const handleReset = () => {
+  formState.value = {
+    enterpriseName: "",
+    contractStatus: "",
+    salesPerson: "",
+  };
 };
 
 onMounted(() => {
-  getCustomerList();
+  getReferralList();
 });
 </script>
 
