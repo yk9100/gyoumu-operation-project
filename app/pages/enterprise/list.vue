@@ -9,38 +9,62 @@
           @finishFailed="onFinishFailed"
           layout="inline"
         >
-          <a-form-item label="企業名" name="enterpriseName">
-            <a-input v-model:value="formState.enterpriseName" allowClear />
-          </a-form-item>
-          <a-form-item label="契約状態" name="contractStatus">
-            <a-select
-              v-model:value="formState.contractStatus"
-              allowClear
-              style="width: 200px"
-            >
-              <a-select-option value="契約中">契約中</a-select-option>
-              <a-select-option value="契約未了">契約未了</a-select-option>
-              <a-select-option value="契約中止">契約中止</a-select-option>
-            </a-select>
-          </a-form-item>
-          <a-form-item label="営業担当" name="salesPerson">
-            <a-select
-              v-model:value="formState.salesPerson"
-              allowClear
-              style="width: 200px"
-            >
-              <a-select-option value="営業担当A">営業担当A</a-select-option>
-              <a-select-option value="営業担当B">営業担当B</a-select-option>
-              <a-select-option value="営業担当C">営業担当C</a-select-option>
-            </a-select>
-          </a-form-item>
-          <a-button style="margin-right: 12px" @click="handleReset"
-            >リセット
-          </a-button>
-          <a-button type="primary" html-type="submit">絞り込み</a-button>
+          <a-row class="form-row">
+            <a-col class="form-col">
+              <a-form-item label="企業名" name="enterpriseName">
+                <a-input v-model:value="formState.enterpriseName" allowClear />
+              </a-form-item>
+              <a-form-item label="契約状態" name="contractStatus">
+                <a-select
+                  v-model:value="formState.contractStatus"
+                  allowClear
+                  style="width: 200px"
+                >
+                  <a-select-option value="契約手続中"
+                    >契約手続中</a-select-option
+                  >
+                  <a-select-option value="契約中">契約中</a-select-option>
+                  <a-select-option value="契約終了">契約終了</a-select-option>
+                </a-select>
+              </a-form-item>
+              <a-form-item label="営業担当" name="salesPerson">
+                <a-select
+                  v-model:value="formState.salesPerson"
+                  allowClear
+                  style="width: 200px"
+                >
+                  <a-select-option value="営業担当A">営業担当A</a-select-option>
+                  <a-select-option value="営業担当B">営業担当B</a-select-option>
+                  <a-select-option value="営業担当C">営業担当C</a-select-option>
+                </a-select>
+              </a-form-item>
+            </a-col>
+            <a-col class="btn-box">
+              <a-button @click="handleReset">リセット </a-button>
+              <a-button type="primary" html-type="submit">絞り込み</a-button>
+            </a-col>
+          </a-row>
+
+          <a-row class="form-row">
+            <a-col class="form-col">
+              <a-form-item label="契約期" name="contractPeriod">
+                <a-range-picker
+                  v-model:value="formState.contractPeriod"
+                  allowClear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col class="btn-box">
+              <a-button>ダウンロード</a-button>
+              <a-button type="primary" html-type="submit">新規契約</a-button>
+            </a-col>
+          </a-row>
         </a-form>
       </div>
       <div>
+        <div class="result-count">
+          契約結果：{{ tableData.dataSource.length }}件
+        </div>
         <a-table
           :columns="columns"
           :data-source="tableData.dataSource"
@@ -91,17 +115,20 @@
 <script lang="ts" setup>
 import type { IEnterprise } from "~/types/enterprise";
 import type { IPagination } from "~/types";
-import { EditOutlined, DeleteOutlined } from "@ant-design/icons-vue";
 import { useRouter } from "vue-router";
 import { mockEnterpriseList } from "~/mock/enterprise";
+import type { Dayjs } from 'dayjs';
+type RangeValue = [Dayjs, Dayjs];
 
 interface FormState {
   enterpriseName: string;
   contractStatus: string;
   salesPerson: string;
+  contractPeriod?: RangeValue;
 }
 const router = useRouter();
 const scrollY = computed(() => window.innerHeight - 300);
+
 const tableData = ref<IPagination<IEnterprise>>({
   dataSource: [],
   total: 0,
@@ -238,5 +265,29 @@ onMounted(() => {
 
 :deep(.ant-table-placeholder) {
   height: 300px;
+}
+.form-row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.form-col {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.btn-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: flex-end;
+}
+.result-count {
+  font-size: 16px;
+  color: #333;
+  font-weight: bold;
+  margin-bottom: 12px;
 }
 </style>

@@ -1,37 +1,18 @@
 <template>
   <div class="page-root">
-    <GlobalHeader />
+    <GlobalHeader :title="currentTitle"> </GlobalHeader>
     <div class="page-content">
-      <a-spin :spinning="spinning">
-        <a-form
-          :model="formState"
-          name="basic"
-          :label-col="{ span: 8 }"
-          :wrapper-col="{ span: 8 }"
-          autocomplete="off"
-          @finish="onFinish"
-          @finishFailed="onFinishFailed"
-        >
-          <a-form-item label="紹介元名" name="referralName" required>
-            <a-input v-model:value="formState.referralName" />
-          </a-form-item>
-          <a-form-item label="郵便番号" name="postalCode" required>
-            <a-input v-model:value="formState.postalCode" />
-          </a-form-item>
-          <a-form-item label="電話番号" name="phoneNumber" required>
-            <a-input v-model:value="formState.phoneNumber" />
-          </a-form-item>
-          <a-form-item label="住所" name="address" required>
-            <a-input v-model:value="formState.address" />
-          </a-form-item>
-          <a-form-item label="ビル名" name="buildingName" required>
-            <a-input v-model:value="formState.buildingName" />
-          </a-form-item>
-          <a-form-item :wrapper-col="{ offset: 8, span: 8 }">
-            <a-button type="primary" html-type="submit">登録</a-button>
-          </a-form-item>
-        </a-form>
-      </a-spin>
+      <div class="steps-container">
+        <a-steps
+          v-model:current="current"
+          size="small"
+          :items="steps"
+          @change="handleStepChange"
+        ></a-steps>
+      </div>
+      <KeepAlive>
+        <component :is="currentComponent" />
+      </KeepAlive>
     </div>
   </div>
 </template>
@@ -39,7 +20,8 @@
 import { reactive } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { message } from "ant-design-vue";
-
+import BaseInfo from "~/components/enterprise/BaseInfo.vue";
+import NdaContract from "~/components/enterprise/NdaContract.vue";
 interface FormState {
   referralName: string;
   postalCode: string;
@@ -47,9 +29,82 @@ interface FormState {
   address: string;
   buildingName: string;
 }
-
+export type RegistrationStep =
+  | "baseInfo"
+  | "ndaContract"
+  | "checkCompany"
+  | "contract"
+  | "account";
 const route = useRoute();
+const router = useRouter();
+const DEFAULT_STEPS = [
+  {
+    status: "wait",
+    title: "基本情報",
+  },
+  {
+    status: "wait",
+    title: "NDA契約書",
+  },
+  {
+    status: "wait",
+    title: "反社チェック",
+  },
+  {
+    status: "wait",
+    title: "基本契約書",
+  },
+  {
+    status: "wait",
+    title: "アカウント発行",
+  },
+];
+const componentMap: Record<RegistrationStep, Component> = {
+  baseInfo: BaseInfo,
+  ndaContract: NdaContract,
+  checkCompany: BaseInfo,
+  contract: BaseInfo,
+  account: BaseInfo,
+};
+const titleMap: Record<RegistrationStep, string> = {
+  baseInfo: "基本情報",
+  ndaContract: "NDA契約書",
+  checkCompany: "反社チェック",
+  contract: "基本契約書",
+  account: "アカウント発行",
+};
+const current = computed(() => {
+  if (route.query.step) {
+    return DEFAULT_STEPS.findIndex(
+      (item) => item.title === titleMap[route.query.step as RegistrationStep],
+    );
+  }
+  return 0;
+});
+
 const spinning = ref(false);
+const steps = computed(() => {
+  let newSteps = [...DEFAULT_STEPS];
+  newSteps = newSteps.map((item, index) => {
+    if (index <= current.value) {
+      return {
+        ...item,
+        status: "process",
+      };
+    }
+    return {
+      ...item,
+      status: "wait",
+    };
+  });
+  return newSteps;
+});
+const currentTitle = computed(() => {
+  if (route.query.step) {
+    return titleMap[route.query.step as RegistrationStep];
+  }
+  return "基本情報";
+});
 
 const formState = reactive<FormState>({
   referralName: "",
@@ -58,16 +113,21 @@ const formState = reactive<FormState>({
   address: "",
   buildingName: "",
 });
-const router = useRouter();
 
-const onFinish = (values: any) => {
-  console.log("Success:", values);
-  // router.push("/back-office/notification-management/list");
-};
+const currentComponent = computed(() => {
+  if (route.query.step) {
+    return componentMap[route.query.step as RegistrationStep];
+  }
+  return BaseInfo;
+});
 
-const onFinishFailed = (errorInfo: any) => {
-  console.log("Failed:", errorInfo);
-  router.push("/back-office/referral-management/list");
+const handleStepChange = (index: number) => {
+  const step = Object.keys(titleMap)[index] as RegistrationStep;
+  router.push({
+    query: {
+      step,
+    },
+  });
 };
 
 const getReferralDetail = async (id: string) => {
@@ -97,3 +157,10 @@ onMounted(() => {
   }
 });
 </script>
+<style scoped l>
+.steps-container {
+  width: 80%;
+  margin: 0 auto;
+  margin-bottom: 20px;
+}
+</style>
