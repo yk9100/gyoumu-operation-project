@@ -8,7 +8,7 @@
         :wrapper-col="{ span: 8 }"
         autocomplete="off"
       >
-        <div class="title-info">各種手続の状況（NDA契約書）</div>
+        <div class="title-info">各種手続の状況（反社チェック）</div>
         <a-form-item label="お知らせ先" name="notificationReceiver" required>
           <a-select
             v-model:value="formState.notificationReceiver"
@@ -26,27 +26,30 @@
             allowClear
           />
         </a-form-item>
-        <a-form-item label="処理ステータス" name="notificationStatus" required>
+        <a-form-item
+          label="処理ステータス"
+          name="hannsyaNotificationStatus"
+          required
+        >
           <a-select
-            v-model:value="formState.notificationStatus"
+            v-model:value="formState.hannsyaNotificationStatus"
             placeholder="選択してください"
-            :options="NOTIFICATION_STATUS_OPTIONS"
+            :options="HANNSYYA_NOTIFICATION_STATUS_OPTIONS"
             allowClear
           />
         </a-form-item>
-        <a-form-item label="NDA契約書" name="contract" required>
-          <a-upload
-            v-model:fileList="formState.contract"
-            name="logo"
-            action="/upload.do"
-            list-type="picture"
-            accept=".doc,.docx,.pdf,.xlsx,.xls"
-          >
-            <a-button>
-              <template #icon><UploadOutlined /></template>
-              word,pdf,excelファイルをアップロードしてください
-            </a-button>
-          </a-upload>
+        <a-form-item label="チェック結果" name="checkResult">
+          <a-radio-group v-model:value="formState.checkResult">
+            <a-radio value="OK"> OK </a-radio>
+            <a-radio value="NG"> NG </a-radio>
+          </a-radio-group>
+        </a-form-item>
+        <a-form-item label=" " name="checkComment">
+          <a-textarea
+            v-model:value="formState.checkComment"
+            placeholder="コメントを入力してください"
+            allowClear
+          />
         </a-form-item>
 
         <div class="footer-button-group" `>
@@ -61,20 +64,20 @@
 </template>
 
 <script lang="ts" setup>
-import { UploadOutlined } from "@ant-design/icons-vue";
-import { NOTIFICATION_STATUS_OPTIONS } from "@/common/enterprise";
+import { HANNSYYA_NOTIFICATION_STATUS_OPTIONS } from "@/common/enterprise";
 const router = useRouter();
 const formState = ref({
   notificationReceiver: "",
   notificationContent: "",
-  notificationStatus: "",
-  contract: [],
+  hannsyaNotificationStatus: undefined,
+  checkResult: "OK",
+  checkComment: "",
 });
 
 const handleSubmit = async () => {
   router.push({
     query: {
-      step: "checkCompany",
+      step: "contract",
     },
   });
 };

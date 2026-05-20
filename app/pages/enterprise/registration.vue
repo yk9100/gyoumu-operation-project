@@ -22,6 +22,8 @@ import { useRouter, useRoute } from "vue-router";
 import { message } from "ant-design-vue";
 import BaseInfo from "~/components/enterprise/BaseInfo.vue";
 import NdaContract from "~/components/enterprise/NdaContract.vue";
+import CheckCompany from "~/components/enterprise/CheckCompany.vue";
+import Contract from "~/components/enterprise/Contract.vue";
 interface FormState {
   referralName: string;
   postalCode: string;
@@ -33,8 +35,7 @@ export type RegistrationStep =
   | "baseInfo"
   | "ndaContract"
   | "checkCompany"
-  | "contract"
-  | "account";
+  | "contract";
 const route = useRoute();
 const router = useRouter();
 const DEFAULT_STEPS = [
@@ -54,24 +55,18 @@ const DEFAULT_STEPS = [
     status: "wait",
     title: "基本契約書",
   },
-  {
-    status: "wait",
-    title: "アカウント発行",
-  },
 ];
 const componentMap: Record<RegistrationStep, Component> = {
   baseInfo: BaseInfo,
   ndaContract: NdaContract,
-  checkCompany: BaseInfo,
-  contract: BaseInfo,
-  account: BaseInfo,
+  checkCompany: CheckCompany,
+  contract: Contract,
 };
 const titleMap: Record<RegistrationStep, string> = {
   baseInfo: "基本情報",
   ndaContract: "NDA契約書",
   checkCompany: "反社チェック",
   contract: "基本契約書",
-  account: "アカウント発行",
 };
 const current = computed(() => {
   if (route.query.step) {

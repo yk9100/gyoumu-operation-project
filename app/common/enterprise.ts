@@ -161,3 +161,18 @@ export const NOTIFICATION_STATUS_OPTIONS = [
     value: "先方確認中",
   },
 ];
+
+export const HANNSYYA_NOTIFICATION_STATUS_OPTIONS = [
+  {
+    label: "未依頼",
+    value: "未依頼",
+  },
+  {
+    label: "管理部チェック中",
+    value: "管理部チェック中",
+  },
+  {
+    label: "チェック完了",
+    value: "チェック完了",
+  },
+];

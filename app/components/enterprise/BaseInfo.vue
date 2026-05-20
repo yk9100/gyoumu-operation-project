@@ -221,7 +221,9 @@
         </a-form-item>
         <div class="footer-button-group" `>
           <a-button> 下書き保存 </a-button>
-          <a-button type="primary" html-type="submit"> 登録 </a-button>
+          <a-button type="primary" html-type="submit" @click="handleSubmit">
+            登録
+          </a-button>
         </div>
       </a-form>
     </div>
@@ -241,6 +243,8 @@ import {
 } from "@/common/enterprise";
 import type { Dayjs } from "dayjs";
 import dayjs from "dayjs";
+
+const router = useRouter();
 const formState = ref({
   enterpriseName: "",
   enterpriseNameReading: "",
@@ -280,6 +284,14 @@ const endDate = computed(() => {
 const disabledStartDate = (current: Dayjs) => {
   // Can not select days before today and today
   return current && current < dayjs().startOf("day");
+};
+
+const handleSubmit = async () => {
+  router.push({
+    query: {
+      step: "ndaContract",
+    },
+  });
 };
 </script>
 

@@ -8,7 +8,7 @@
         :wrapper-col="{ span: 8 }"
         autocomplete="off"
       >
-        <div class="title-info">各種手続の状況（NDA契約書）</div>
+        <div class="title-info">各種手続の状況（基本契約書）</div>
         <a-form-item label="お知らせ先" name="notificationReceiver" required>
           <a-select
             v-model:value="formState.notificationReceiver"
@@ -26,15 +26,19 @@
             allowClear
           />
         </a-form-item>
-        <a-form-item label="処理ステータス" name="notificationStatus" required>
+        <a-form-item
+          label="処理ステータス"
+          name="hannsyaNotificationStatus"
+          required
+        >
           <a-select
-            v-model:value="formState.notificationStatus"
+            v-model:value="formState.hannsyaNotificationStatus"
             placeholder="選択してください"
-            :options="NOTIFICATION_STATUS_OPTIONS"
+            :options="HANNSYYA_NOTIFICATION_STATUS_OPTIONS"
             allowClear
           />
         </a-form-item>
-        <a-form-item label="NDA契約書" name="contract" required>
+        <a-form-item label="基本契約書" name="contract" required>
           <a-upload
             v-model:fileList="formState.contract"
             name="logo"
@@ -48,12 +52,9 @@
             </a-button>
           </a-upload>
         </a-form-item>
-
         <div class="footer-button-group" `>
           <!-- <a-button> 下書き保存 </a-button> -->
-          <a-button type="primary" html-type="submit" @click="handleSubmit">
-            登録
-          </a-button>
+          <a-button type="primary" html-type="submit"> 登録 </a-button>
         </div>
       </a-form>
     </div>
@@ -62,22 +63,14 @@
 
 <script lang="ts" setup>
 import { UploadOutlined } from "@ant-design/icons-vue";
-import { NOTIFICATION_STATUS_OPTIONS } from "@/common/enterprise";
-const router = useRouter();
+import { HANNSYYA_NOTIFICATION_STATUS_OPTIONS } from "@/common/enterprise";
+
 const formState = ref({
   notificationReceiver: "",
   notificationContent: "",
-  notificationStatus: "",
+  hannsyaNotificationStatus: undefined,
   contract: [],
 });
-
-const handleSubmit = async () => {
-  router.push({
-    query: {
-      step: "checkCompany",
-    },
-  });
-};
 </script>
 
 <style scoped>
